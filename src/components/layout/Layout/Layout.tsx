@@ -13,12 +13,28 @@ import HelpIcon from '@mui/icons-material/Help';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import {MouseEvent, useState} from 'react';
+import {FC, MouseEvent, useState} from 'react';
 import {Avatar, Paper, Popover, Tooltip} from '@mui/material';
 
 import {MainDrawer, SecondarySidebar, PrimarySidebar, Separator, ToggleSidebarIcon, SearchDrawer} from './Layout.styles';
 import MainMenu from '../MainMenu';
 import LogoIcon from '../../icons/LogoIcon';
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    board: {
+      bg: string;
+      ticketBg: string;
+    };
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    board?: {
+      bg?: string;
+      ticketBg?: string;
+    };
+  }
+}
 
 const theme = createTheme({
   palette: {
@@ -28,14 +44,20 @@ const theme = createTheme({
       contrastText: '#fff',
     },
   },
+  board: {
+    bg: '#F4F5F7',
+    ticketBg: '#fff',
+  },
 });
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
-
-export function Layout() {
-  const [open, setOpen] = useState(false);
+interface Props {
+  children: any;
+}
+export const Layout: FC<Props> = ({children}) => {
+  const [open, setOpen] = useState(true);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handlePopoverOpen = (event: MouseEvent<HTMLButtonElement>) => {
@@ -64,7 +86,7 @@ export function Layout() {
 
   return (
     <ThemeProvider theme={theme}>
-    {/*   <SearchDrawer sx={{}} elevation={6} variant="permanent" open={searchDrawerOpened} onClose={toggleSearchDrawer(false)}>
+      {/*   <SearchDrawer sx={{}} elevation={6} variant="permanent" open={searchDrawerOpened} onClose={toggleSearchDrawer(false)}>
         <Box
           role="presentation"
           onClick={toggleSearchDrawer(false)}
@@ -148,8 +170,10 @@ export function Layout() {
             </ToggleSidebarIcon>
           )}
         </Separator>
-        <Box component="main" sx={{flexGrow: 1, p: 3}}></Box>
+        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+          {children}
+        </Box>
       </Box>
     </ThemeProvider>
   );
-}
+};

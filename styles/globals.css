@@ -19,3 +19,7 @@ body,
 #__next {
     height: 100%;
 }
+
+[data-rbd-draggable-context-id] {
+    width: 100%;
+}
