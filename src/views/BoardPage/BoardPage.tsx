@@ -1,11 +1,13 @@
-import {FC, useState} from 'react';
+import { FC, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import {styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider} from '@mui/material/styles';
-import {Box, Grid} from '@mui/material';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import dynamic from 'next/dynamic';
+import { Box, Grid } from '@mui/material';
+import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import NoSsr from '../../shared/NoSsr';
-import {TicketCard} from './TicketCard';
+import { TicketCard } from './TicketCard';
+import BoardColumn from './components/BoardColumn';
+import { styled } from '@mui/material/styles';
+import { Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
+import BoardPageControls from './components/BoardPageControls';
 
 const initialData = [
   {
@@ -97,51 +99,18 @@ const initialData = [
 export const ItemTypes = {
   CARD: 'card',
 };
+const breadcrumbs = ['Projects', 'React Jira Clone', 'Kanban Board'];
 
-const BoardColumn: FC = ({id, headerText, children}) => {
-  const Wrapper = styled('div')(({theme}) => ({
-    backgroundColor: theme.board.bg,
-    height: '100%',
-    display: 'flex',
-    flexFlow: 'column',
-    flexDirection: 'flex-start',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  }));
-  const ItemsContainer = styled('div')(({theme}) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: '1 1 auto',
-    padding: `0 ${theme.spacing(1)}`,
-
-    '& > *': {
-      marginBottom: theme.spacing(1),
-    },
-  }));
-  const Header = styled('h1')(({theme}) => ({
-    fontSize: 13,
-    margin: 0,
-    color: theme.palette.text.secondary,
-    padding: '12px 12px 16px 12px',
-  }));
-  return (
-    <Wrapper>
-      <Header>{headerText}</Header>
-      <Droppable droppableId={id}>{(provided: any) => <ItemsContainer ref={provided.innerRef}>{children}</ItemsContainer>}</Droppable>
-    </Wrapper>
-  );
-};
-
-export const BoardPage: FC = (props) => {
+export const BoardPage: FC = () => {
   const [taskList, setTasks] = useState(initialData);
-  function onDragEnd(val) {
-    const {draggableId, source, destination} = val;
+  function onDragEnd(val: any) {
+    const { draggableId, source, destination } = val;
 
     const [sourceGroup] = taskList.filter((column) => column.group === source.droppableId);
 
-    const [destinationGroup] = destination ? taskList.filter((column) => column.group === destination.droppableId) : {...sourceGroup};
+    const [destinationGroup] = destination
+      ? taskList.filter((column) => column.group === destination.droppableId)
+      : [{ ...sourceGroup }];
 
     const [movingTask] = sourceGroup.items.filter((t) => t.id === draggableId);
 
@@ -169,24 +138,33 @@ export const BoardPage: FC = (props) => {
   return (
     <NoSsr>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Box sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-          <Typography>Kanban Board</Typography>
-          <Box sx={{flex: '1 1 auto', maxWidth: '1270px'}}>
-            <Grid sx={{height: '100%'}} container spacing={1}>
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Breadcrumbs breadcrumbs={breadcrumbs}></Breadcrumbs>
+          <Typography variant='h1' sx={{ mb: 3, mt: 1.5 }}>
+            Kanban Board
+          </Typography>
+          <Box sx={{ mb: 2 }}>
+            <BoardPageControls></BoardPageControls>
+          </Box>
+          <Box sx={{ flex: '1 1 auto', maxWidth: '1270px' }}>
+            <Grid sx={{ height: '100%' }} container spacing={1}>
               {taskList.map((data, index) => {
                 return (
                   <Grid item key={data.id} xs={3}>
                     <BoardColumn id={data.group} headerText={data.title}>
-                      {data.items.map(({id, title}, i) => (
-                        <Draggable styles={{width: '100%'}} key={id} draggableId={id} index={i}>
-                          {(provided) => (
-                            <div
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              ref={provided.innerRef}
-                              styles={{marginBottom: 1, width: '100%'}}
-                            >
-                              <TicketCard>{title}</TicketCard>
+                      {data.items.map(({ id, title }, i) => (
+                        <Draggable key={id} draggableId={id} index={i}>
+                          {(provided: any) => (
+                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                              <TicketCard
+                                text={'When creating an issue, the assignee list is not working properly on searching'}
+                                assigned={['/images/avatar1.jpg', '/images/avatar2.jpg']}
+                                issueId={'SUP-123'}
+                                type={'bug'}
+                                priority={'low'}
+                              >
+                                {title}
+                              </TicketCard>
                             </div>
                           )}
                         </Draggable>

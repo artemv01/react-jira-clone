@@ -37,7 +37,15 @@ declare module '@mui/material/styles' {
 }
 
 const theme = createTheme({
+  typography: {
+    h1: {
+      fontSize: '24px',
+    },
+  },
   palette: {
+    text: {
+      primary: '#172B4D',
+    },
     primary: {
       main: '#0747A6',
       light: '#4C9AFF',
