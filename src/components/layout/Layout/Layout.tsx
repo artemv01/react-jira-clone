@@ -1,6 +1,6 @@
-import {styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider} from '@mui/material/styles';
+import { styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
@@ -13,15 +13,26 @@ import HelpIcon from '@mui/icons-material/Help';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import {FC, MouseEvent, useState} from 'react';
-import {Avatar, Paper, Popover, Tooltip} from '@mui/material';
+import { FC, MouseEvent, useState } from 'react';
+import { Avatar, Paper, Popover, Tooltip } from '@mui/material';
 
-import {MainDrawer, SecondarySidebar, PrimarySidebar, Separator, ToggleSidebarIcon, SearchDrawer} from './Layout.styles';
+import {
+  MainDrawer,
+  SecondarySidebar,
+  PrimarySidebar,
+  Separator,
+  ToggleSidebarIcon,
+  SearchDrawer,
+} from './Layout.styles';
 import MainMenu from '../MainMenu';
 import LogoIcon from '../../icons/LogoIcon';
 
 declare module '@mui/material/styles' {
   interface Theme {
+    button: {
+      primary: string;
+      dark: string;
+    };
     board: {
       bg: string;
       ticketBg: string;
@@ -29,6 +40,7 @@ declare module '@mui/material/styles' {
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
+    shadow: string;
     board?: {
       bg?: string;
       ticketBg?: string;
@@ -41,6 +53,10 @@ const theme = createTheme({
     h1: {
       fontSize: '24px',
     },
+  },
+  button: {
+    primary: 'rgba(0,0,0,0.1)',
+    dark: 'rgba(0,0,0,0.2)',
   },
   palette: {
     text: {
@@ -64,7 +80,7 @@ interface AppBarProps extends MuiAppBarProps {
 interface Props {
   children: any;
 }
-export const Layout: FC<Props> = ({children}) => {
+export const Layout: FC<Props> = ({ children }) => {
   const [open, setOpen] = useState(true);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -86,7 +102,10 @@ export const Layout: FC<Props> = ({children}) => {
 
   const [searchDrawerOpened, setSearchDrawerOpened] = useState(false);
   const toggleSearchDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
+    if (
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+    ) {
       return;
     }
     setSearchDrawerOpened(open);
@@ -104,10 +123,10 @@ export const Layout: FC<Props> = ({children}) => {
           drawer it is
         </Box>
       </SearchDrawer> */}
-      <Box sx={{display: 'flex', alignContent: 'stretch', height: '100%'}}>
+      <Box sx={{ display: 'flex', alignContent: 'stretch', height: '100%' }}>
         <CssBaseline />
 
-        <MainDrawer elevation={6} variant="permanent" open={open}>
+        <MainDrawer elevation={6} variant='permanent' open={open}>
           <Box
             sx={{
               display: 'flex',
@@ -118,17 +137,25 @@ export const Layout: FC<Props> = ({children}) => {
             }}
           >
             <SecondarySidebar>
-              <IconButton onClick={toggleSearchDrawer(true)} size="small" sx={{color: theme.palette.primary.contrastText, mb: 1}}>
+              <IconButton
+                onClick={toggleSearchDrawer(true)}
+                size='small'
+                sx={{ color: theme.palette.primary.contrastText, mb: 1 }}
+              >
                 <SearchIcon></SearchIcon>
               </IconButton>
-              <IconButton size="small" sx={{color: theme.palette.primary.contrastText, mb: 1}}>
+              <IconButton size='small' sx={{ color: theme.palette.primary.contrastText, mb: 1 }}>
                 <AddIcon></AddIcon>
               </IconButton>
-              <Box sx={{flex: '1 1 auto'}}></Box>
-              <Tooltip title="John Johnson" placement="right-start">
-                <Avatar alt="John Johnson" src="" sx={{mb: 2, width: 28, height: 28}} />
+              <Box sx={{ flex: '1 1 auto' }}></Box>
+              <Tooltip title='John Johnson' placement='right-start'>
+                <Avatar alt='John Johnson' src='' sx={{ mb: 2, width: 28, height: 28 }} />
               </Tooltip>
-              <IconButton size="small" sx={{color: theme.palette.primary.contrastText, mb: 1}} onClick={handlePopoverOpen}>
+              <IconButton
+                size='small'
+                sx={{ color: theme.palette.primary.contrastText, mb: 1 }}
+                onClick={handlePopoverOpen}
+              >
                 <HelpIcon></HelpIcon>
               </IconButton>
               <Popover
@@ -145,19 +172,19 @@ export const Layout: FC<Props> = ({children}) => {
                   horizontal: 'left',
                 }}
               >
-                <Box sx={{p: 1}}>This is a simplified Jira clone built with React and MUI</Box>
+                <Box sx={{ p: 1 }}>This is a simplified Jira clone built with React and MUI</Box>
               </Popover>
             </SecondarySidebar>
             <PrimarySidebar>
-              <Box sx={{display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', mb: 3}}>
-                <Box sx={{padding: '0 16px'}}>
-                  <LogoIcon sx={{fontSize: 32}}></LogoIcon>
+              <Box sx={{ display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', mb: 3 }}>
+                <Box sx={{ padding: '0 16px' }}>
+                  <LogoIcon sx={{ fontSize: 32 }}></LogoIcon>
                 </Box>
                 <Box>
-                  <Typography fontSize={15} sx={{color: 'text.secondary'}}>
+                  <Typography fontSize={15} sx={{ color: 'text.secondary' }}>
                     React Jira Clone
                   </Typography>
-                  <Typography fontSize={13} sx={{color: 'text.disabled'}}>
+                  <Typography fontSize={13} sx={{ color: 'text.disabled' }}>
                     Software Project
                   </Typography>
                 </Box>
@@ -168,17 +195,17 @@ export const Layout: FC<Props> = ({children}) => {
         </MainDrawer>
         <Separator>
           {open && (
-            <ToggleSidebarIcon onClick={handleDrawerClose} size="small">
-              <ChevronLeftIcon fontWeight="bold" fontSize="inherit" />
+            <ToggleSidebarIcon onClick={handleDrawerClose} size='small'>
+              <ChevronLeftIcon fontWeight='bold' fontSize='inherit' />
             </ToggleSidebarIcon>
           )}
           {!open && (
-            <ToggleSidebarIcon onClick={handleDrawerOpen} size="small">
-              <ChevronRightIcon fontWeight="bold" fontSize="inherit" />
+            <ToggleSidebarIcon onClick={handleDrawerOpen} size='small'>
+              <ChevronRightIcon fontWeight='bold' fontSize='inherit' />
             </ToggleSidebarIcon>
           )}
         </Separator>
-        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+        <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
           {children}
         </Box>
       </Box>

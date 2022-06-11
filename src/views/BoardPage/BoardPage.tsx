@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Grid } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import NoSsr from '../../shared/NoSsr';
 import { TicketCard } from './TicketCard';
@@ -8,7 +9,8 @@ import BoardColumn from './components/BoardColumn';
 import { styled } from '@mui/material/styles';
 import { Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 import BoardPageControls from './components/BoardPageControls';
-
+import Backdrop from '@mui/material/Backdrop';
+import IssueCard from '../../components/shared/IssueCard';
 const initialData = [
   {
     id: '1',
@@ -137,6 +139,9 @@ export const BoardPage: FC = () => {
 
   return (
     <NoSsr>
+      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} open={true}>
+        <IssueCard></IssueCard>
+      </Backdrop>
       <DragDropContext onDragEnd={onDragEnd}>
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <Breadcrumbs breadcrumbs={breadcrumbs}></Breadcrumbs>
