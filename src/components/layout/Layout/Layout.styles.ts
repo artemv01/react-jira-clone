@@ -25,7 +25,10 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {MouseEvent, useState} from 'react';
-import {Avatar, Paper, Popover, Tooltip} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
+import Popover from '@mui/material/Popover';
+import Tooltip from '@mui/material/Tooltip';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import LogoIcon from '../src/components/Logo';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -93,7 +96,7 @@ export const PrimarySidebar = styled(Box)(({theme}) => ({
 }));
 export const ToggleSidebarIcon = styled(IconButton)(({theme}) => ({
   position: 'absolute',
-  zIndex: '10000',
+  zIndex: theme.zIndex.drawer + 1,
   top: 40,
   left: '-15px',
   background: '#fff',
@@ -109,7 +112,7 @@ export const Separator = styled(Box)(({theme}) => ({
   width: 25,
   height: '100%',
   position: 'relative',
-  zIndex: 10000,
+  zIndex: theme.zIndex.drawer + 1,
   boxShadow: '-6px 0px 5px -2px rgb(0 0 0 / 6%)',
   borderLeft: '2px solid transparent',
   transition: theme.transitions.create(['all'], {

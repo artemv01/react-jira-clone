@@ -14,7 +14,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { FC, MouseEvent, useState } from 'react';
-import { Avatar, Paper, Popover, Tooltip } from '@mui/material';
 
 import {
   MainDrawer,
@@ -26,6 +25,9 @@ import {
 } from './Layout.styles';
 import MainMenu from '../MainMenu';
 import LogoIcon from '../../icons/LogoIcon';
+import Tooltip from '@mui/material/Tooltip';
+import Avatar from '@mui/material/Avatar';
+import Popover from '@mui/material/Popover';
 
 declare module '@mui/material/styles' {
   interface Theme {

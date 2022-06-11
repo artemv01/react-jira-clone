@@ -1,2 +1,2 @@
-import {Breadcrumbs} from '@mui/material';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 export default Breadcrumbs;

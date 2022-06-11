@@ -139,7 +139,7 @@ export const BoardPage: FC = () => {
 
   return (
     <NoSsr>
-      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} open={true}>
+      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={true}>
         <IssueCard></IssueCard>
       </Backdrop>
       <DragDropContext onDragEnd={onDragEnd}>

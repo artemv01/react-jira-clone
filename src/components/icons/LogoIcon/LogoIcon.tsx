@@ -1,4 +1,5 @@
-import {Box, SvgIcon} from '@mui/material';
+import Box from "@mui/material/Box";
+import SvgIcon from "@mui/material/SvgIcon";
 
 export const LogoIcon = ({cursor = 'pointer', ...props}) => {
   return (
