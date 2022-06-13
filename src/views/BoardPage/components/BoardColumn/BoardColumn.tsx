@@ -12,7 +12,7 @@ export const BoardColumn: FC<Props & DefaultProps> = (props) => {
   const Wrapper = styled('div')(
     ({theme}) =>
       ({
-        backgroundColor: theme.board.bg,
+        backgroundColor: theme.palette.board.bg,
         height: '100%',
         display: 'flex',
         flexFlow: 'column',

@@ -38,7 +38,7 @@ const BoardPageControlsWrapper = styled('div')(({ theme }) => ({
       marginLeft: '-6px',
       width: 36,
       height: 36,
-      border: `1px solid ${theme.board.ticketBg}`,
+      border: `1px solid ${theme.palette.board.ticketBg}`,
       transition: 'all 0.3s ease',
       '&:hover': {
         transform: 'translateY(-5px)',

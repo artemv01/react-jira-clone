@@ -30,7 +30,10 @@ import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 
 declare module '@mui/material/styles' {
-  interface Theme {
+  interface TypographyVariants {
+    label: React.CSSProperties;
+  }
+  interface PaletteOptions {
     button: {
       primary: string;
       dark: string;
@@ -55,10 +58,11 @@ const theme = createTheme({
     h1: {
       fontSize: '24px',
     },
-  },
-  button: {
-    primary: 'rgba(0,0,0,0.1)',
-    dark: 'rgba(0,0,0,0.2)',
+    label: {
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      fontSize: '14px',
+    },
   },
   palette: {
     text: {
@@ -69,10 +73,14 @@ const theme = createTheme({
       light: '#4C9AFF',
       contrastText: '#fff',
     },
-  },
-  board: {
-    bg: '#F4F5F7',
-    ticketBg: '#fff',
+    button: {
+      primary: 'rgba(0,0,0,0.1)',
+      dark: 'rgba(0,0,0,0.2)',
+    },
+    board: {
+      bg: '#F4F5F7',
+      ticketBg: '#fff',
+    },
   },
 });
 
