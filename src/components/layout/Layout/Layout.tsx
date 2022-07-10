@@ -58,6 +58,10 @@ const theme = createTheme({
     h1: {
       fontSize: '24px',
     },
+    h4: {
+      fontSize: '16px',
+      fontWeight: 'bold',
+    },
     label: {
       fontWeight: 'bold',
       textTransform: 'uppercase',
@@ -80,6 +84,37 @@ const theme = createTheme({
     board: {
       bg: '#F4F5F7',
       ticketBg: '#fff',
+    },
+  },
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'contained' },
+          style: ({ theme }) => ({
+            textTransform: 'none',
+            border: `none`,
+            borderRadius: '0',
+            boxShadow: 'none',
+            '&:hover': {
+              boxShadow: 'none',
+            },
+          }),
+        },
+        {
+          props: { variant: 'text' },
+          style: ({ theme }) => ({
+            textTransform: 'none',
+            border: `none`,
+            borderRadius: '0',
+            boxShadow: 'none',
+            '&:hover': {
+              backgroundColor: theme.palette.button.dark,
+              boxShadow: 'none',
+            },
+          }),
+        },
+      ],
     },
   },
 });

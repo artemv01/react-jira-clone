@@ -68,7 +68,6 @@ export const IssueHeaderBadge: FC<Props> = ({ issueId, issueTypeId }) => {
         </Typography>
       </Wrapper>
       <MenuWrapper
-        id='priority-menu'
         anchorEl={anchorEl}
         open={openMenu}
         onClose={handleClose}

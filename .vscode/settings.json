@@ -1,6 +1,7 @@
 {
     "exportall.config.relExclusion": [
         "/src/views/BoardPage",
-        "/src/views/BoardPage/components/BoardColumn"
+        "/src/views/BoardPage/components/BoardColumn",
+        "/src/shared"
     ]
 }

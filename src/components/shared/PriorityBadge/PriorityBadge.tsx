@@ -24,6 +24,7 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+
     setAnchorEl(null);
   };
   const Wrapper = styled(Menu)(({ theme }) => ({
@@ -49,9 +50,9 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
 
   return (
     <div>
-      <List disablePadding={true}>
+      <List  onClick={handleClick} disablePadding={true}>
         <ListItem disablePadding>
-          <ListItemButton onClick={handleClick} dense={true} selected={true}>
+          <ListItemButton dense={true} selected={true}>
             <ListItemIcon>
               <SvgIcon>{selected.img}</SvgIcon>
             </ListItemIcon>
@@ -72,9 +73,6 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
         anchorEl={anchorEl}
         open={openMenu}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
       >
         <MenuList disablePadding={true}>
           {priorities.map((item) => (

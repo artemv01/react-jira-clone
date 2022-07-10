@@ -160,8 +160,14 @@ export const BoardPage: FC = () => {
                       {data.items.map(({ id, title }, i) => (
                         <Draggable key={id} draggableId={id} index={i}>
                           {(provided: any) => (
-                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                            <div
+                              key={id}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              ref={provided.innerRef}
+                            >
                               <TicketCard
+                                key={id}
                                 text={'When creating an issue, the assignee list is not working properly on searching'}
                                 assigned={['/images/avatar1.jpg', '/images/avatar2.jpg']}
                                 issueId={'SUP-123'}
