@@ -7,10 +7,10 @@ import NoSsr from '../../../shared/NoSsr';
 import { TicketCard } from './TicketCard';
 import BoardColumn from '../BoardColumn';
 import { styled } from '@mui/material/styles';
-import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 import BoardPageControls from '../BoardPageControls';
 import Backdrop from '@mui/material/Backdrop';
 import IssueCard from '../../issue-card/IssueCard';
+import Breadcrumbs from '../../../shared/components/Breadcrumbs';
 const initialData = [
   {
     id: '1',

@@ -10,8 +10,9 @@ interface Props {
   onDelete: () => void;
   onExpand: () => void;
   onClose: () => void;
+  onSinglePage?: false;
 }
-export const IssueCardControls: FC<Props> = (props) => {
+export const IssueCardControls: FC<Props> = ({ onDelete, onExpand, onClose, onSinglePage }) => {
   return (
     <Box
       sx={{
@@ -20,15 +21,19 @@ export const IssueCardControls: FC<Props> = (props) => {
         },
       }}
     >
-      <IconButton onClick={props.onDelete} aria-label='delete'>
+      <IconButton onClick={onDelete} aria-label='delete'>
         <DeleteOutlineIcon></DeleteOutlineIcon>
       </IconButton>
-      <IconButton onClick={props.onExpand} aria-label='expand'>
-        <OpenInNewIcon></OpenInNewIcon>
-      </IconButton>
-      <IconButton onClick={props.onClose} aria-label='close'>
-        <CloseIcon></CloseIcon>
-      </IconButton>
+      {!onSinglePage && (
+        <IconButton onClick={onExpand} aria-label='expand'>
+          <OpenInNewIcon></OpenInNewIcon>
+        </IconButton>
+      )}
+      {!onSinglePage && (
+        <IconButton onClick={onClose} aria-label='close'>
+          <CloseIcon></CloseIcon>
+        </IconButton>
+      )}
     </Box>
   );
 };

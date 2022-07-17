@@ -33,22 +33,23 @@ import Comment from '../Comment';
 import IssueCardControls from '../IssueCardControls';
 import Backdrop from '@mui/material/Backdrop';
 import DeleteIssueConfirm from '../DeleteIssueConfirm';
+import {useRouter} from 'next/router';
 
-const Wrapper = styled('div')(({ theme }) => ({
+const Wrapper = styled('div')<Props>(({ theme, onSinglePage }) => ({
   position: 'relative',
   display: 'flex',
   flexFlow: 'row nowrap',
   backgroundColor: theme.palette.board.ticketBg,
-  padding: `${theme.spacing(2)} ${theme.spacing(2.5)} 64px ${theme.spacing(2.5)}`,
+  padding: !onSinglePage ? `${theme.spacing(2)} ${theme.spacing(2.5)} 64px ${theme.spacing(2.5)}` : 0,
   width: '100%',
-  maxWidth: '1040px',
+  maxWidth: !onSinglePage ? '1040px' : '100%',
   '& .editor-col': {
     flex: '1 1 auto',
     marginRight: '40px',
   },
   '& .issue-controls-col': {
     flex: '0 0 333px',
-    mt: '32px',
+    marginTop: '32px',
   },
   '& .issue-type-desc': {},
   '& .action-buttons': {
@@ -111,14 +112,17 @@ const AssigneeMenu = styled(Menu)(({ theme }) => ({
 }));
 
 interface Props {
-    onClose: () => {}
+  onClose?: () => {};
+  onSinglePage?: boolean;
 }
 
-export const IssueCard: FC<Props> = (props) => {
+export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
   const theme = useTheme();
   const [assigneeBtn, setAssigneeBtn] = useState<null | HTMLElement>(null);
   const addAssigneeRef = useRef(null);
   const assigneeMenuOpen = Boolean(assigneeBtn);
+  const router = useRouter()
+
   const [ticketContent, setTicketContent] = useState<string>(`
   After searching for an assignee on the list and clear the text, the option label was missing. It could
   be the bug on the ng-zorro select itself. If you have any idea, feel free to create a pull request.
@@ -160,6 +164,9 @@ export const IssueCard: FC<Props> = (props) => {
   const onDeleteCancel = () => {
     setDeleteModalOpened(false);
   };
+  const onExpandClick = () => {
+     router.push(`/project/issue/${issueId}`)
+  }
 
   const ticketHeaderRef = useRef(null);
   useEffect(() => {
@@ -212,9 +219,9 @@ export const IssueCard: FC<Props> = (props) => {
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
         <DeleteIssueConfirm onClose={onDeleteCancel} onConfirm={onDeleteConfirm}></DeleteIssueConfirm>
       </Backdrop>
-      <Wrapper>
+      <Wrapper onSinglePage={onSinglePage}>
         <div className='issue-card-controls'>
-          <IssueCardControls onDelete={onDeleteClick} onExpand={() => {}} onClose={props.onClose}></IssueCardControls>
+          <IssueCardControls onSinglePage={onSinglePage} onDelete={onDeleteClick} onExpand={onExpandClick} onClose={onClose}></IssueCardControls>
         </div>
         <div className='editor-col'>
           <IssueHeaderBadge issueId='STG-1234' issueTypeId='bug'></IssueHeaderBadge>

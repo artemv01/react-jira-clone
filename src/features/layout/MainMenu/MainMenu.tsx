@@ -22,7 +22,7 @@ export function MainMenu(): JSX.Element {
             py: 1,
           }}
           component='a'
-          href='/kanban'
+          href='/project/board'
         >
           <ListItemIcon
             sx={{
