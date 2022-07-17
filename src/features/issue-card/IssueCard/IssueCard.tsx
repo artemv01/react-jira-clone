@@ -24,7 +24,7 @@ import NoSsr from '../../../shared/NoSsr';
 import dynamic from 'next/dynamic';
 
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill from '../ReactQuill';
+import ReactQuill from '../../../shared/components/ReactQuill';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CommentInput from '../CommentInput';

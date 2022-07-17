@@ -24,7 +24,7 @@ import {
   SearchDrawer,
 } from './Layout.styles';
 import MainMenu from '../MainMenu';
-import LogoIcon from '../../icons/LogoIcon';
+import LogoIcon from '../../../shared/icons/LogoIcon';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';

@@ -1,5 +1,5 @@
-import Layout from '../../../src/components/layout/Layout';
-import BoardPage from '../../../src/views/BoardPage';
+import Layout from '../../../src/features/layout/Layout';
+import BoardPage from '../../../src/features/board-page/BoardPage';
 
 function Board() {
   return (

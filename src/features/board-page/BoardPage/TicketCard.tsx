@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import Box from '@mui/material/Box';
-import DefaultProps from '../../shared/model/DefaultProps';
+import DefaultProps from '../../../shared/model/DefaultProps';
 import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
-import { priorityTypes } from '../../shared/PriorityTypes';
-import { issueTypes } from '../../shared/IssueTypes';
+import { priorityTypes } from '../../../shared/PriorityTypes';
+import { issueTypes } from '../../../shared/IssueTypes';
 
 const Wrapper = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.board.ticketBg,

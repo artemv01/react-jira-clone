@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {styled} from '@mui/material/styles';
 import {Droppable} from 'react-beautiful-dnd';
 
-import DefaultProps from '../../../../shared/model/DefaultProps';
+import DefaultProps from '../../../shared/model/DefaultProps';
 interface Props {
   id: string;
   headerText: string;
