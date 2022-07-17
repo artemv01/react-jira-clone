@@ -29,7 +29,13 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CommentInput from '../CommentInput';
 import Comment from '../Comment';
+
+import IssueCardControls from '../IssueCardControls';
+import Backdrop from '@mui/material/Backdrop';
+import DeleteIssueConfirm from '../DeleteIssueConfirm';
+
 const Wrapper = styled('div')(({ theme }) => ({
+  position: 'relative',
   display: 'flex',
   flexFlow: 'row nowrap',
   backgroundColor: theme.palette.board.ticketBg,
@@ -42,6 +48,7 @@ const Wrapper = styled('div')(({ theme }) => ({
   },
   '& .issue-controls-col': {
     flex: '0 0 333px',
+    mt: '32px',
   },
   '& .issue-type-desc': {},
   '& .action-buttons': {
@@ -52,6 +59,10 @@ const Wrapper = styled('div')(({ theme }) => ({
     '& > .MuiButton-root': {
       marginRight: '8px',
     },
+  },
+  '& .issue-card-controls': {
+    position: 'absolute',
+    right: 0,
   },
 }));
 
@@ -98,7 +109,12 @@ const AssigneeMenu = styled(Menu)(({ theme }) => ({
     paddingLeft: theme.spacing(1),
   },
 }));
-export const IssueCard: FC = () => {
+
+interface Props {
+    onClose: () => {}
+}
+
+export const IssueCard: FC<Props> = (props) => {
   const theme = useTheme();
   const [assigneeBtn, setAssigneeBtn] = useState<null | HTMLElement>(null);
   const addAssigneeRef = useRef(null);
@@ -110,7 +126,7 @@ export const IssueCard: FC = () => {
   const [ticketHeader, setTicketHeader] = useState<string>(
     'How to build Jira clone? Follow these tutorials from its author'
   );
-
+  const [isDeleteModalOpened, setDeleteModalOpened] = useState(false);
   const [openEditors, setOpenEditors] = useState<Record<string, any>>({
     content: false,
     header: false,
@@ -133,6 +149,16 @@ export const IssueCard: FC = () => {
   };
   const onCancel = () => {
     setOpenEditors((editors) => ({ ...editors, content: false }));
+  };
+
+  const onDeleteClick = () => {
+    setDeleteModalOpened(true);
+  };
+  const onDeleteConfirm = () => {
+    setDeleteModalOpened(false);
+  };
+  const onDeleteCancel = () => {
+    setDeleteModalOpened(false);
   };
 
   const ticketHeaderRef = useRef(null);
@@ -183,7 +209,13 @@ export const IssueCard: FC = () => {
 
   return (
     <NoSsr>
+      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
+        <DeleteIssueConfirm onClose={onDeleteCancel} onConfirm={onDeleteConfirm}></DeleteIssueConfirm>
+      </Backdrop>
       <Wrapper>
+        <div className='issue-card-controls'>
+          <IssueCardControls onDelete={onDeleteClick} onExpand={() => {}} onClose={props.onClose}></IssueCardControls>
+        </div>
         <div className='editor-col'>
           <IssueHeaderBadge issueId='STG-1234' issueTypeId='bug'></IssueHeaderBadge>
           <div ref={ticketHeaderRef}>
@@ -320,7 +352,6 @@ export const IssueCard: FC = () => {
                   anchorEl={assigneeBtn}
                   open={assigneeMenuOpen}
                   onClose={handleAssigneeMenuClose}
-               
                 >
                   <MenuList disablePadding={true}>
                     <MenuItem>
