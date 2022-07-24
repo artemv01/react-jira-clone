@@ -1,3 +1,1 @@
-import {BoardPage} from './BoardPage';
-
-export default BoardPage;
+export {BoardPage as default} from './BoardPage';

@@ -1,3 +1,1 @@
-import {BoardPageControls} from './BoardPageControls';
-
-export default BoardPageControls;
+export {BoardPageControls as default} from './BoardPageControls';

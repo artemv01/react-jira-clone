@@ -1,3 +1,1 @@
-import { IssueType } from './IssueType';
-
-export default IssueType;
+export { IssueType as default } from './IssueType';

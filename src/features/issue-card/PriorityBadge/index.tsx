@@ -1,3 +1,1 @@
-import {PriorityBadge} from "./PriorityBadge";
-
-export default PriorityBadge
+export {PriorityBadge as default} from "./PriorityBadge";

@@ -10,7 +10,7 @@ interface Props {
   onDelete: () => void;
   onExpand: () => void;
   onClose: () => void;
-  onSinglePage?: false;
+  onSinglePage?: boolean;
 }
 export const IssueCardControls: FC<Props> = ({ onDelete, onExpand, onClose, onSinglePage }) => {
   return (

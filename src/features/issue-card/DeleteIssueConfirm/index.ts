@@ -1,3 +1,1 @@
-import { DeleteIssueConfirm } from './DeleteIssueConfirm';
-
-export default DeleteIssueConfirm;
+export { DeleteIssueConfirm as default} from './DeleteIssueConfirm';

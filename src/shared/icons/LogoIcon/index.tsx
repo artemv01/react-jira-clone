@@ -1,3 +1,1 @@
-import {LogoIcon} from "./LogoIcon";
-
-export default LogoIcon
+export { LogoIcon as default } from './LogoIcon';

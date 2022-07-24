@@ -1,3 +1,1 @@
-import {SingleIssuePage} from "./SingleIssuePage";
-
-export default SingleIssuePage
+export {SingleIssuePage as default} from "./SingleIssuePage";

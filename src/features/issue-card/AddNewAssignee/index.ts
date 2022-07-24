@@ -1,3 +1,1 @@
-import {AddNewAssignee} from "./AddNewAssignee";
-
-export default AddNewAssignee
+export  {AddNewAssignee as default} from "./AddNewAssignee";

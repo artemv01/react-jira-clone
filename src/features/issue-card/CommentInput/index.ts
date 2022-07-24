@@ -1,2 +1,1 @@
-import { CommentInput } from './CommentInput';
-export default CommentInput;
+export { CommentInput as default } from './CommentInput';

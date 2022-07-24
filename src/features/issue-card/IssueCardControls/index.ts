@@ -1,3 +1,1 @@
-import {IssueCardControls} from "./IssueCardControls";
-
-export default IssueCardControls
+export {IssueCardControls as default} from "./IssueCardControls";

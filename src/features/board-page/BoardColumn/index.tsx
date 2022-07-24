@@ -1,3 +1,1 @@
-import {BoardColumn} from './BoardColumn';
-
-export default BoardColumn;
+export {BoardColumn as default} from './BoardColumn';

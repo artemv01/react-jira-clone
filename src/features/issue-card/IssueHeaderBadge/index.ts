@@ -1,3 +1,1 @@
-import {IssueHeaderBadge} from "./IssueHeaderBadge";
-
-export default IssueHeaderBadge
+export {IssueHeaderBadge as default} from "./IssueHeaderBadge";
