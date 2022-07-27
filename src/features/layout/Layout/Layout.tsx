@@ -28,6 +28,8 @@ import LogoIcon from '../../../shared/icons/LogoIcon';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
+import {CreateIssue} from "../../create-issue/CreateIssue";
+import Backdrop from '@mui/material/Backdrop';
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {
@@ -130,6 +132,7 @@ interface Props {
 }
 export const Layout: FC<Props> = ({ children }) => {
   const [open, setOpen] = useState(true);
+  const [showAddIssue, setShowAddIssue] = useState(false)
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handlePopoverOpen = (event: MouseEvent<HTMLButtonElement>) => {
@@ -148,6 +151,8 @@ export const Layout: FC<Props> = ({ children }) => {
     setOpen(false);
   };
 
+  const openAddIssue = () => {}
+
   const [searchDrawerOpened, setSearchDrawerOpened] = useState(false);
   const toggleSearchDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -161,6 +166,10 @@ export const Layout: FC<Props> = ({ children }) => {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={showAddIssue}>
+        <CreateIssue onClose={() => setShowAddIssue(false)}></CreateIssue>
+      </Backdrop>
       {/*   <SearchDrawer sx={{}} elevation={6} variant="permanent" open={searchDrawerOpened} onClose={toggleSearchDrawer(false)}>
         <Box
           role="presentation"
@@ -172,7 +181,6 @@ export const Layout: FC<Props> = ({ children }) => {
         </Box>
       </SearchDrawer> */}
       <Box sx={{ display: 'flex', alignContent: 'stretch', height: '100%' }}>
-        <CssBaseline />
 
         <MainDrawer elevation={6} variant='permanent' open={open}>
           <Box
@@ -192,7 +200,7 @@ export const Layout: FC<Props> = ({ children }) => {
               >
                 <SearchIcon></SearchIcon>
               </IconButton>
-              <IconButton size='small' sx={{ color: theme.palette.primary.contrastText, mb: 1 }}>
+              <IconButton onClick={() => setShowAddIssue(true)} size='small' sx={{ color: theme.palette.primary.contrastText, mb: 1 }}>
                 <AddIcon></AddIcon>
               </IconButton>
               <Box sx={{ flex: '1 1 auto' }}></Box>

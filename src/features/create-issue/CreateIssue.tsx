@@ -13,7 +13,11 @@ import 'react-quill/dist/quill.snow.css';
 import ReactQuill from '../../shared/components/ReactQuill';
 import TextField from "../../shared/components/TextField";
 
-export const CreateIssue: FC = () => {
+interface Props {
+    onClose: () => void
+}
+
+export const CreateIssue: FC<Props> = ({onClose}) => {
     const issueData ={
         type: '',
         priority: '',
@@ -38,7 +42,7 @@ export const CreateIssue: FC = () => {
                 }}
             >
                 <Typography variant='h1'>Create issue</Typography>
-                <IconButton aria-label='close'>
+                <IconButton onClick={onClose} aria-label='close'>
                     <CloseIcon></CloseIcon>
                 </IconButton>
             </Box>
@@ -100,7 +104,7 @@ export const CreateIssue: FC = () => {
                     }}
                 >
                     <Button variant='contained' onClick={submit}>Create Issue</Button>
-                    <Button variant='text'>Cancel</Button>
+                    <Button variant='text' onClick={onClose}>Cancel</Button>
                 </Box>
             </Box>
         </Box>

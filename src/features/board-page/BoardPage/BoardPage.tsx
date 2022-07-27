@@ -144,9 +144,7 @@ export const BoardPage: FC = () => {
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isIssueCardOpened}>
         <IssueCard onClose={() => setIssueCardOpened(false)}></IssueCard>
       </Backdrop>
-      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={true}>
-        <CreateIssue></CreateIssue>
-      </Backdrop>
+
       <DragDropContext onDragEnd={onDragEnd}>
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <Breadcrumbs breadcrumbs={breadcrumbs}></Breadcrumbs>
