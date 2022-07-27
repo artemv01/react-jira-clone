@@ -34,6 +34,7 @@ import IssueCardControls from '../IssueCardControls';
 import Backdrop from '@mui/material/Backdrop';
 import DeleteIssueConfirm from '../DeleteIssueConfirm';
 import {useRouter} from 'next/router';
+import {editorFormats, editorModules} from '../../../shared/editorConfig';
 
 const Wrapper = styled('div')<Props>(({ theme, onSinglePage }) => ({
   position: 'relative',
@@ -182,37 +183,6 @@ export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
     };
   }, [ticketHeaderRef]);
 
-  const modules = {
-    toolbar: [
-      [{ header: '1' }, { header: '2' }, { font: [] }],
-      [{ size: [] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
-    },
-  };
-
-  const formats = [
-    'header',
-    'font',
-    'size',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-    'video',
-  ];
 
   return (
     <NoSsr>
@@ -274,8 +244,8 @@ export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
                   theme={'snow'}
                   onChange={handleTicketContentChange}
                   value={ticketContent}
-                  modules={modules}
-                  formats={formats}
+                  modules={editorModules}
+                  formats={editorFormats}
                   placeholder='Issue text'
                 />
               </Box>

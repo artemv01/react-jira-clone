@@ -1,5 +1,6 @@
-export type IssueTypeId = 'bug' | 'task' | 'story';
-export const issueTypes: Array<{ id: IssueTypeId; title: string; img: JSX.Element }> = [
+import {IssueType} from "./model/common";
+
+export const issueTypes: IssueType[] = [
   {
     id: 'bug',
     title: 'Bug',

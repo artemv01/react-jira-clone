@@ -11,6 +11,7 @@ import BoardPageControls from '../BoardPageControls';
 import Backdrop from '@mui/material/Backdrop';
 import IssueCard from '../../issue-card/IssueCard';
 import Breadcrumbs from '../../../shared/components/Breadcrumbs';
+import {CreateIssue} from '../../create-issue/CreateIssue';
 const initialData = [
   {
     id: '1',

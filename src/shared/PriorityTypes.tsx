@@ -1,4 +1,6 @@
-export const priorityTypes = [
+import {Priority} from "./model/common";
+
+export const priorityTypes: Priority[] = [
   {
     id: 'lowest',
     title: 'Lowest',

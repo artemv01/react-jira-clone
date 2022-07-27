@@ -67,6 +67,9 @@ const theme = createTheme({
       textTransform: 'uppercase',
       fontSize: '14px',
     },
+    label2: {
+      fontSize: '12px',
+    },
   },
   palette: {
     text: {
