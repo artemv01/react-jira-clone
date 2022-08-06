@@ -21,20 +21,27 @@ import {
   PrimarySidebar,
   Separator,
   ToggleSidebarIcon,
-  SearchDrawer,
 } from './Layout.styles';
 import MainMenu from '../MainMenu';
 import LogoIcon from '../../../shared/icons/LogoIcon';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
-import {CreateIssue} from "../../create-issue/CreateIssue";
+import { CreateIssue } from '../../create-issue/CreateIssue';
 import Backdrop from '@mui/material/Backdrop';
+import Drawer from '@mui/material/Drawer';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import Search from '@mui/icons-material/Search';
+import { priorityTypes } from '../../../shared/PriorityTypes';
+import { issueTypes } from '../../../shared/IssueTypes';
+import SearchDrawer from '../../search-drawer/SearchDrawer';
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     label: React.CSSProperties;
   }
+
   interface PaletteOptions {
     button: {
       primary: string;
@@ -45,6 +52,7 @@ declare module '@mui/material/styles' {
       ticketBg: string;
     };
   }
+
   // allow configuration using `createTheme`
   interface ThemeOptions {
     shadow: string;
@@ -76,6 +84,8 @@ const theme = createTheme({
   palette: {
     text: {
       primary: '#172B4D',
+      silent: '#5E6C84',
+      silent2: '#42526E',
     },
     primary: {
       main: '#0747A6',
@@ -89,6 +99,9 @@ const theme = createTheme({
     board: {
       bg: '#F4F5F7',
       ticketBg: '#fff',
+    },
+    hoverMark: {
+      primary: 'rgba(0,0,0,0.1)',
     },
   },
   components: {
@@ -127,12 +140,19 @@ const theme = createTheme({
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
+
 interface Props {
   children: any;
 }
+
 export const Layout: FC<Props> = ({ children }) => {
   const [open, setOpen] = useState(true);
-  const [showAddIssue, setShowAddIssue] = useState(false)
+  const [showAddIssue, setShowAddIssue] = useState(false);
+
+  const [searchDrawerOpened, setSearchDrawerOpened] = useState(false);
+   const toggleSearchDrawer = (val: boolean ) => {
+    setSearchDrawerOpened(val)
+   }
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handlePopoverOpen = (event: MouseEvent<HTMLButtonElement>) => {
@@ -151,37 +171,14 @@ export const Layout: FC<Props> = ({ children }) => {
     setOpen(false);
   };
 
-  const openAddIssue = () => {}
-
-  const [searchDrawerOpened, setSearchDrawerOpened] = useState(false);
-  const toggleSearchDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-    setSearchDrawerOpened(open);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={showAddIssue}>
+      <Backdrop open={showAddIssue}>
         <CreateIssue onClose={() => setShowAddIssue(false)}></CreateIssue>
       </Backdrop>
-      {/*   <SearchDrawer sx={{}} elevation={6} variant="permanent" open={searchDrawerOpened} onClose={toggleSearchDrawer(false)}>
-        <Box
-          role="presentation"
-          onClick={toggleSearchDrawer(false)}
-          onKeyDown={toggleSearchDrawer(false)}
-          sx={{width: 500, height: '100%', background: 'black'}}
-        >
-          drawer it is
-        </Box>
-      </SearchDrawer> */}
+      <SearchDrawer isOpened={searchDrawerOpened} toggleCb={toggleSearchDrawer}></SearchDrawer>
       <Box sx={{ display: 'flex', alignContent: 'stretch', height: '100%' }}>
-
         <MainDrawer elevation={6} variant='permanent' open={open}>
           <Box
             sx={{
@@ -194,13 +191,17 @@ export const Layout: FC<Props> = ({ children }) => {
           >
             <SecondarySidebar>
               <IconButton
-                onClick={toggleSearchDrawer(true)}
+                onClick={() => toggleSearchDrawer(!searchDrawerOpened)}
                 size='small'
                 sx={{ color: theme.palette.primary.contrastText, mb: 1 }}
               >
                 <SearchIcon></SearchIcon>
               </IconButton>
-              <IconButton onClick={() => setShowAddIssue(true)} size='small' sx={{ color: theme.palette.primary.contrastText, mb: 1 }}>
+              <IconButton
+                onClick={() => setShowAddIssue(true)}
+                size='small'
+                sx={{ color: theme.palette.primary.contrastText, mb: 1 }}
+              >
                 <AddIcon></AddIcon>
               </IconButton>
               <Box sx={{ flex: '1 1 auto' }}></Box>

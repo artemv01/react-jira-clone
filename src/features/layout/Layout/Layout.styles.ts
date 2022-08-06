@@ -1,11 +1,11 @@
-import type {NextPage} from 'next';
+import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import {styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider} from '@mui/material/styles';
+import { styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,7 +24,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import {MouseEvent, useState} from 'react';
+import { MouseEvent, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import Popover from '@mui/material/Popover';
@@ -34,48 +34,43 @@ import LogoIcon from '../src/components/Logo';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ViewKanbanIcon from '@mui/icons-material/ViewKanban';
 import MainMenu from '../src/components/layout/MainMenu';
-const drawerWidth = 304;
+const openedMixin =
+  (width: number) =>
+  (theme: Theme): CSSObject => ({
+    width,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: 'hidden',
+  });
 
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
-});
+const closedMixin =
+  (width: number) =>
+  (theme: Theme): CSSObject => ({
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width,
+  });
 
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: 84,
-});
-
-export const MainDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
-  width: drawerWidth,
+export const MainDrawer = styled(MuiDrawer)(({ theme, open }) => ({
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
   ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
+    ...openedMixin(304)(theme),
+    '& .MuiDrawer-paper': openedMixin(304)(theme),
   }),
   ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
+    ...closedMixin(84)(theme),
+    '& .MuiDrawer-paper': closedMixin(84)(theme),
   }),
 }));
-export const SearchDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  '.MuiPaper-root': {zIndex: 99999},
-}));
-export const SecondarySidebar = styled(Box)(({theme}) => ({
+
+export const SecondarySidebar = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   display: 'flex',
   flexDirection: 'column',
@@ -85,7 +80,7 @@ export const SecondarySidebar = styled(Box)(({theme}) => ({
   justifyContent: 'flex-start',
   padding: `${theme.spacing(3)} 0`,
 }));
-export const PrimarySidebar = styled(Box)(({theme}) => ({
+export const PrimarySidebar = styled(Box)(({ theme }) => ({
   backgroundColor: '#F4F5F7',
   display: 'flex',
   flexDirection: 'column',
@@ -94,7 +89,7 @@ export const PrimarySidebar = styled(Box)(({theme}) => ({
   width: 240,
   padding: theme.spacing(3, 2),
 }));
-export const ToggleSidebarIcon = styled(IconButton)(({theme}) => ({
+export const ToggleSidebarIcon = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
   zIndex: theme.zIndex.drawer + 1,
   top: 40,
@@ -108,7 +103,7 @@ export const ToggleSidebarIcon = styled(IconButton)(({theme}) => ({
     border: `1px solid ${theme.palette.primary.light}`,
   },
 }));
-export const Separator = styled(Box)(({theme}) => ({
+export const Separator = styled(Box)(({ theme }) => ({
   width: 25,
   height: '100%',
   position: 'relative',
