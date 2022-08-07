@@ -20,7 +20,7 @@ export const SelectUser: FC<Props> = ({ onChange }) => {
       {users.map((item) => (
         <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>
           <Avatar alt='John Johnson' src='/images/avatar1.jpg' sx={{ width: 24, height: 24 }} />
-          <ListItemText sx={{ pl: '8px' }} primaryTypographyProps={{ variant: 'body' }}>
+          <ListItemText sx={{ pl: '8px' }} primaryTypographyProps={{ variant: 'body1' }}>
             John Johnson
           </ListItemText>
         </MenuItem>

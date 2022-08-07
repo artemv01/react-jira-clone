@@ -13,8 +13,8 @@ export const SingleIssuePage: FC<Props> = ({ id }) => {
   return (
     <Box>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <Box sx={{mt: 2}}>
-          <IssueCard onSinglePage={true} issueId={id} />
+      <Box sx={{ mt: 2 }}>
+        <IssueCard singlePage={true} id={id} />
       </Box>
     </Box>
   );

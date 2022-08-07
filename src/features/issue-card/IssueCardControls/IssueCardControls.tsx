@@ -9,10 +9,10 @@ import IconButton from '@mui/material/IconButton';
 interface Props {
   onDelete: () => void;
   onExpand: () => void;
-  onClose: () => void;
-  onSinglePage?: boolean;
+  onClose?: () => void;
+  singlePage?: boolean;
 }
-export const IssueCardControls: FC<Props> = ({ onDelete, onExpand, onClose, onSinglePage }) => {
+export const IssueCardControls: FC<Props> = ({ onDelete, onExpand, onClose, singlePage }) => {
   return (
     <Box
       sx={{
@@ -24,12 +24,12 @@ export const IssueCardControls: FC<Props> = ({ onDelete, onExpand, onClose, onSi
       <IconButton onClick={onDelete} aria-label='delete'>
         <DeleteOutlineIcon></DeleteOutlineIcon>
       </IconButton>
-      {!onSinglePage && (
+      {!singlePage && (
         <IconButton onClick={onExpand} aria-label='expand'>
           <OpenInNewIcon></OpenInNewIcon>
         </IconButton>
       )}
-      {!onSinglePage && (
+      {!singlePage && (
         <IconButton onClick={onClose} aria-label='close'>
           <CloseIcon></CloseIcon>
         </IconButton>

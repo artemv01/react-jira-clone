@@ -1,8 +1,9 @@
-import {IssueType} from "./model/common";
+import { IssueType } from './model/common';
 
 export const issueTypes: IssueType[] = [
   {
-    id: 'bug',
+    id: 0,
+    name: 'bug',
     title: 'Bug',
     img: (
       <svg fill='red' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
@@ -12,7 +13,8 @@ export const issueTypes: IssueType[] = [
     ),
   },
   {
-    id: 'task',
+    id: 1,
+    name: 'task',
     title: 'Task',
     img: (
       <svg fill='green' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
@@ -22,7 +24,8 @@ export const issueTypes: IssueType[] = [
     ),
   },
   {
-    id: 'story',
+    id: 2,
+    name: 'story',
     title: 'Story',
     img: (
       <svg fill='blue' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>

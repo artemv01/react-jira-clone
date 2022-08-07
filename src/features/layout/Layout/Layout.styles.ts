@@ -1,39 +1,8 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
-import { styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
-import HelpIcon from '@mui/icons-material/Help';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { MouseEvent, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Paper from '@mui/material/Paper';
-import Popover from '@mui/material/Popover';
-import Tooltip from '@mui/material/Tooltip';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import LogoIcon from '../src/components/Logo';
-import SettingsIcon from '@mui/icons-material/Settings';
-import ViewKanbanIcon from '@mui/icons-material/ViewKanban';
-import MainMenu from '../src/components/layout/MainMenu';
+
 const openedMixin =
   (width: number) =>
   (theme: Theme): CSSObject => ({

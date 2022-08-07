@@ -4,24 +4,20 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { FC, forwardRef, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import IssueType from '../IssueType';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import SvgIcon from '@mui/material/SvgIcon';
 
 import { priorityTypes } from '../../../shared/PriorityTypes';
-import { issueTypes } from '../../../shared/IssueTypes';
 import IssueHeaderBadge from '../IssueHeaderBadge';
 import AddNewAssignee from '../AddNewAssignee';
 import PriorityBadge from '../PriorityBadge';
 import NoSsr from '../../../shared/NoSsr';
-import dynamic from 'next/dynamic';
 
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from '../../../shared/components/ReactQuill';
@@ -33,17 +29,19 @@ import Comment from '../Comment';
 import IssueCardControls from '../IssueCardControls';
 import Backdrop from '@mui/material/Backdrop';
 import DeleteIssueConfirm from '../DeleteIssueConfirm';
-import {useRouter} from 'next/router';
-import {editorFormats, editorModules} from '../../../shared/editorConfig';
+import { useRouter } from 'next/router';
+import { editorFormats, editorModules } from '../../../shared/editorConfig';
 
-const Wrapper = styled('div')<Props>(({ theme, onSinglePage }) => ({
+const Wrapper = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'singlePage',
+})<Props>(({ theme, singlePage }) => ({
   position: 'relative',
   display: 'flex',
   flexFlow: 'row nowrap',
   backgroundColor: theme.palette.board.ticketBg,
-  padding: !onSinglePage ? `${theme.spacing(2)} ${theme.spacing(2.5)} 64px ${theme.spacing(2.5)}` : 0,
+  padding: !singlePage ? `${theme.spacing(2)} ${theme.spacing(2.5)} 64px ${theme.spacing(2.5)}` : 0,
   width: '100%',
-  maxWidth: !onSinglePage ? '1040px' : '100%',
+  maxWidth: !singlePage ? '1040px' : '100%',
   '& .editor-col': {
     flex: '1 1 auto',
     marginRight: '40px',
@@ -113,16 +111,17 @@ const AssigneeMenu = styled(Menu)(({ theme }) => ({
 }));
 
 interface Props {
-  onClose?: () => {};
-  onSinglePage?: boolean;
+  onClose?: () => void;
+  singlePage?: boolean;
+  id?: string;
 }
 
-export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
+export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const theme = useTheme();
   const [assigneeBtn, setAssigneeBtn] = useState<null | HTMLElement>(null);
   const addAssigneeRef = useRef(null);
   const assigneeMenuOpen = Boolean(assigneeBtn);
-  const router = useRouter()
+  const router = useRouter();
 
   const [ticketContent, setTicketContent] = useState<string>(`
   After searching for an assignee on the list and clear the text, the option label was missing. It could
@@ -140,7 +139,7 @@ export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
   const toggleOpenEditor = (editor: string) => {
     setOpenEditors((state) => ({ ...state, content: !state[editor] }));
   };
-  const handleAddAssigneeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddAssigneeClick = (event: React.MouseEvent<HTMLDivElement>): void => {
     setAssigneeBtn(event.currentTarget);
   };
   const handleAssigneeMenuClose = () => {
@@ -166,13 +165,13 @@ export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
     setDeleteModalOpened(false);
   };
   const onExpandClick = () => {
-     router.push(`/project/issue/${issueId}`)
-  }
+    router.push(`/project/issue/${id}`);
+  };
 
   const ticketHeaderRef = useRef(null);
   useEffect(() => {
-    function addTitleInputClick(event) {
-      if (ticketHeaderRef.current && !ticketHeaderRef.current.contains(event.target)) {
+    function addTitleInputClick(event: Event): any {
+      if (ticketHeaderRef.current && !(ticketHeaderRef.current as any).contains(event.target)) {
         setOpenEditors((editors) => ({ ...editors, header: false }));
       }
     }
@@ -183,18 +182,22 @@ export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
     };
   }, [ticketHeaderRef]);
 
-
   return (
     <NoSsr>
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
         <DeleteIssueConfirm onClose={onDeleteCancel} onConfirm={onDeleteConfirm}></DeleteIssueConfirm>
       </Backdrop>
-      <Wrapper onSinglePage={onSinglePage}>
+      <Wrapper singlePage={singlePage}>
         <div className='issue-card-controls'>
-          <IssueCardControls onSinglePage={onSinglePage} onDelete={onDeleteClick} onExpand={onExpandClick} onClose={onClose}></IssueCardControls>
+          <IssueCardControls
+            singlePage={singlePage}
+            onDelete={onDeleteClick}
+            onExpand={onExpandClick}
+            onClose={onClose}
+          ></IssueCardControls>
         </div>
         <div className='editor-col'>
-          <IssueHeaderBadge issueId='STG-1234' issueTypeId='bug'></IssueHeaderBadge>
+          <IssueHeaderBadge issueId='STG-1234' issueTypeId={0}></IssueHeaderBadge>
           <div ref={ticketHeaderRef}>
             {!openEditors['header'] && (
               <Typography
@@ -356,7 +359,7 @@ export const IssueCard: FC<Props> = ({ onClose, onSinglePage, issueId }) => {
                 priority
               </Typography>
               <div className='control-content'>
-                <PriorityBadge priority={priorityTypes[0]} />
+                <PriorityBadge priorityId={priorityTypes[0].id} />
               </div>
             </div>
             <Typography variant='caption' color='text.secondary'>

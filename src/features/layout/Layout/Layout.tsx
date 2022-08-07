@@ -1,12 +1,10 @@
-import { styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
@@ -15,33 +13,43 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { FC, MouseEvent, useState } from 'react';
 
-import {
-  MainDrawer,
-  SecondarySidebar,
-  PrimarySidebar,
-  Separator,
-  ToggleSidebarIcon,
-} from './Layout.styles';
+import { MainDrawer, SecondarySidebar, PrimarySidebar, Separator, ToggleSidebarIcon } from './Layout.styles';
 import MainMenu from '../MainMenu';
 import LogoIcon from '../../../shared/icons/LogoIcon';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
-import { CreateIssue } from '../../create-issue/CreateIssue';
+import { CreateIssue } from '../../create-issue/CreateIssue/CreateIssue';
 import Backdrop from '@mui/material/Backdrop';
-import Drawer from '@mui/material/Drawer';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
-import Search from '@mui/icons-material/Search';
-import { priorityTypes } from '../../../shared/PriorityTypes';
-import { issueTypes } from '../../../shared/IssueTypes';
 import SearchDrawer from '../../search-drawer/SearchDrawer';
-
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    label: true;
+    label2: true;
+  }
+}
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     label: React.CSSProperties;
+    label2: React.CSSProperties;
   }
-
+  interface Palette {
+    button: {
+      primary: string;
+      dark: string;
+    };
+    board: {
+      bg: string;
+      ticketBg: string;
+    };
+    silent: {
+      silent1: string;
+      silent2: string;
+    };
+    hoverMark: {
+      primary: string;
+    };
+  }
   interface PaletteOptions {
     button: {
       primary: string;
@@ -51,15 +59,38 @@ declare module '@mui/material/styles' {
       bg: string;
       ticketBg: string;
     };
+    silent: {
+      silent1: string;
+      silent2: string;
+    };
+    hoverMark: {
+      primary: string;
+    };
   }
 
   // allow configuration using `createTheme`
   interface ThemeOptions {
-    shadow: string;
     board?: {
       bg?: string;
       ticketBg?: string;
     };
+    silent?: {
+      silent1?: string;
+      silent2?: string;
+    };
+    hoverMark?: {
+      primary?: string;
+    };
+  }
+
+  interface TypographyVariants {
+    label: React.CSSProperties;
+    label2: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    label?: React.CSSProperties;
+    label2?: React.CSSProperties;
   }
 }
 
@@ -84,7 +115,9 @@ const theme = createTheme({
   palette: {
     text: {
       primary: '#172B4D',
-      silent: '#5E6C84',
+    },
+    silent: {
+      silent1: '#5E6C84',
       silent2: '#42526E',
     },
     primary: {
@@ -142,7 +175,7 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 interface Props {
-  children: any;
+  children?: any;
 }
 
 export const Layout: FC<Props> = ({ children }) => {
@@ -150,9 +183,9 @@ export const Layout: FC<Props> = ({ children }) => {
   const [showAddIssue, setShowAddIssue] = useState(false);
 
   const [searchDrawerOpened, setSearchDrawerOpened] = useState(false);
-   const toggleSearchDrawer = (val: boolean ) => {
-    setSearchDrawerOpened(val)
-   }
+  const toggleSearchDrawer = (val: boolean) => {
+    setSearchDrawerOpened(val);
+  };
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handlePopoverOpen = (event: MouseEvent<HTMLButtonElement>) => {

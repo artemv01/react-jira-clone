@@ -32,7 +32,7 @@ export const SearchInput = styled(OutlinedInput)(({ theme }) => ({
     position: 'relative',
     backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
     fontSize: 20,
-    color: `${theme.palette.text.silent}`,
+    color: `${theme.palette.silent.silent1}`,
     padding: '4px 8px 4px 0px',
   },
   '& .MuiOutlinedInput-notchedOutline': {

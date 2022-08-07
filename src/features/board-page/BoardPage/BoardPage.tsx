@@ -4,17 +4,16 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import NoSsr from '../../../shared/NoSsr';
-import { TicketCard } from './TicketCard';
 import BoardColumn from '../BoardColumn';
-import { styled } from '@mui/material/styles';
 import BoardPageControls from '../BoardPageControls';
 import Backdrop from '@mui/material/Backdrop';
 import IssueCard from '../../issue-card/IssueCard';
 import Breadcrumbs from '../../../shared/components/Breadcrumbs';
-import {CreateIssue} from '../../create-issue/CreateIssue';
+import TicketCard from '../TicketCard';
 const initialData = [
   {
     id: '1',
+    publicId: 'BUG-001',
     group: 'backlog',
     title: 'Backlog',
     items: [
@@ -37,6 +36,7 @@ const initialData = [
   {
     id: '2',
     group: 'selected_for_dev',
+    publicId: 'BUG-001',
     title: 'Selected for development',
     items: [
       {
@@ -58,6 +58,7 @@ const initialData = [
   {
     id: '3',
     group: 'in_progress',
+    publicId: 'BUG-001',
     title: 'in progress',
     items: [
       {
@@ -80,6 +81,7 @@ const initialData = [
     id: '4',
     group: 'done',
     title: 'done',
+    publicId: 'BUG-001',
     items: [
       {
         id: '7',

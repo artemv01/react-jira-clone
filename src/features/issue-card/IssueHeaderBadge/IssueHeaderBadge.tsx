@@ -1,17 +1,18 @@
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import IssueType from '../IssueType';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-import { IssueTypeId, issueTypes } from '../../../shared/IssueTypes';
+import { issueTypes } from '../../../shared/IssueTypes';
+import { IssueType } from '../../../shared/model/common';
+import { IssueTypeBadge } from '../IssueTypeBadge/IssueTypeBadge';
 interface Props {
   issueId: string;
-  issueTypeId: IssueTypeId;
+  issueTypeId: number;
 }
 const MenuWrapper = styled(Menu)(({ theme }) => ({
   '& .MuiTypography-root': {
@@ -38,15 +39,15 @@ const Wrapper = styled('div')(({ theme }) => ({
 export const IssueHeaderBadge: FC<Props> = ({ issueId, issueTypeId }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState<IssueType>({} as IssueType);
   const [types, setTypes] = useState(issueTypes);
-  const initIssues = (issueTypeId: IssueTypeId) => {
+  const initIssues = (issueTypeId: number) => {
     let issueIdx = issueTypes.findIndex((item) => item.id === issueTypeId);
     if (issueIdx === -1) {
       issueIdx = 0;
@@ -62,7 +63,7 @@ export const IssueHeaderBadge: FC<Props> = ({ issueId, issueTypeId }) => {
   return (
     <div>
       <Wrapper onClick={handleClick}>
-        <IssueType type={selected.id}></IssueType>
+        <IssueTypeBadge id={selected.id}></IssueTypeBadge>
         <Typography variant='label' color='text.secondary'>
           {issueId}
         </Typography>

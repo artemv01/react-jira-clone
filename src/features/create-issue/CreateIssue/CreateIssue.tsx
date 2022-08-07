@@ -4,25 +4,33 @@ import { FC, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
-import SelectType from './SelectType';
-import SelectPriority from './SelectPriority';
-import SelectUser from './SelectUser';
-import Label from '../../shared/components/Label';
-import { editorFormats, editorModules } from '../../shared/editorConfig';
+import SelectType from '../SelectType';
+import SelectPriority from '../SelectPriority';
+import SelectUser from '../SelectUser';
+import Label from '../../../shared/components/Label';
+import { editorFormats, editorModules } from '../../../shared/editorConfig';
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill from '../../shared/components/ReactQuill';
-import TextField from '../../shared/components/TextField';
+import ReactQuill from '../../../shared/components/ReactQuill';
+import TextField from '../../../shared/components/TextField';
 
 interface Props {
   onClose: () => void;
 }
+interface CreateIssue {
+  type: string;
+  priority: string;
+  assignee: number | undefined;
+  reporter: number | undefined;
+  summary: string;
+  text: string;
+}
 
 export const CreateIssue: FC<Props> = ({ onClose }) => {
-  const issueData = {
+  const issueData: CreateIssue = {
     type: '',
     priority: '',
-    assignee: '',
-    reporter: '',
+    assignee: undefined,
+    reporter: undefined,
     summary: '',
     text: '',
   };

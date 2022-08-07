@@ -40,24 +40,7 @@ export function MainMenu(): JSX.Element {
           <ListItemText disableTypography primary={<Typography fontSize={15}>Kanban Board</Typography>} />
         </ListItemButton>
       </ListItem>
-      <ListItem disablePadding>
-        <ListItemButton>
-          <ListItemIcon
-            sx={{
-              width: '24px',
-              minWidth: '24px',
-              marginRight: '16px',
-            }}
-          >
-            <SettingsIcon
-              sx={{
-                color: 'text.primary',
-              }}
-            />
-          </ListItemIcon>
-          <ListItemText disableTypography primary={<Typography fontSize={15}>Project Settings</Typography>} />
-        </ListItemButton>
-      </ListItem>
+      
     </List>
   );
 }

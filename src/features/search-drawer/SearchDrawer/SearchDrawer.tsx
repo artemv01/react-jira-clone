@@ -39,13 +39,14 @@ export const SearchDrawer: FC<Props> = ({ toggleCb, isOpened }) => {
           placeholder={'Search issues by summary, description..'}
         />
         <Box sx={{ mb: 2 }}>
-          <Typography variant={'label'} color={'text.silent'} fontSize={12}>
+          <Typography variant={'label'} color={'silent.silent1'} fontSize={12}>
             Recent issues
           </Typography>
         </Box>
         <Box>
-          {new Array(4).fill(1).map((i) => (
+          {new Array(4).fill(1).map((item, index) => (
             <Box
+              key={index}
               className={'ticket-mini-card'}
               sx={{
                 display: 'flex',
@@ -60,7 +61,7 @@ export const SearchDrawer: FC<Props> = ({ toggleCb, isOpened }) => {
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography
                   variant={'body2'}
-                  color={'text.silent2'}
+                  color={'silent.silent2'}
                   sx={{
                     overflowWrap: 'break-word',
                     whiteSpace: 'normal',
@@ -68,7 +69,7 @@ export const SearchDrawer: FC<Props> = ({ toggleCb, isOpened }) => {
                 >
                   Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis ipsum, dolorem
                 </Typography>
-                <Typography color={'text.silent'} fontSize={12} textTransform={'uppercase'}>
+                <Typography color={'silent.silent1'} fontSize={12} textTransform={'uppercase'}>
                   story-1234
                 </Typography>
               </Box>

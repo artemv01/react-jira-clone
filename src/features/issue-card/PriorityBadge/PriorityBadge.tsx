@@ -12,19 +12,19 @@ import MenuList from '@mui/material/MenuList';
 import SvgIcon from '@mui/material/SvgIcon';
 
 import { priorityTypes } from '../../../shared/PriorityTypes';
+import { Priority } from '../../../shared/model/common';
 
 interface Props {
-  priorityId: string;
+  priorityId: number;
 }
 
 export const PriorityBadge: FC<Props> = ({ priorityId }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-
     setAnchorEl(null);
   };
   const Wrapper = styled(Menu)(({ theme }) => ({
@@ -33,9 +33,9 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
       paddingLeft: theme.spacing(1),
     },
   }));
-  const [selected, setSelected] = useState({});
-  const [priorities, setPriorities] = useState(priorityTypes);
-  const initPriorities = (priorityId) => {
+  const [selected, setSelected] = useState<Priority>({} as Priority);
+  const [priorities, setPriorities] = useState<Priority[]>(priorityTypes);
+  const initPriorities = (priorityId: number) => {
     let priorityIdx = priorityTypes.findIndex((item) => item.id === priorityId);
     if (priorityIdx === -1) {
       priorityIdx = 0;
@@ -50,7 +50,7 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
 
   return (
     <div>
-      <List  onClick={handleClick} disablePadding={true}>
+      <List onClick={handleClick} disablePadding={true}>
         <ListItem disablePadding>
           <ListItemButton dense={true} selected={true}>
             <ListItemIcon>
@@ -68,12 +68,7 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
           </ListItemButton>
         </ListItem>
       </List>
-      <Wrapper
-        id='priority-menu'
-        anchorEl={anchorEl}
-        open={openMenu}
-        onClose={handleClose}
-      >
+      <Wrapper id='priority-menu' anchorEl={anchorEl} open={openMenu} onClose={handleClose}>
         <MenuList disablePadding={true}>
           {priorities.map((item) => (
             <MenuItem onClick={() => initPriorities(item.id)} key={item.id}>
