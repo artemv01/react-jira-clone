@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { FC } from 'react';
-import Breadcrumbs from '../../shared/components/Breadcrumbs';
-import IssueCard from '../issue-card/IssueCard';
+import Breadcrumbs from '../../../shared/components/Breadcrumbs';
+import IssueCard from '../../issue-card/IssueCard';
 
 const breadcrumbs = ['Projects', 'React Jira Clone', 'Issues', '2022'];
 

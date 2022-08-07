@@ -3,11 +3,12 @@
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import Layout from '../../../src/features/layout/Layout';
-import SingleIssuePage from '../../../src/features/single-issue-page';
+import SingleIssuePage from '../../../src/features/single-issue-page/SingleIssuePage';
 
 const SingleIssue: FC = (): JSX.Element => {
   const router = useRouter();
   const id = router.query.id as string;
+
   return (
     <Layout>
       <SingleIssuePage id={id}></SingleIssuePage>
