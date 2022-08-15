@@ -10,96 +10,8 @@ import Backdrop from '@mui/material/Backdrop';
 import IssueCard from '../../issue-card/IssueCard';
 import Breadcrumbs from '../../../shared/components/Breadcrumbs';
 import TicketCard from '../TicketCard';
-const initialData = [
-  {
-    id: '1',
-    publicId: 'BUG-001',
-    group: 'backlog',
-    title: 'Backlog',
-    items: [
-      {
-        id: '1',
-        title: 'Angular Spotify',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-      {
-        id: '2',
-        title: 'Angular Spotify',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-    ],
-  },
-  {
-    id: '2',
-    group: 'selected_for_dev',
-    publicId: 'BUG-001',
-    title: 'Selected for development',
-    items: [
-      {
-        id: '3',
-        title: 'When creating an issue, the assignee list is not working properly on searching',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-      {
-        id: '4',
-        title: 'Preparing backend API with GraphQL - Update 08/2020',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-    ],
-  },
-  {
-    id: '3',
-    group: 'in_progress',
-    publicId: 'BUG-001',
-    title: 'in progress',
-    items: [
-      {
-        id: '5',
-        title: 'Preparing backend API with GraphQL - Update 08/2020',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-      {
-        id: '6',
-        title: 'Jira Clone Storybook - Update 10/2020',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-    ],
-  },
-  {
-    id: '4',
-    group: 'done',
-    title: 'done',
-    publicId: 'BUG-001',
-    items: [
-      {
-        id: '7',
-        title: 'Behind the 900 stars - Update 08/2020',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-      {
-        id: '8',
-        title: 'Angular router not working on Netlify on refresh',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-    ],
-  },
-];
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { moveIssue, selectIssues } from '../../../store/issuesSlice';
 
 export const ItemTypes = {
   CARD: 'card',
@@ -107,7 +19,8 @@ export const ItemTypes = {
 const breadcrumbs = ['Projects', 'React Jira Clone', 'Kanban Board'];
 
 export const BoardPage: FC = () => {
-  const [taskList, setTasks] = useState(initialData);
+  const taskList = useAppSelector(selectIssues);
+  const dispatch = useAppDispatch();
   const [isIssueCardOpened, setIssueCardOpened] = useState(false);
   function onDragEnd(val: any) {
     const { draggableId, source, destination } = val;
@@ -119,8 +32,15 @@ export const BoardPage: FC = () => {
       : [{ ...sourceGroup }];
 
     const [movingTask] = sourceGroup.items.filter((t) => t.id === draggableId);
-
-    sourceGroup.items.splice(source.index, 1);
+    dispatch(
+      moveIssue({
+        sourceGroupId: sourceGroup.id,
+        destGroupId: destinationGroup.id,
+        destIdx: destination.index,
+        issueId: movingTask.id,
+      })
+    );
+    /* sourceGroup.items.splice(source.index, 1);
     destinationGroup.items.splice(destination.index, 0, movingTask);
 
     const newTaskList = taskList.map((column) => {
@@ -138,7 +58,7 @@ export const BoardPage: FC = () => {
       }
       return column;
     });
-    setTasks(newTaskList);
+    setTasks(newTaskList);*/
   }
 
   return (

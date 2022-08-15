@@ -1,8 +1,9 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+import { compose } from '@reduxjs/toolkit';
+import { wrapper } from '../src/store/store';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return <Component {...pageProps} />;
 }
-
-export default MyApp
+export default compose(wrapper.withRedux)(MyApp);
