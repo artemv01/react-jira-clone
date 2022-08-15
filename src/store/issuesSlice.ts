@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { ColumnType, Issue, IssueColumn } from '../shared/model/common';
 import { RootState } from './store';
 import { HYDRATE } from 'next-redux-wrapper';
@@ -32,7 +32,7 @@ const initialState: IssueColumn[] = [
     publicId: 'BUG-001',
     items: [
       {
-        id: '7',
+        id: nanoid(),
         title: 'Behind the 900 stars - Update 08/2020',
         assignee: 'Thor',
         priority: 'Highest',

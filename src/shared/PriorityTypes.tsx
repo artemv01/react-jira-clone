@@ -2,7 +2,7 @@ import { Priority } from './model/common';
 
 export const priorityTypes: Priority[] = [
   {
-    id: 0,
+    id: 'kUvro59zCQQRgz4DCiDjs',
     name: 'lowest',
     title: 'Lowest',
     img: (
@@ -13,7 +13,7 @@ export const priorityTypes: Priority[] = [
     ),
   },
   {
-    id: 1,
+    id: 'dTy-97F8hh08enlqiFPhJ',
     name: 'low',
     title: 'Low',
     img: (
@@ -24,7 +24,7 @@ export const priorityTypes: Priority[] = [
     ),
   },
   {
-    id: 2,
+    id: 'f1BPVryv9N5PJeHeviFuy',
     name: 'medium',
     title: 'Medium',
     img: (
@@ -35,7 +35,7 @@ export const priorityTypes: Priority[] = [
     ),
   },
   {
-    id: 3,
+    id: 'wX64qFzHhgccoEyX5kZmp',
     name: 'high',
     title: 'High',
     img: (

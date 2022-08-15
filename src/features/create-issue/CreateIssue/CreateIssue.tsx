@@ -12,6 +12,9 @@ import { editorFormats, editorModules } from '../../../shared/editorConfig';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from '../../../shared/components/ReactQuill';
 import TextField from '../../../shared/components/TextField';
+import { users } from '../../../shared/stubs/users';
+import { priorityTypes } from '../../../shared/PriorityTypes';
+import { issueTypes } from '../../../shared/IssueTypes';
 
 interface Props {
   onClose: () => void;
@@ -19,18 +22,18 @@ interface Props {
 interface CreateIssue {
   type: string;
   priority: string;
-  assignee: number | undefined;
-  reporter: number | undefined;
+  assignee: string[];
+  reporter: string;
   summary: string;
   text: string;
 }
 
 export const CreateIssue: FC<Props> = ({ onClose }) => {
   const issueData: CreateIssue = {
-    type: '',
-    priority: '',
-    assignee: undefined,
-    reporter: undefined,
+    type: issueTypes[0].id,
+    priority: priorityTypes[0].id,
+    assignee: [],
+    reporter: users[0].id,
     summary: '',
     text: '',
   };
@@ -63,12 +66,12 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
       <Box>
         <Box sx={{ mb: 1 }}>
           <Label text='Issue type'>
-            <SelectType onChange={(type) => (issueData.type = type)}></SelectType>
+            <SelectType value={issueData.type} onChange={(type) => (issueData.type = type)}></SelectType>
           </Label>
         </Box>
         <Box sx={{ mb: 1 }}>
           <Label text='Issue priority'>
-            <SelectPriority onChange={(val) => (issueData.priority = val)}></SelectPriority>
+            <SelectPriority value={issueData.priority} onChange={(val) => (issueData.priority = val)}></SelectPriority>
           </Label>
         </Box>
         <Box sx={{ mb: 1 }}>
@@ -83,7 +86,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
               <ReactQuill
                 theme={'snow'}
                 onChange={(val) => (issueData.text = val)}
-                value={''}
+                value={issueData.text}
                 modules={editorModules}
                 formats={editorFormats}
               />
@@ -92,17 +95,21 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
         </Box>
         <Box sx={{ mb: 1 }}>
           <Label text='Reporter'>
-            <SelectUser onChange={(val) => (issueData.reporter = val)}></SelectUser>
+            <SelectUser value={issueData.reporter} onChange={(val) => (issueData.reporter = val)}></SelectUser>
           </Label>
         </Box>
         <Box sx={{ mb: 1 }}>
           <Label text='Short summary'>
-            <TextField onChange={(val) => (issueData.summary = val)}></TextField>
+            <TextField value={issueData.summary} onChange={(val) => (issueData.summary = val)}></TextField>
           </Label>
         </Box>
         <Box sx={{ mb: 3 }}>
           <Label text='Assignees'>
-            <SelectUser onChange={(val) => (issueData.assignee = val)}></SelectUser>
+            <SelectUser
+              value={issueData.assignee}
+              multiple={true}
+              onChange={(val) => (issueData.assignee = val)}
+            ></SelectUser>
           </Label>
         </Box>
         <Box

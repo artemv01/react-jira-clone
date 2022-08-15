@@ -1,8 +1,9 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { IssueType } from './model/common';
 
 export const issueTypes: IssueType[] = [
   {
-    id: 0,
+    id: 'PkNnJEJXUrfJ94uX8haZC',
     name: 'bug',
     title: 'Bug',
     img: (
@@ -13,7 +14,7 @@ export const issueTypes: IssueType[] = [
     ),
   },
   {
-    id: 1,
+    id: '2jV8kOluCQPObo2_kYYgh',
     name: 'task',
     title: 'Task',
     img: (
@@ -24,7 +25,7 @@ export const issueTypes: IssueType[] = [
     ),
   },
   {
-    id: 2,
+    id: 'jkxTB4-Y9VATH14_Sztf5',
     name: 'story',
     title: 'Story',
     img: (

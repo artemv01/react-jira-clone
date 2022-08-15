@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import styledEngine from '@mui/styled-engine';
 import MuiSelect from '@mui/material/Select';
-import {styled} from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import FormControl from '@mui/material/FormControl';
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => ({
@@ -26,7 +26,7 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
     outline: 0,
   },
   '& .MuiOutlinedInput-input': {
-    padding: '2px 8px  2px 8px',
+    padding: '4px 8px  4px 8px',
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
@@ -38,21 +38,26 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
     width: '24px',
     minWidth: '24px',
   },
-
 }));
 interface Props {
   children: any[];
   onChange: (newVal: any) => void;
-  defaultValue: any;
+  value: any;
+  multiple?: boolean;
+  renderValue?: (selected: any) => ReactNode;
 }
-export const Select: FC<Props> = ({ children, onChange, defaultValue }) => {
+export const Select: FC<Props> = ({ children, onChange, value, multiple, renderValue }) => {
+  console.log('value is');
+  console.log(value);
   return (
     <FormControl fullWidth>
       <StyledSelect
         onChange={(event) => onChange(event.target.value)}
         displayEmpty
         input={<OutlinedInput />}
-        defaultValue={defaultValue}
+        value={value}
+        multiple={multiple}
+        renderValue={renderValue}
       >
         {/* <MenuItem value={0}>
           <Avatar alt='John Johnson' src='/images/avatar1.jpg' sx={{ width: 20, height: 20 }} />

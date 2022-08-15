@@ -1,11 +1,11 @@
 export interface Priority {
-  id: number;
+  id: string;
   name: string;
   title: string;
   img: React.ReactNode;
 }
 export interface IssueType {
-  id: number;
+  id: string;
   name: string;
   title: string;
   img: React.ReactNode;

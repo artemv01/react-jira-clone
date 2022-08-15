@@ -7,20 +7,26 @@ import Select from '../../../shared/components/Select';
 
 interface Props {
   onChange: (id: string) => void;
+  value: string;
 }
 
-export const SelectType: FC<Props> = ({ onChange }) => {
+export const SelectType: FC<Props> = ({ onChange, value }) => {
+  const [selected, setSelected] = useState(value);
+  if (!selected) {
+    return <></>;
+  }
   return (
     <Select
       onChange={(newVal: any) => {
+        setSelected(newVal);
         onChange(newVal);
       }}
-      defaultValue={(issueTypes[0].id)}
+      value={selected}
     >
       {issueTypes.map((item) => (
-        <MenuItem value={item.id} key={item.id} sx={{px: '8px'}}>
-          <ListItemIcon  sx={{minWidth: '24px !important', width: '24px !important'}}>{item.img}</ListItemIcon>
-          <ListItemText sx={{pl: '8px'}} primaryTypographyProps={{ variant: 'label', color: 'text.secondary' }}>
+        <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>
+          <ListItemIcon sx={{ minWidth: '24px !important', width: '24px !important' }}>{item.img}</ListItemIcon>
+          <ListItemText sx={{ pl: '8px' }} primaryTypographyProps={{ variant: 'label', color: 'text.secondary' }}>
             {item.title}
           </ListItemText>
         </MenuItem>

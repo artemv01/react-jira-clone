@@ -4,24 +4,30 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { IssueType, Priority } from '../../../shared/model/common';
 import Select from '../../../shared/components/Select';
-import {priorityTypes} from '../../../shared/PriorityTypes';
+import { priorityTypes } from '../../../shared/PriorityTypes';
 
 interface Props {
   onChange: (id: string) => void;
+  value: string;
 }
 
-export const SelectPriority: FC<Props> = ({ onChange }) => {
+export const SelectPriority: FC<Props> = ({ onChange, value }) => {
+  const [selected, setSelected] = useState(value);
+  if (!selected) {
+    return <></>;
+  }
   return (
     <Select
       onChange={(newVal: any) => {
+        setSelected(newVal);
         onChange(newVal);
       }}
-      defaultValue={priorityTypes[0].id}
+      value={selected}
     >
       {priorityTypes.map((item) => (
-        <MenuItem value={item.id} key={item.id} sx={{px: '8px'}}>
-          <ListItemIcon  sx={{minWidth: '24px !important', width: '24px !important'}}>{item.img}</ListItemIcon>
-          <ListItemText sx={{pl: '8px'}} primaryTypographyProps={{ variant: 'label', color: 'text.secondary' }}>
+        <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>
+          <ListItemIcon sx={{ minWidth: '24px !important', width: '24px !important' }}>{item.img}</ListItemIcon>
+          <ListItemText sx={{ pl: '8px' }} primaryTypographyProps={{ variant: 'label', color: 'text.secondary' }}>
             {item.title}
           </ListItemText>
         </MenuItem>
