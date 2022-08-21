@@ -8,16 +8,18 @@ import { priorityTypes } from '../../../shared/PriorityTypes';
 
 interface Props {
   onChange: (id: string) => void;
+  onBlur?: () => void;
   value: string;
 }
 
-export const SelectPriority: FC<Props> = ({ onChange, value }) => {
+export const SelectPriority: FC<Props> = ({ onChange, value, onBlur }) => {
   const [selected, setSelected] = useState(value);
   if (!selected) {
     return <></>;
   }
   return (
     <Select
+      onBlur={onBlur}
       onChange={(newVal: any) => {
         setSelected(newVal);
         onChange(newVal);

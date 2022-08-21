@@ -11,6 +11,7 @@ import styledEngine from '@mui/styled-engine';
 import MuiSelect from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 import FormControl from '@mui/material/FormControl';
+import React from 'react';
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => ({
   '& .MuiOutlinedInput-notchedOutline': {
@@ -42,27 +43,24 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
 interface Props {
   children: any[];
   onChange: (newVal: any) => void;
+  onBlur?: () => void;
   value: any;
   multiple?: boolean;
   renderValue?: (selected: any) => ReactNode;
 }
-export const Select: FC<Props> = ({ children, onChange, value, multiple, renderValue }) => {
-  console.log('value is');
-  console.log(value);
+
+export const Select: FC<Props> = ({ children, onChange, onBlur, value, multiple, renderValue }) => {
   return (
     <FormControl fullWidth>
       <StyledSelect
         onChange={(event) => onChange(event.target.value)}
+        onBlur={onBlur}
         displayEmpty
         input={<OutlinedInput />}
         value={value}
         multiple={multiple}
         renderValue={renderValue}
       >
-        {/* <MenuItem value={0}>
-          <Avatar alt='John Johnson' src='/images/avatar1.jpg' sx={{ width: 20, height: 20 }} />
-          <ListItemText>John Johnson</ListItemText>
-        </MenuItem> */}
         {children}
       </StyledSelect>
     </FormControl>

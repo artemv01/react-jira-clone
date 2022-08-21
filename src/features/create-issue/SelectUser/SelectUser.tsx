@@ -10,13 +10,14 @@ import Chip from '@mui/material/Chip';
 import CloseIcon from '@mui/icons-material/Close';
 interface Props {
   onChange: (id: string | string[]) => void;
+  onBlur?: () => void;
   multiple?: boolean;
   value: string[] | string;
 }
 
 const findUserById = (findId: string) => users.find(({ id }) => findId === id);
 
-export const SelectUser: FC<Props> = ({ onChange, multiple, value }) => {
+export const SelectUser: FC<Props> = ({ onChange, multiple, value, onBlur }) => {
   const [selected, setSelected] = useState<string[] | string>(value);
   useEffect(() => setSelected(value), [value]);
   const handleDelete = (e: React.MouseEvent, value: string) => {
@@ -85,6 +86,7 @@ export const SelectUser: FC<Props> = ({ onChange, multiple, value }) => {
   return (
     <Select
       multiple={multiple}
+      onBlur={onBlur}
       onChange={(newVal: any) => {
         setSelected((selected) => {
           setSelected(newVal);

@@ -23,7 +23,9 @@ import { CreateIssue } from '../../create-issue/CreateIssue/CreateIssue';
 import Backdrop from '@mui/material/Backdrop';
 import SearchDrawer from '../../search-drawer/SearchDrawer';
 import { theme } from '../../../shared/theme';
-
+import { CreateIssueParams, issueAdded } from '../../../store/issuesSlice';
+import { useAppDispatch } from '../../../store/hooks';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 interface Props {
   children?: any;
 }
@@ -35,6 +37,10 @@ export const Layout: FC<Props> = ({ children }) => {
   const [searchDrawerOpened, setSearchDrawerOpened] = useState(false);
   const toggleSearchDrawer = (val: boolean) => {
     setSearchDrawerOpened(val);
+  };
+
+  const createIssueClose = () => {
+    setShowAddIssue(false);
   };
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -57,8 +63,8 @@ export const Layout: FC<Props> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Backdrop open={showAddIssue}>
-        <CreateIssue onClose={() => setShowAddIssue(false)}></CreateIssue>
+      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={showAddIssue}>
+        <CreateIssue onClose={() => createIssueClose()}></CreateIssue>
       </Backdrop>
       <SearchDrawer isOpened={searchDrawerOpened} toggleCb={toggleSearchDrawer}></SearchDrawer>
       <Box sx={{ display: 'flex', alignContent: 'stretch', height: '100%' }}>

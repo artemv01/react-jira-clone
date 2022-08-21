@@ -30,19 +30,11 @@ const initialState: IssueColumn[] = [
     group: 'done',
     title: 'done',
     publicId: 'BUG-001',
-    items: [
-      {
-        id: nanoid(),
-        title: 'Behind the 900 stars - Update 08/2020',
-        assignee: 'Thor',
-        priority: 'Highest',
-        type: '',
-      },
-    ],
+    items: [],
   },
 ];
 
-interface CreateIssueParams {
+export interface CreateIssueParams {
   issue: Issue;
   columnType: ColumnType;
 }

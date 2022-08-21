@@ -1,4 +1,6 @@
-export const users = [
+import {User} from "../model/common";
+
+export const users: User[] = [
   {
     id: '85hO6aeMSpjVxT3iwdhiP',
     avatarUrl: '/images/avatar1.jpg',

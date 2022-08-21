@@ -12,7 +12,7 @@ import { IssueType } from '../../../shared/model/common';
 import { IssueTypeBadge } from '../IssueTypeBadge/IssueTypeBadge';
 interface Props {
   issueId: string;
-  issueTypeId: number;
+  issueTypeId: string;
 }
 const MenuWrapper = styled(Menu)(({ theme }) => ({
   '& .MuiTypography-root': {
@@ -47,7 +47,7 @@ export const IssueHeaderBadge: FC<Props> = ({ issueId, issueTypeId }) => {
   };
   const [selected, setSelected] = useState<IssueType>({} as IssueType);
   const [types, setTypes] = useState(issueTypes);
-  const initIssues = (issueTypeId: number) => {
+  const initIssues = (issueTypeId: string) => {
     let issueIdx = issueTypes.findIndex((item) => item.id === issueTypeId);
     if (issueIdx === -1) {
       issueIdx = 0;

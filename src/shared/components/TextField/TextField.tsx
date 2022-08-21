@@ -4,6 +4,7 @@ import { FC, useState } from 'react';
 
 interface Props {
   onChange: (val: string) => void;
+  onBlur: () => void;
   value: string;
 }
 const StyledInput = styled(MuiInput)(({ theme }) => ({
@@ -27,12 +28,13 @@ const StyledInput = styled(MuiInput)(({ theme }) => ({
   },
 }));
 
-export const TextField: FC<Props> = ({ onChange, value }) => {
+export const TextField: FC<Props> = ({ onChange, value, onBlur }) => {
   const [inputValue, setInputValue] = useState(value);
   return (
     <StyledInput
       value={inputValue}
       fullWidth={true}
+      onBlur={onBlur}
       onChange={(event) => {
         setInputValue(event.target.value);
         onChange(event.target.value);

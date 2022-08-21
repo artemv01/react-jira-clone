@@ -82,26 +82,23 @@ export const BoardPage: FC = () => {
                 return (
                   <Grid item key={data.id} xs={3}>
                     <BoardColumn id={data.group} headerText={data.title}>
-                      {data.items.map(({ id, title }, i) => (
-                        <Draggable key={id} draggableId={id} index={i}>
+                      {data.items.map((issue, i) => (
+                        <Draggable key={issue.id} draggableId={issue.id} index={i}>
                           {(provided: any) => (
                             <div
-                              key={id}
+                              key={issue.id}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}
                               onClick={() => setIssueCardOpened(true)}
                             >
                               <TicketCard
-                                key={id}
-                                text={'When creating an issue, the assignee list is not working properly on searching'}
-                                assigned={['/images/avatar1.jpg', '/images/avatar2.jpg']}
-                                issueId={'SUP-123'}
-                                type={'bug'}
-                                priority={'low'}
-                              >
-                                {title}
-                              </TicketCard>
+                                text={issue.title}
+                                assigned={issue.assignee}
+                                issueId={issue.publicId}
+                                type={issue.type}
+                                priority={issue.priority}
+                              />
                             </div>
                           )}
                         </Draggable>

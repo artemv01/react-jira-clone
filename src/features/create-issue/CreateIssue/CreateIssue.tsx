@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
@@ -15,7 +15,15 @@ import TextField from '../../../shared/components/TextField';
 import { users } from '../../../shared/stubs/users';
 import { priorityTypes } from '../../../shared/PriorityTypes';
 import { issueTypes } from '../../../shared/IssueTypes';
-
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { CreateIssueParams, issueAdded } from '../../../store/issuesSlice';
+import { nanoid } from '@reduxjs/toolkit';
+import { Issue } from '../../../shared/model/common';
+import { incrementLastUsedId, selectSettings } from '../../../store/settingsSlice';
+import { Controller, useForm,useFormState } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { object, string, array } from 'yup';
+import { ErrorMessage } from '../../../shared/components/ErrorMessage/ErrorMessage';
 interface Props {
   onClose: () => void;
 }
@@ -24,24 +32,57 @@ interface CreateIssue {
   priority: string;
   assignee: string[];
   reporter: string;
-  summary: string;
+  title: string;
   text: string;
 }
 
 export const CreateIssue: FC<Props> = ({ onClose }) => {
-  const issueData: CreateIssue = {
-    type: issueTypes[0].id,
-    priority: priorityTypes[0].id,
-    assignee: [],
-    reporter: users[0].id,
-    summary: '',
-    text: '',
-  };
+  const createIssueValidate = object({
+    type: string().required(),
+    priority: string().required(),
+    assignee: array(),
+    reporter: string().required(),
+    title: string().required(),
+    text: string(),
+  }).required();
+  const { handleSubmit, control } = useForm({
+    mode: 'onBlur',
+    defaultValues: {
+      type: issueTypes[0].id,
+      priority: priorityTypes[0].id,
+      assignee: [],
+      reporter: users[0].id,
+      title: '',
+      text: '',
+    },
+    resolver: yupResolver(createIssueValidate),
+  });
+  const { errors, dirtyFields, isValid } = useFormState({
+    control,
+  });
 
-  function submit() {
-    console.log(issueData);
+  const projectSettings = useAppSelector(selectSettings);
+
+  const dispatch = useAppDispatch();
+
+  const MemoizedEditor = React.memo(ReactQuill);
+
+  function submit(formData: any) {
+    console.log(JSON.stringify(formData));
+    const createIssueData = {
+      ...formData,
+      id: nanoid(),
+      publicId: `${projectSettings.issueIdPrefix}-${projectSettings.lastUsedIssueId + 1}`,
+    };
+    const payload: CreateIssueParams = {
+      issue: createIssueData as Issue,
+      columnType: 'backlog',
+    };
+    dispatch(issueAdded(payload));
+    dispatch(incrementLastUsedId());
+
+    onClose();
   }
-
   return (
     <Box
       sx={{
@@ -50,88 +91,116 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
         background: (theme) => theme.palette.board.ticketBg,
       }}
     >
-      <Box
-        sx={{
-          mb: 2,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant='h1'>Create issue</Typography>
-        <IconButton onClick={onClose} aria-label='close'>
-          <CloseIcon></CloseIcon>
-        </IconButton>
-      </Box>
-      <Box>
-        <Box sx={{ mb: 1 }}>
-          <Label text='Issue type'>
-            <SelectType value={issueData.type} onChange={(type) => (issueData.type = type)}></SelectType>
-          </Label>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Label text='Issue priority'>
-            <SelectPriority value={issueData.priority} onChange={(val) => (issueData.priority = val)}></SelectPriority>
-          </Label>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Label text='Description'>
-            <Box
-              sx={{
-                '& .ql-container': {
-                  height: '170px',
-                },
-              }}
-            >
-              <ReactQuill
-                theme={'snow'}
-                onChange={(val) => (issueData.text = val)}
-                value={issueData.text}
-                modules={editorModules}
-                formats={editorFormats}
-              />
-            </Box>
-          </Label>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Label text='Reporter'>
-            <SelectUser value={issueData.reporter} onChange={(val) => (issueData.reporter = val)}></SelectUser>
-          </Label>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Label text='Short summary'>
-            <TextField value={issueData.summary} onChange={(val) => (issueData.summary = val)}></TextField>
-          </Label>
-        </Box>
-        <Box sx={{ mb: 3 }}>
-          <Label text='Assignees'>
-            <SelectUser
-              value={issueData.assignee}
-              multiple={true}
-              onChange={(val) => (issueData.assignee = val)}
-            ></SelectUser>
-          </Label>
-        </Box>
+      <form onSubmit={handleSubmit(submit)}>
         <Box
           sx={{
+            mb: 2,
             display: 'flex',
-            flexFlow: 'row nowrap',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            justifyContent: 'flex-end',
-            marginTop: '16px',
-            '& > .MuiButton-root': {
-              marginRight: '8px',
-            },
           }}
         >
-          <Button variant='contained' onClick={submit}>
-            Create Issue
-          </Button>
-          <Button variant='text' onClick={onClose}>
-            Cancel
-          </Button>
+          <Typography variant='h1'>Create issue</Typography>
+          <IconButton onClick={() => onClose()} aria-label='close'>
+            <CloseIcon></CloseIcon>
+          </IconButton>
         </Box>
-      </Box>
+        <Box>
+          <Box sx={{ mb: 1 }}>
+            <Label text='Issue type'>
+              <Controller
+                render={({ field: { onChange, value } }) => <SelectType onChange={onChange} value={value} />}
+                name={'type'}
+                control={control}
+              />
+            </Label>
+          </Box>
+          <Box sx={{ mb: 1 }}>
+            <Label text='Issue priority'>
+              <Controller
+                render={({ field: { onChange, value } }) => <SelectPriority onChange={onChange} value={value} />}
+                name={'priority'}
+                control={control}
+              />
+            </Label>
+          </Box>
+          <Box sx={{ mb: 1 }}>
+            <Label text='Description'>
+              <Box
+                sx={{
+                  '& .ql-container': {
+                    height: '170px',
+                  },
+                }}
+              >
+                <Controller
+                  render={({ field: { onChange, value, onBlur } }) => (
+                    <MemoizedEditor
+                      theme={'snow'}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      modules={editorModules}
+                      formats={editorFormats}
+                    />
+                  )}
+                  name={'text'}
+                  control={control}
+                />
+              </Box>
+            </Label>
+          </Box>
+          <Box sx={{ mb: 1 }}>
+            <Label text='Reporter'>
+              <Controller
+                render={({ field: { onChange, value } }) => <SelectUser onChange={onChange} value={value} />}
+                name={'reporter'}
+                control={control}
+              />
+            </Label>
+          </Box>
+          <Box sx={{ mb: 1 }}>
+            <Label text='Short summary'>
+              <Controller
+                render={({ field: { onChange, value, onBlur } }) => <TextField onBlur={onBlur} value={value} onChange={onChange}></TextField>}
+                name={'title'}
+                control={control}
+              />
+            </Label>
+            {errors.title && <ErrorMessage message={'Summary is required'} />}
+          </Box>
+          <Box sx={{ mb: 3 }}>
+            <Label text='Assignees'>
+              <Controller
+                render={({ field: { onChange, value } }) => (
+                  <SelectUser value={value} multiple={true} onChange={onChange} />
+                )}
+                name={'assignee'}
+                control={control}
+              />
+            </Label>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexFlow: 'row nowrap',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              marginTop: '16px',
+              '& > .MuiButton-root': {
+                marginRight: '8px',
+              },
+            }}
+          >
+            <Button variant='contained' type='submit'>
+              Create Issue
+            </Button>
+            <Button variant='text' onClick={() => onClose()}>
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+      </form>
     </Box>
   );
 };

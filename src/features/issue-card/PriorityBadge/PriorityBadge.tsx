@@ -15,7 +15,7 @@ import { priorityTypes } from '../../../shared/PriorityTypes';
 import { Priority } from '../../../shared/model/common';
 
 interface Props {
-  priorityId: number;
+  priorityId: string;
 }
 
 export const PriorityBadge: FC<Props> = ({ priorityId }) => {
@@ -35,7 +35,7 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
   }));
   const [selected, setSelected] = useState<Priority>({} as Priority);
   const [priorities, setPriorities] = useState<Priority[]>(priorityTypes);
-  const initPriorities = (priorityId: number) => {
+  const initPriorities = (priorityId: string) => {
     let priorityIdx = priorityTypes.findIndex((item) => item.id === priorityId);
     if (priorityIdx === -1) {
       priorityIdx = 0;
