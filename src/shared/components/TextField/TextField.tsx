@@ -29,16 +29,12 @@ const StyledInput = styled(MuiInput)(({ theme }) => ({
 }));
 
 export const TextField: FC<Props> = ({ onChange, value, onBlur }) => {
-  const [inputValue, setInputValue] = useState(value);
   return (
     <StyledInput
-      value={inputValue}
+      value={value}
       fullWidth={true}
       onBlur={onBlur}
-      onChange={(event) => {
-        setInputValue(event.target.value);
-        onChange(event.target.value);
-      }}
+      onChange={onChange as any}
     ></StyledInput>
   );
 };

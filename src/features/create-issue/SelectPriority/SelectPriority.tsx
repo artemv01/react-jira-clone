@@ -13,18 +13,12 @@ interface Props {
 }
 
 export const SelectPriority: FC<Props> = ({ onChange, value, onBlur }) => {
-  const [selected, setSelected] = useState(value);
-  if (!selected) {
-    return <></>;
-  }
+  
   return (
     <Select
       onBlur={onBlur}
-      onChange={(newVal: any) => {
-        setSelected(newVal);
-        onChange(newVal);
-      }}
-      value={selected}
+      onChange={onChange}
+      value={value}
     >
       {priorityTypes.map((item) => (
         <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>

@@ -13,20 +13,23 @@ interface Props {
   onBlur?: () => void;
   multiple?: boolean;
   value: string[] | string;
+  setValue?: (newVal: any) => void;
 }
 
 const findUserById = (findId: string) => users.find(({ id }) => findId === id);
 
-export const SelectUser: FC<Props> = ({ onChange, multiple, value, onBlur }) => {
-  const [selected, setSelected] = useState<string[] | string>(value);
-  useEffect(() => setSelected(value), [value]);
-  const handleDelete = (e: React.MouseEvent, value: string) => {
+export const SelectUser: FC<Props> = ({ onChange, multiple, value, onBlur, setValue }) => {
+  const handleDelete = (e: React.MouseEvent, deleteItem: string) => {
     e.preventDefault();
-    if (Array.isArray(selected)) {
-      const temp = [...selected];
-      const deleteIdx = temp.indexOf(value);
+    console.log(value)
+    console.log(setValue)
+
+    if (Array.isArray(value) && setValue) {
+      const temp = [...value];
+      const deleteIdx = temp.indexOf(deleteItem);
       temp.splice(deleteIdx, 1);
-      setSelected(temp);
+      console.log(temp)
+      setValue(temp);
     }
   };
 
@@ -84,20 +87,7 @@ export const SelectUser: FC<Props> = ({ onChange, multiple, value, onBlur }) => 
   }
 
   return (
-    <Select
-      multiple={multiple}
-      onBlur={onBlur}
-      onChange={(newVal: any) => {
-        setSelected((selected) => {
-          setSelected(newVal);
-          return selected;
-        });
-
-        onChange(newVal);
-      }}
-      value={selected}
-      renderValue={renderValue}
-    >
+    <Select multiple={multiple} onBlur={onBlur} onChange={onChange} value={value} renderValue={renderValue}>
       {users.map((item) => (
         <MenuItem sx={{ px: '8px' }} key={item.id} value={item.id}>
           <Box

@@ -7,24 +7,17 @@ import Select from '../../../shared/components/Select';
 import React from 'react';
 
 interface Props {
-  onChange: (id: string) => void;
+  onChange: () => void;
   onBlur?: () => void;
   value: string;
 }
 
 export const SelectType: FC<Props> = ({ onChange, value, onBlur }) => {
-    const [selected, setSelected] = useState(value);
-    if (!selected) {
-      return <></>;
-    }
     return (
       <Select
-        onChange={(newVal: any) => {
-          setSelected(newVal);
-          onChange(newVal);
-        }}
+        onChange={onChange}
         onBlur={onBlur}
-        value={selected}
+        value={value}
       >
         {issueTypes.map((item) => (
           <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>

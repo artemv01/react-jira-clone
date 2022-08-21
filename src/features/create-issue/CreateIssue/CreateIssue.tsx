@@ -45,7 +45,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     title: string().required(),
     text: string(),
   }).required();
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, reset,setValue} = useForm({
     mode: 'onBlur',
     defaultValues: {
       type: issueTypes[0].id,
@@ -57,10 +57,12 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     },
     resolver: yupResolver(createIssueValidate),
   });
-  const { errors, dirtyFields, isValid } = useFormState({
+  const { errors, dirtyFields, isValid, isSubmitSuccessful } = useFormState({
     control,
   });
-
+  useEffect(() => {
+    reset()
+  }, [isSubmitSuccessful])
   const projectSettings = useAppSelector(selectSettings);
 
   const dispatch = useAppDispatch();
@@ -68,8 +70,8 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
   const MemoizedEditor = React.memo(ReactQuill);
 
   function submit(formData: any) {
-    console.log(JSON.stringify(formData));
-    const createIssueData = {
+    console.log(formData)
+   /*  const createIssueData = {
       ...formData,
       id: nanoid(),
       publicId: `${projectSettings.issueIdPrefix}-${projectSettings.lastUsedIssueId + 1}`,
@@ -80,8 +82,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     };
     dispatch(issueAdded(payload));
     dispatch(incrementLastUsedId());
-
-    onClose();
+    onClose(); */
   }
   return (
     <Box
@@ -153,7 +154,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
           <Box sx={{ mb: 1 }}>
             <Label text='Reporter'>
               <Controller
-                render={({ field: { onChange, value } }) => <SelectUser onChange={onChange} value={value} />}
+                render={({ field: { onChange, value } }) => <SelectUser  onChange={onChange} value={value} />}
                 name={'reporter'}
                 control={control}
               />
@@ -173,7 +174,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
             <Label text='Assignees'>
               <Controller
                 render={({ field: { onChange, value } }) => (
-                  <SelectUser value={value} multiple={true} onChange={onChange} />
+                  <SelectUser setValue={(newVal) => setValue('assignee', newVal )} value={value} multiple={true} onChange={onChange} />
                 )}
                 name={'assignee'}
                 control={control}
