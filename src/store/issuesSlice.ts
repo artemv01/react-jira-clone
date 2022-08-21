@@ -9,7 +9,18 @@ const initialState: IssueColumn[] = [
     publicId: 'BUG-001',
     group: 'backlog',
     title: 'Backlog',
-    items: [],
+    items: [
+      {
+        type: 'PkNnJEJXUrfJ94uX8haZC',
+        priority: 'kUvro59zCQQRgz4DCiDjs',
+        assignee: ['85hO6aeMSpjVxT3iwdhiP', 'IEJ3QQNbTBVjvw_4gvd5D'],
+        reporter: '85hO6aeMSpjVxT3iwdhiP',
+        title: 'dwqdwqdqwdq',
+        text: '<p>ddwdqdwqdwqdwq</p>',
+        id: 'i9E3gvSNrd7b1a4rttl3t',
+        publicId: 'RJC-1',
+      },
+    ],
   },
   {
     id: '2',

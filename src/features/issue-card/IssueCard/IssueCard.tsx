@@ -31,90 +31,11 @@ import Backdrop from '@mui/material/Backdrop';
 import DeleteIssueConfirm from '../DeleteIssueConfirm';
 import { useRouter } from 'next/router';
 import { editorFormats, editorModules } from '../../../shared/editorConfig';
-
-const Wrapper = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'singlePage',
-})<Props>(({ theme, singlePage }) => ({
-  position: 'relative',
-  display: 'flex',
-  flexFlow: 'row nowrap',
-  backgroundColor: theme.palette.board.ticketBg,
-  padding: !singlePage ? `${theme.spacing(2)} ${theme.spacing(2.5)} 64px ${theme.spacing(2.5)}` : 0,
-  width: '100%',
-  maxWidth: !singlePage ? '1040px' : '100%',
-  '& .editor-col': {
-    flex: '1 1 auto',
-    marginRight: '40px',
-  },
-  '& .issue-controls-col': {
-    flex: '0 0 333px',
-    marginTop: '32px',
-  },
-  '& .issue-type-desc': {},
-  '& .action-buttons': {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'center',
-    marginTop: '16px',
-    '& > .MuiButton-root': {
-      marginRight: '8px',
-    },
-  },
-  '& .issue-card-controls': {
-    position: 'absolute',
-    right: 0,
-  },
-}));
-
-const IssueControlsWrapper = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexFlow: 'column nowrap',
-  '& .issue-control': {
-    marginBottom: theme.spacing(3),
-    '& .MuiList-root': {
-      paddingBottom: 0,
-    },
-    '& .MuiListItem-root': {
-      marginBottom: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      '& .MuiSvgIcon-root': {
-        fontSize: '20px',
-      },
-    },
-    '& .MuiListItemIcon-root': {
-      width: '24px',
-      minWidth: '24px',
-    },
-    '& .MuiListItemText-root': {
-      marginTop: 0,
-      marginBottom: 0,
-      marginLeft: '10px',
-    },
-    '& .MuiListItemText-root, & .MuiListItemButton-root ': {
-      flex: '0 1 auto',
-    },
-    '& .MuiListItemButton-root': {
-      backgroundColor: theme.palette.button.primary,
-      padding: `${theme.spacing(0.5)} ${theme.spacing(1)}`,
-      '&:hover': {
-        backgroundColor: theme.palette.button.dark,
-      },
-    },
-  },
-  '& .control-title': {},
-}));
-const AssigneeMenu = styled(Menu)(({ theme }) => ({
-  '& .MuiTypography-root': {
-    fontSize: '14px',
-    paddingLeft: theme.spacing(1),
-  },
-}));
-
-interface Props {
-  onClose?: () => void;
-  singlePage?: boolean;
-  id?: string;
-}
+import { AssigneeMenu, IssueControlsWrapper, Props, Wrapper } from './IssueCard.styles';
+import { Issue } from '../../../shared/model/common';
+import { useAppSelector } from '../../../store/hooks';
+import { selectIssues } from '../../../store/issuesSlice';
+import React from 'react';
 
 export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const theme = useTheme();
@@ -122,6 +43,8 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const addAssigneeRef = useRef(null);
   const assigneeMenuOpen = Boolean(assigneeBtn);
   const router = useRouter();
+  const [issueData, setIssueData] = useState<Issue>();
+  const issuesStore = useAppSelector(selectIssues);
 
   const [ticketContent, setTicketContent] = useState<string>(`
   After searching for an assignee on the list and clear the text, the option label was missing. It could
@@ -169,6 +92,8 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   };
 
   const ticketHeaderRef = useRef(null);
+  const MemoizedEditor = React.memo(ReactQuill);
+
   useEffect(() => {
     function addTitleInputClick(event: Event): any {
       if (ticketHeaderRef.current && !(ticketHeaderRef.current as any).contains(event.target)) {
@@ -181,7 +106,20 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
       document.removeEventListener('click', addTitleInputClick, true);
     };
   }, [ticketHeaderRef]);
+  useEffect(() => {
+    const mergedIssues = issuesStore.map((dataColumn) => dataColumn.items).flat();
+    const issue = mergedIssues.find((issue) => issue.id === id);
+    if (!issue) {
+      // TODO (FEATURE): signal no issue exist and redirect to main screen
+    }
+    console.log(issue);
+    setIssueData(issue);
+  }, [id]);
 
+  // TODO (FEATURE): loading skeleton
+  if (!issueData) {
+    return <></>
+  }
   return (
     <NoSsr>
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
@@ -205,7 +143,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                 sx={{ mb: 2, mt: 1, '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
                 variant='h1'
               >
-                {ticketHeader}
+                {issueData.title}
               </Typography>
             )}
             {openEditors['header'] && (
@@ -220,7 +158,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                   },
                 }}
                 type='text'
-                value={ticketHeader}
+                value={issueData.title}
                 onChange={($event) => setTicketHeader($event.target.value)}
                 variant='outlined'
               />
@@ -236,17 +174,16 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                 sx={{ '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
               >
                 <div className='content'>
-                  After searching for an assignee on the list and clear the text, the option label was missing. It could
-                  be the bug on the ng-zorro select itself. If you have any idea, feel free to create a pull request.{' '}
+                  {issueData.text}
                 </div>
               </Box>
             )}
             {openEditors['content'] && (
               <Box>
-                <ReactQuill
+                <MemoizedEditor
                   theme={'snow'}
                   onChange={handleTicketContentChange}
-                  value={ticketContent}
+                  value={issueData.text}
                   modules={editorModules}
                   formats={editorFormats}
                   placeholder='Issue text'

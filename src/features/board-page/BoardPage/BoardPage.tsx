@@ -21,7 +21,7 @@ const breadcrumbs = ['Projects', 'React Jira Clone', 'Kanban Board'];
 export const BoardPage: FC = () => {
   const taskList = useAppSelector(selectIssues);
   const dispatch = useAppDispatch();
-  const [isIssueCardOpened, setIssueCardOpened] = useState(false);
+  const [openedIssueId, setOpenedIssueId] = useState<string | undefined>(false);
   function onDragEnd(val: any) {
     const { draggableId, source, destination } = val;
 
@@ -63,8 +63,8 @@ export const BoardPage: FC = () => {
 
   return (
     <NoSsr>
-      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isIssueCardOpened}>
-        <IssueCard onClose={() => setIssueCardOpened(false)}></IssueCard>
+      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={!!openedIssueId}>
+        <IssueCard id={openedIssueId} onClose={() => setOpenedIssueId(undefined)}></IssueCard>
       </Backdrop>
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -90,7 +90,7 @@ export const BoardPage: FC = () => {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}
-                              onClick={() => setIssueCardOpened(true)}
+                              onClick={() => setOpenedIssueId(issue.id)}
                             >
                               <TicketCard
                                 text={issue.title}

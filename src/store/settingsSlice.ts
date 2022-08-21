@@ -8,7 +8,7 @@ interface ProjectSettings {
   issueIdPrefix: string;
 }
 const initialState: ProjectSettings = {
-  lastUsedIssueId: 1,
+  lastUsedIssueId: 0,
   issueIdPrefix: 'RJC',
 };
 
@@ -22,7 +22,7 @@ const settingsSlice = createSlice({
   },
   reducers: {
     incrementLastUsedId(state) {
-        state.lastUsedIssueId =+ 1
+        state.lastUsedIssueId++
     }
   },
 });

@@ -70,8 +70,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
   const MemoizedEditor = React.memo(ReactQuill);
 
   function submit(formData: any) {
-    console.log(formData)
-   /*  const createIssueData = {
+    const createIssueData = {
       ...formData,
       id: nanoid(),
       publicId: `${projectSettings.issueIdPrefix}-${projectSettings.lastUsedIssueId + 1}`,
@@ -82,7 +81,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     };
     dispatch(issueAdded(payload));
     dispatch(incrementLastUsedId());
-    onClose(); */
+    onClose();
   }
   return (
     <Box
