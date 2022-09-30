@@ -14,35 +14,38 @@ import SvgIcon from '@mui/material/SvgIcon';
 import { priorityTypes } from '../../../shared/PriorityTypes';
 import { Option, Priority } from '../../../shared/model/common';
 import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
 interface Props {
   onChange: (val: string) => void;
   value: string;
   options: Array<Option>;
   uppercase?: boolean;
+  id: string;
 }
 
-export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase }) => {
+export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [selectedItem, setSelectedItem] = useState<Option>({} as Option);
   useEffect(() => {
-    console.log(options)
     setSelectedItem(options.find((opt) => opt.value === value) || options[0]);
   }, [value]);
 
   const theme = useTheme();
 
+  const testClick = () => {
+    console.log('click');
+  };
+
   const openMenu = Boolean(anchorEl);
   const handleClick = (event: any) => {
-    console.log(event.currentTarget)
-
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const Wrapper = styled(Menu)(({ theme }) => ({
+  const Wrapper = styled(MenuList)(({ theme }) => ({
     '& .MuiTypography-root': {
       fontSize: '14px',
       paddingLeft: theme.spacing(1),
@@ -82,26 +85,34 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase }) =
           </ListItemButton>
         </ListItem>
       </List>
-      <Wrapper anchorEl={anchorEl} open={openMenu} onClose={handleClose}>
-      {/*   <MenuList disablePadding={true}>
+      <Menu id={id} anchorEl={anchorEl} open={openMenu} onClose={handleClose}>
+        <MenuList disablePadding={true}>
           {options.map((item) => (
-            <MenuItem
+            <Box
+              sx={{
+                '& .MuiTypography-root': {
+                  fontSize: '14px',
+                  paddingLeft: theme.spacing(1),
+                },
+              }}
               onClick={() => {
                 onChange(item.value);
                 handleClose();
               }}
               key={item.value}
             >
-              {item.img && (
-                <ListItemIcon>
-                  <img src={item.img} alt={selectedItem.name} />
-                </ListItemIcon>
-              )}
-              <ListItemText sx={{ textTransform: uppercase ? 'uppercase' : 'none' }}>{item.name}</ListItemText>
-            </MenuItem>
+              <MenuItem>
+                {item.img && (
+                  <ListItemIcon>
+                    <img src={item.img} alt={selectedItem.name} />
+                  </ListItemIcon>
+                )}
+                <ListItemText sx={{ textTransform: uppercase ? 'uppercase' : 'none' }}>{item.name}</ListItemText>
+              </MenuItem>
+            </Box>
           ))}
-        </MenuList> */}
-      </Wrapper>
+        </MenuList>
+      </Menu>
     </div>
   );
 };

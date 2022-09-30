@@ -134,7 +134,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const ticketHeaderRef = useRef(null);
   const MemoizedEditor = React.memo(ReactQuill);
 
-  /* useEffect(() => {
+  useEffect(() => {
     function addTitleInputClick(event: Event): any {
       if (ticketHeaderRef.current && !(ticketHeaderRef.current as any).contains(event.target)) {
         setTitleEditable(false);
@@ -147,7 +147,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
     return function () {
       document.removeEventListener('click', addTitleInputClick, false);
     };
-  }, [ticketHeaderRef, issueData]); */
+  }, [ticketHeaderRef, issueData]);
 
   // TODO (FEATURE): loading skeleton
   if (!issueData) {
@@ -268,14 +268,23 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                 <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
                   status
                 </Typography>
-                <SelectMenu
-                  uppercase={true}
-                  options={issuesStore.map((item) => ({
-                    value: item.id,
-                    name: item.title,
-                    bgColor: item.bgColor,
-                    textColor: item.textColor,
-                  }))}
+                <Controller
+                  render={({ field: { onChange, value } }) => (
+                    <SelectMenu
+                      onChange={onChange}
+                      id='select-status'
+                      value={value}
+                      uppercase={true}
+                      options={issuesStore.map((item) => ({
+                        value: item.id,
+                        name: item.title,
+                        bgColor: item.bgColor,
+                        textColor: item.textColor,
+                      }))}
+                    />
+                  )}
+                  name={'status'}
+                  control={control}
                 />
               </div>
               <div className='issue-control'>
@@ -308,6 +317,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                       <SelectMenu
                         onChange={onChange}
                         value={value}
+                        id={'select-priority'}
                         options={priorityTypes.map((item) => ({
                           value: item.id,
                           name: item.title,
