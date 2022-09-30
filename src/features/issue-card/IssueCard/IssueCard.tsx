@@ -1,21 +1,10 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { styled, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { FC, useEffect, useRef, useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import Avatar from '@mui/material/Avatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Box from '@mui/material/Box';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
 
 import { priorityTypes } from '../../../shared/PriorityTypes';
 import IssueHeaderBadge from '../IssueHeaderBadge';
-import AddNewAssignee from '../AddNewAssignee';
 import PriorityBadge from '../PriorityBadge';
 import NoSsr from '../../../shared/NoSsr';
 
@@ -29,53 +18,104 @@ import Comment from '../Comment';
 import IssueCardControls from '../IssueCardControls';
 import Backdrop from '@mui/material/Backdrop';
 import DeleteIssueConfirm from '../DeleteIssueConfirm';
+import AssigneeSelect from '../AssigneeSelect';
 import { useRouter } from 'next/router';
 import { editorFormats, editorModules } from '../../../shared/editorConfig';
-import { AssigneeMenu, IssueControlsWrapper, Props, Wrapper } from './IssueCard.styles';
-import { Issue } from '../../../shared/model/common';
-import { useAppSelector } from '../../../store/hooks';
-import { selectIssues } from '../../../store/issuesSlice';
+import { IssueControlsWrapper, Props, Wrapper } from './IssueCard.styles';
+import { ColumnType, Issue, IssueStatus } from '../../../shared/model/common';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { moveIssue, selectIssueById, selectIssues, updateIssue } from '../../../store/issuesSlice';
 import React from 'react';
+import SelectMenu from '../../../shared/components/SelectMenu';
+import { issueStatuses } from '../../../shared/IssueStatuses';
+import { users } from '../../../shared/stubs/users';
+import { Controller, useForm, useFormState } from 'react-hook-form';
 
 export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
+  const issueData = useAppSelector(selectIssueById(id));
+  const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
+  //   const createIssueValidate = object({
+  //     type: string().required(),
+  //     priority: string().required(),
+  //     assignee: array(),
+  //     reporter: string().required(),
+  //     title: string().required(),
+  //     text: string(),
+  //   }).required();
+  const { handleSubmit, control, reset, setValue, getValues } = useForm({
+    mode: 'onBlur',
+
+    defaultValues: {
+      title: '',
+      textBuffer: '',
+      status: '',
+      assignee: [],
+      priority: '',
+    },
+    // resolver: yupResolver(createIssueValidate),
+  });
+  const { errors, dirtyFields, isValid, isSubmitSuccessful } = useFormState({
+    control,
+  });
+  const submit = (formData: Record<string, any>) => {
+    const { textBuffer, ...payload } = formData;
+    if (payload.status !== issueData.status) {
+      onIssueStatusUpdate(payload.status);
+    } else {
+      onIssueUpdate(payload);
+    }
+  };
+
+  useEffect(() => {
+    if (issueData) {
+      setValue('title', issueData.title);
+      setValue('textBuffer', issueData.text);
+      setValue('status', issueData.status);
+      setValue('assignee', issueData.assignee);
+      setValue('priority', issueData.priority);
+      forceUpdate();
+    }
+  }, [!!issueData]);
+
   const theme = useTheme();
-  const [assigneeBtn, setAssigneeBtn] = useState<null | HTMLElement>(null);
-  const addAssigneeRef = useRef(null);
-  const assigneeMenuOpen = Boolean(assigneeBtn);
   const router = useRouter();
-  const [issueData, setIssueData] = useState<Issue>();
+
   const issuesStore = useAppSelector(selectIssues);
 
-  const [ticketContent, setTicketContent] = useState<string>(`
-  After searching for an assignee on the list and clear the text, the option label was missing. It could
-  be the bug on the ng-zorro select itself. If you have any idea, feel free to create a pull request.
- `);
-  const [ticketHeader, setTicketHeader] = useState<string>(
-    'How to build Jira clone? Follow these tutorials from its author'
-  );
-  const [isDeleteModalOpened, setDeleteModalOpened] = useState(false);
-  const [openEditors, setOpenEditors] = useState<Record<string, any>>({
-    content: false,
-    header: false,
-  });
+  const dispatch = useAppDispatch();
 
-  const toggleOpenEditor = (editor: string) => {
-    setOpenEditors((state) => ({ ...state, content: !state[editor] }));
+  const onIssueStatusUpdate = (value: ColumnType) => {
+    dispatch(
+      moveIssue({
+        sourceGroupId: issueData.status,
+        destGroupId: value,
+        issueId: issueData.id,
+      })
+    );
   };
-  const handleAddAssigneeClick = (event: React.MouseEvent<HTMLDivElement>): void => {
-    setAssigneeBtn(event.currentTarget);
+
+  const onIssueUpdate = (update: Partial<Record<keyof Issue, any>>) => {
+    dispatch(
+      updateIssue({
+        columnId: issueData.status,
+        issue: { ...issueData, ...update },
+        issueId: issueData.id,
+      })
+    );
   };
-  const handleAssigneeMenuClose = () => {
-    setAssigneeBtn(null);
-  };
-  const handleTicketContentChange = (content: string) => {
-    setTicketContent(content);
-  };
+
+  const [isDeleteModalOpened, setDeleteModalOpened] = useState(false);
+
+  const [contentEditable, setContentEditable] = useState(false);
+  const [titleEditable, setTitleEditable] = useState(false);
+
   const onSubmit = () => {
-    setOpenEditors((editors) => ({ ...editors, content: false }));
+    onIssueUpdate({ text: getValues('textBuffer') });
+    setContentEditable(false);
   };
   const onCancel = () => {
-    setOpenEditors((editors) => ({ ...editors, content: false }));
+    setValue('textBuffer', issueData.text);
+    setContentEditable(false);
   };
 
   const onDeleteClick = () => {
@@ -94,220 +134,202 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const ticketHeaderRef = useRef(null);
   const MemoizedEditor = React.memo(ReactQuill);
 
-  useEffect(() => {
+  /* useEffect(() => {
     function addTitleInputClick(event: Event): any {
       if (ticketHeaderRef.current && !(ticketHeaderRef.current as any).contains(event.target)) {
-        setOpenEditors((editors) => ({ ...editors, header: false }));
+        setTitleEditable(false);
+      } else if (ticketHeaderRef.current && (ticketHeaderRef.current as any).contains(event.target)) {
+        setTitleEditable(true);
       }
     }
-    document.addEventListener('click', addTitleInputClick, true);
+    document.addEventListener('click', addTitleInputClick, false);
 
     return function () {
-      document.removeEventListener('click', addTitleInputClick, true);
+      document.removeEventListener('click', addTitleInputClick, false);
     };
-  }, [ticketHeaderRef]);
-  useEffect(() => {
-    const mergedIssues = issuesStore.map((dataColumn) => dataColumn.items).flat();
-    const issue = mergedIssues.find((issue) => issue.id === id);
-    if (!issue) {
-      // TODO (FEATURE): signal no issue exist and redirect to main screen
-    }
-    console.log(issue);
-    setIssueData(issue);
-  }, [id]);
+  }, [ticketHeaderRef, issueData]); */
 
   // TODO (FEATURE): loading skeleton
   if (!issueData) {
-    return <></>
+    return <></>;
   }
   return (
     <NoSsr>
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
         <DeleteIssueConfirm onClose={onDeleteCancel} onConfirm={onDeleteConfirm}></DeleteIssueConfirm>
       </Backdrop>
-      <Wrapper singlePage={singlePage}>
-        <div className='issue-card-controls'>
-          <IssueCardControls
-            singlePage={singlePage}
-            onDelete={onDeleteClick}
-            onExpand={onExpandClick}
-            onClose={onClose}
-          ></IssueCardControls>
-        </div>
-        <div className='editor-col'>
-          <IssueHeaderBadge issueId='STG-1234' issueTypeId={0}></IssueHeaderBadge>
-          <div ref={ticketHeaderRef}>
-            {!openEditors['header'] && (
-              <Typography
-                onClick={() => setOpenEditors({ ...openEditors, header: true })}
-                sx={{ mb: 2, mt: 1, '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
-                variant='h1'
-              >
-                {issueData.title}
-              </Typography>
-            )}
-            {openEditors['header'] && (
-              <TextField
-                multiline={true}
-                fullWidth={true}
-                sx={{
-                  mb: 2,
-                  mt: 1,
-                  '& .MuiInputBase-input': {
-                    fontSize: 24,
-                  },
-                }}
-                type='text'
-                value={issueData.title}
-                onChange={($event) => setTicketHeader($event.target.value)}
-                variant='outlined'
-              />
-            )}
+      <form onSubmit={handleSubmit(submit)} onBlur={handleSubmit(submit)}>
+        <Wrapper singlePage={singlePage}>
+          <div className='issue-card-controls'>
+            <IssueCardControls
+              singlePage={singlePage}
+              onDelete={onDeleteClick}
+              onExpand={onExpandClick}
+              onClose={onClose}
+            ></IssueCardControls>
           </div>
-          <div className='issue-content'>
-            <Typography sx={{ mb: 1 }} variant='h4'>
-              Description
-            </Typography>
-            {!openEditors['content'] && (
-              <Box
-                onClick={() => toggleOpenEditor('content')}
-                sx={{ '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
-              >
-                <div className='content'>
-                  {issueData.text}
-                </div>
-              </Box>
-            )}
-            {openEditors['content'] && (
-              <Box>
-                <MemoizedEditor
-                  theme={'snow'}
-                  onChange={handleTicketContentChange}
-                  value={issueData.text}
-                  modules={editorModules}
-                  formats={editorFormats}
-                  placeholder='Issue text'
-                />
-              </Box>
-            )}
-          </div>
-          {openEditors['content'] && (
-            <div className='action-buttons'>
-              <Button onClick={onSubmit} variant='contained'>
-                Save
-              </Button>
-              <Button onClick={onCancel} variant='text'>
-                Cancel
-              </Button>
-            </div>
-          )}
-          <Box className='comments' sx={{ mt: 3 }}>
-            <Typography sx={{ mb: 2 }} variant='h4'>
-              Comments
-            </Typography>
-            <Box sx={{ mb: 3 }}>
-              <CommentInput></CommentInput>
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Comment></Comment>
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Comment></Comment>
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Comment></Comment>
-            </Box>
-          </Box>
-        </div>
-        <div className='issue-controls-col'>
-          <IssueControlsWrapper>
-            <div className='issue-control'>
-              <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
-                status
-              </Typography>
-              <div className='control-content'>
-                <List disablePadding={true}>
-                  <ListItem disablePadding>
-                    <ListItemButton dense={true} selected={true}>
-                      <ListItemText
-                        sx={{ mx: 1 }}
-                        disableTypography
-                        primary={
-                          <Typography sx={{ textTransform: 'uppercase' }} component='span' fontSize={14}>
-                            in progress
-                          </Typography>
-                        }
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-              </div>
-            </div>
-            <div className='issue-control'>
-              <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
-                assignees
-              </Typography>
-              <div className='control-content'>
-                <List disablePadding={true}>
-                  <ListItem disablePadding={true}>
-                    <ListItemButton dense={true} selected={true}>
-                      <Avatar alt='John Johnson' src='/images/avatar1.jpg' sx={{ width: 20, height: 20 }} />
-                      <ListItemText
-                        sx={{ mx: 1 }}
-                        disableTypography
-                        primary={<Typography fontSize={14}>JamesBond</Typography>}
-                      />
-                      <ListItemIcon>
-                        <CloseIcon />
-                      </ListItemIcon>
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-                <AddNewAssignee ref={addAssigneeRef} onClick={handleAddAssigneeClick} />
-                <AssigneeMenu
-                  id='assignee-menu'
-                  anchorEl={assigneeBtn}
-                  open={assigneeMenuOpen}
-                  onClose={handleAssigneeMenuClose}
+          <div className='editor-col'>
+            {/* <IssueHeaderBadge issueId={issueData.publicId} issueTypeId={0}></IssueHeaderBadge> */}
+            <div ref={ticketHeaderRef}>
+              {!titleEditable && (
+                <Typography
+                  sx={{ mb: 2, mt: 1, '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
+                  variant='h1'
                 >
-                  <MenuList disablePadding={true}>
-                    <MenuItem>
-                      <Avatar alt='John Johnson' src='/images/avatar1.jpg' sx={{ width: 20, height: 20 }} />
-                      <ListItemText>John Johnson</ListItemText>
-                    </MenuItem>
-                  </MenuList>
-                  <MenuList disablePadding>
-                    <MenuItem>
-                      <Avatar alt='John Johnson' src='/images/avatar1.jpg' sx={{ width: 20, height: 20 }} />
-                      <ListItemText>John Johnson</ListItemText>
-                    </MenuItem>
-                  </MenuList>
-                  <MenuList disablePadding>
-                    <MenuItem>
-                      <Avatar alt='John Johnson' src='/images/avatar1.jpg' sx={{ width: 20, height: 20 }} />
-                      <ListItemText>John Johnson</ListItemText>
-                    </MenuItem>
-                  </MenuList>
-                </AssigneeMenu>
-              </div>
+                  {getValues('title') || '\u00A0'}
+                </Typography>
+              )}
+              {titleEditable && (
+                <Controller
+                  render={({ field: { onChange, value } }) => (
+                    <TextField
+                      multiline={true}
+                      fullWidth={true}
+                      sx={{
+                        mb: 2,
+                        mt: 1,
+                        '& .MuiInputBase-input': {
+                          fontSize: 24,
+                        },
+                      }}
+                      type='text'
+                      value={value}
+                      onChange={onChange}
+                      variant='outlined'
+                    />
+                  )}
+                  name={'title'}
+                  control={control}
+                />
+              )}
             </div>
-            <div className='issue-control'>
-              <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
-                priority
+            <div className='issue-content'>
+              <Typography sx={{ mb: 1 }} variant='h4'>
+                Description
               </Typography>
-              <div className='control-content'>
-                <PriorityBadge priorityId={priorityTypes[0].id} />
-              </div>
+              {!contentEditable && (
+                <Box
+                  onClick={() => setContentEditable(true)}
+                  sx={{ '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
+                >
+                  <div className='content'>{getValues('textBuffer')}</div>
+                </Box>
+              )}
+              {contentEditable && (
+                <Box>
+                  <Controller
+                    render={({ field: { onChange, value } }) => (
+                      <MemoizedEditor
+                        theme={'snow'}
+                        onChange={onChange}
+                        value={value}
+                        modules={editorModules}
+                        formats={editorFormats}
+                        placeholder='Issue text'
+                      />
+                    )}
+                    name={'textBuffer'}
+                    control={control}
+                  />
+                </Box>
+              )}
             </div>
-            <Typography variant='caption' color='text.secondary'>
-              Created - Jun 28, 2020, 7:30:00 PM
-            </Typography>
-            <Typography variant='caption' color='text.secondary'>
-              Created - Jun 28, 2020, 7:30:00 PM
-            </Typography>
-          </IssueControlsWrapper>
-        </div>
-      </Wrapper>
+            {contentEditable && (
+              <div className='action-buttons'>
+                <Button onClick={onSubmit} variant='contained'>
+                  Save
+                </Button>
+                <Button onClick={onCancel} variant='text'>
+                  Cancel
+                </Button>
+              </div>
+            )}
+            <Box className='comments' sx={{ mt: 3 }}>
+              <Typography sx={{ mb: 2 }} variant='h4'>
+                Comments
+              </Typography>
+              <Box sx={{ mb: 3 }}>
+                <CommentInput></CommentInput>
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Comment></Comment>
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Comment></Comment>
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Comment></Comment>
+              </Box>
+            </Box>
+          </div>
+          <div className='issue-controls-col'>
+            <IssueControlsWrapper>
+              <div className='issue-control'>
+                <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
+                  status
+                </Typography>
+                <SelectMenu
+                  uppercase={true}
+                  options={issuesStore.map((item) => ({
+                    value: item.id,
+                    name: item.title,
+                    bgColor: item.bgColor,
+                    textColor: item.textColor,
+                  }))}
+                />
+              </div>
+              <div className='issue-control'>
+                <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
+                  assignees
+                </Typography>
+                <Controller
+                  render={({ field: { onChange, value } }) => (
+                    <AssigneeSelect
+                      options={users.map((item) => ({
+                        name: item.name,
+                        value: item.id,
+                        img: item.avatarUrl,
+                      }))}
+                      onChange={onChange}
+                      value={value}
+                    />
+                  )}
+                  name={'assignee'}
+                  control={control}
+                />
+              </div>
+              <div className='issue-control'>
+                <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
+                  priority
+                </Typography>
+                <div className='control-content'>
+                  <Controller
+                    render={({ field: { onChange, value } }) => (
+                      <SelectMenu
+                        onChange={onChange}
+                        value={value}
+                        options={priorityTypes.map((item) => ({
+                          value: item.id,
+                          name: item.title,
+                          img: item.img,
+                        }))}
+                      />
+                    )}
+                    name={'priority'}
+                    control={control}
+                  />
+                </div>
+              </div>
+              <Typography variant='caption' color='text.secondary'>
+                Created - Jun 28, 2020, 7:30:00 PM
+              </Typography>
+              <Typography variant='caption' color='text.secondary'>
+                Created - Jun 28, 2020, 7:30:00 PM
+              </Typography>
+            </IssueControlsWrapper>
+          </div>
+        </Wrapper>
+      </form>
     </NoSsr>
   );
 };

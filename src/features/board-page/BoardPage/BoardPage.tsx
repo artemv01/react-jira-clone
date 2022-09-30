@@ -22,16 +22,22 @@ export const BoardPage: FC = () => {
   const taskList = useAppSelector(selectIssues);
   const dispatch = useAppDispatch();
   const [openedIssueId, setOpenedIssueId] = useState<string | undefined>(false);
-  function onDragEnd(val: any) {
+  const onDragEnd = (val: any) => {
     const { draggableId, source, destination } = val;
 
-    const [sourceGroup] = taskList.filter((column) => column.group === source.droppableId);
+    const [sourceGroup] = taskList.filter((column) => column.id === source.droppableId);
 
     const [destinationGroup] = destination
-      ? taskList.filter((column) => column.group === destination.droppableId)
+      ? taskList.filter((column) => column.id === destination.droppableId)
       : [{ ...sourceGroup }];
-
     const [movingTask] = sourceGroup.items.filter((t) => t.id === draggableId);
+
+    console.log({
+      sourceGroupId: sourceGroup.id,
+      destGroupId: destinationGroup.id,
+      destIdx: destination?.index,
+      issueId: movingTask?.id,
+    });
     dispatch(
       moveIssue({
         sourceGroupId: sourceGroup.id,
@@ -40,26 +46,7 @@ export const BoardPage: FC = () => {
         issueId: movingTask.id,
       })
     );
-    /* sourceGroup.items.splice(source.index, 1);
-    destinationGroup.items.splice(destination.index, 0, movingTask);
-
-    const newTaskList = taskList.map((column) => {
-      if (column.group === source.droppableId) {
-        return {
-          ...sourceGroup,
-          items: sourceGroup.items,
-        };
-      }
-      if (column.group === destination.droppableId) {
-        return {
-          ...destinationGroup,
-          items: destinationGroup.items,
-        };
-      }
-      return column;
-    });
-    setTasks(newTaskList);*/
-  }
+  };
 
   return (
     <NoSsr>
@@ -81,7 +68,7 @@ export const BoardPage: FC = () => {
               {taskList.map((data, index) => {
                 return (
                   <Grid item key={data.id} xs={3}>
-                    <BoardColumn id={data.group} headerText={data.title}>
+                    <BoardColumn id={data.id} headerText={data.title}>
                       {data.items.map((issue, i) => (
                         <Draggable key={issue.id} draggableId={issue.id} index={i}>
                           {(provided: any) => (

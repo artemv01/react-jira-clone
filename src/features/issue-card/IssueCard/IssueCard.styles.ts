@@ -69,7 +69,6 @@ export const Wrapper = styled('div', {
         flex: '0 1 auto',
       },
       '& .MuiListItemButton-root': {
-        backgroundColor: theme.palette.button.primary,
         padding: `${theme.spacing(0.5)} ${theme.spacing(1)}`,
         '&:hover': {
           backgroundColor: theme.palette.button.dark,
@@ -78,9 +77,4 @@ export const Wrapper = styled('div', {
     },
     '& .control-title': {},
   }));
-  export const AssigneeMenu = styled(Menu)(({ theme }) => ({
-    '& .MuiTypography-root': {
-      fontSize: '14px',
-      paddingLeft: theme.spacing(1),
-    },
-  }));
+ 

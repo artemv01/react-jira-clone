@@ -25,7 +25,7 @@ interface IssueRenderData {
 export const TicketCard: FC<Props> = (props) => {
   const issueData: IssueRenderData = useMemo(() => {
     const assigned = users.filter((item) => {
-      if (props.assigned.includes(item.id)) {
+      if (Array.isArray(props.assigned) &&props.assigned.includes(item.id)) {
         return item;
       }
     });
@@ -65,7 +65,7 @@ export const TicketCard: FC<Props> = (props) => {
         <div className='issue-id'>{issueData.issueId}</div>
         <div className='filler'></div>
         <div className='issue-type'>{issueData.type.img}</div>
-        <div className='issue-priority'>{issueData.priority.img}</div>
+        <div className='issue-priority'><img src={issueData.priority.img} alt="" /></div>
       </div>
     </Wrapper>
   );

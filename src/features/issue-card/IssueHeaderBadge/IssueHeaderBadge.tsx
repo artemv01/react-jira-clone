@@ -47,17 +47,17 @@ export const IssueHeaderBadge: FC<Props> = ({ issueId, issueTypeId }) => {
   };
   const [selected, setSelected] = useState<IssueType>({} as IssueType);
   const [types, setTypes] = useState(issueTypes);
-  const initIssues = (issueTypeId: string) => {
-    let issueIdx = issueTypes.findIndex((item) => item.id === issueTypeId);
-    if (issueIdx === -1) {
-      issueIdx = 0;
+  const initIssueTypeData = (issueTypeId: string) => {
+    let typeIdx = issueTypes.findIndex((item) => item.id === issueTypeId);
+    if (typeIdx === -1) {
+      typeIdx = 0;
     }
-    setSelected(issueTypes[issueIdx]);
-    setTypes(issueTypes.filter((item, idx) => idx !== issueIdx));
+    setSelected(issueTypes[typeIdx]);
+    setTypes(issueTypes.filter((item, idx) => idx !== typeIdx));
     handleClose();
   };
   useEffect(() => {
-    initIssues(issueTypeId);
+    initIssueTypeData(issueTypeId);
   }, [issueId]);
 
   return (
