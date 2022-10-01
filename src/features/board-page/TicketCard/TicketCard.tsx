@@ -64,8 +64,8 @@ export const TicketCard: FC<Props> = (props) => {
         </div>
         <div className='issue-id'>{issueData.issueId}</div>
         <div className='filler'></div>
-        <div className='issue-type'>{issueData.type.img}</div>
-        <div className='issue-priority'><img src={issueData.priority.img} alt="" /></div>
+        <div className='issue-type'>{issueData.type?.img}</div>
+        <div className='issue-priority'><img src={issueData.priority?.img} alt="" /></div>
       </div>
     </Wrapper>
   );

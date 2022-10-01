@@ -21,7 +21,7 @@ const breadcrumbs = ['Projects', 'React Jira Clone', 'Kanban Board'];
 export const BoardPage: FC = () => {
   const taskList = useAppSelector(selectIssues);
   const dispatch = useAppDispatch();
-  const [openedIssueId, setOpenedIssueId] = useState<string | undefined>(false);
+  const [openedIssueId, setOpenedIssueId] = useState<string | undefined>();
   const onDragEnd = (val: any) => {
     const { draggableId, source, destination } = val;
 

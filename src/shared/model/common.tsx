@@ -1,13 +1,12 @@
 export interface Priority {
   id: string;
   title: string;
-  img: React.ReactNode;
+  img:string;
 }
 export interface IssueType {
   id: string;
-  name: string;
   title: string;
-  img: React.ReactNode;
+  img: string;
 }
 export interface IssueStatus {
   id: string;
@@ -30,7 +29,7 @@ export interface IssueStatus {
 export type ColumnType = 'backlog' | 'selected_for_dev' | 'in_progress' | 'done';
 
 export interface Issue {
-  id: string;
+  id: string | undefined;
   publicId: string;
   title: string;
   assignee: string[];

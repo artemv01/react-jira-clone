@@ -1,6 +1,6 @@
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 
 import { priorityTypes } from '../../../shared/PriorityTypes';
@@ -27,55 +27,48 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { moveIssue, selectIssueById, selectIssues, updateIssue } from '../../../store/issuesSlice';
 import React from 'react';
 import SelectMenu from '../../../shared/components/SelectMenu';
-import { issueStatuses } from '../../../shared/IssueStatuses';
 import { users } from '../../../shared/stubs/users';
 import { Controller, useForm, useFormState } from 'react-hook-form';
+import { issueTypes } from '../../../shared/IssueTypes';
 
 export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
-  const issueData = useAppSelector(selectIssueById(id));
+  const issueData = useAppSelector(selectIssueById(id as string));
   const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
-  //   const createIssueValidate = object({
-  //     type: string().required(),
-  //     priority: string().required(),
-  //     assignee: array(),
-  //     reporter: string().required(),
-  //     title: string().required(),
-  //     text: string(),
-  //   }).required();
-  const { handleSubmit, control, reset, setValue, getValues } = useForm({
-    mode: 'onBlur',
-
+  const { handleSubmit, control, reset, setValue, getValues, watch } = useForm<Issue & { text: string }>({
+    mode: 'onSubmit',
     defaultValues: {
       title: '',
-      textBuffer: '',
+      type: '',
+      text: '',
       status: '',
       assignee: [],
       priority: '',
     },
-    // resolver: yupResolver(createIssueValidate),
   });
-  const { errors, dirtyFields, isValid, isSubmitSuccessful } = useFormState({
-    control,
-  });
-  const submit = (formData: Record<string, any>) => {
-    const { textBuffer, ...payload } = formData;
-    if (payload.status !== issueData.status) {
-      onIssueStatusUpdate(payload.status);
-    } else {
-      onIssueUpdate(payload);
-    }
-  };
 
   useEffect(() => {
-    if (issueData) {
+    if (issueData.id) {
       setValue('title', issueData.title);
-      setValue('textBuffer', issueData.text);
+      setValue('type', issueData.type);
+      setValue('text', issueData.text);
       setValue('status', issueData.status);
       setValue('assignee', issueData.assignee);
       setValue('priority', issueData.priority);
       forceUpdate();
     }
-  }, [!!issueData]);
+  }, [issueData.id]);
+
+  const [watchType, watchAssignee, watchPriority, watchStatus] = watch(['type', 'assignee', 'priority', 'status']);
+  useEffect(() => {
+    onIssueStatusUpdate(watchStatus);
+  }, [watchStatus]);
+  useEffect(() => {
+    onIssueUpdate({
+      type: watchType,
+      assignee: watchAssignee,
+      priority: watchPriority,
+    });
+  }, [watchType, watchAssignee, watchPriority]);
 
   const theme = useTheme();
   const router = useRouter();
@@ -84,40 +77,39 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
 
   const dispatch = useAppDispatch();
 
-  const onIssueStatusUpdate = (value: ColumnType) => {
-    dispatch(
-      moveIssue({
-        sourceGroupId: issueData.status,
-        destGroupId: value,
-        issueId: issueData.id,
-      })
-    );
-  };
-
-  const onIssueUpdate = (update: Partial<Record<keyof Issue, any>>) => {
-    dispatch(
-      updateIssue({
-        columnId: issueData.status,
-        issue: { ...issueData, ...update },
-        issueId: issueData.id,
-      })
-    );
-  };
-
   const [isDeleteModalOpened, setDeleteModalOpened] = useState(false);
 
   const [contentEditable, setContentEditable] = useState(false);
   const [titleEditable, setTitleEditable] = useState(false);
 
-  const onSubmit = () => {
-    onIssueUpdate({ text: getValues('textBuffer') });
-    setContentEditable(false);
-  };
-  const onCancel = () => {
-    setValue('textBuffer', issueData.text);
-    setContentEditable(false);
+  const onIssueStatusUpdate = (value: string) => {
+    dispatch(
+      moveIssue({
+        sourceGroupId: issueData.status,
+        destGroupId: value,
+        issueId: issueData.id as string,
+      })
+    );
   };
 
+  const onIssueUpdate = (update: Partial<Record<keyof Issue, any>>) => {
+      dispatch(
+        updateIssue({
+          columnId: issueData.status,
+          issue: { ...issueData, ...update },
+          issueId: issueData.id as string,
+        })
+      );
+  };
+
+  const onTextSubmit = () => {
+    onIssueUpdate({ text: getValues('text') });
+    setContentEditable(false);
+  };
+  const onTextCancel = () => {
+    setValue('text', issueData.text);
+    setContentEditable(false);
+  };
   const onDeleteClick = () => {
     setDeleteModalOpened(true);
   };
@@ -158,7 +150,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
         <DeleteIssueConfirm onClose={onDeleteCancel} onConfirm={onDeleteConfirm}></DeleteIssueConfirm>
       </Backdrop>
-      <form onSubmit={handleSubmit(submit)} onBlur={handleSubmit(submit)}>
+      <form>
         <Wrapper singlePage={singlePage}>
           <div className='issue-card-controls'>
             <IssueCardControls
@@ -169,7 +161,25 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
             ></IssueCardControls>
           </div>
           <div className='editor-col'>
-            {/* <IssueHeaderBadge issueId={issueData.publicId} issueTypeId={0}></IssueHeaderBadge> */}
+            <Box>
+              <Controller
+                render={({ field: { onChange, value } }) => (
+                  <SelectMenu
+                    onChange={onChange}
+                    id='select-type'
+                    value={value}
+                    uppercase={true}
+                    options={issueTypes.map((item) => ({
+                      value: item.id,
+                      name: item.title,
+                      img: item.img,
+                    }))}
+                  />
+                )}
+                name={'type'}
+                control={control}
+              />
+            </Box>
             <div ref={ticketHeaderRef}>
               {!titleEditable && (
                 <Typography
@@ -195,6 +205,9 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                       type='text'
                       value={value}
                       onChange={onChange}
+                      onBlur={() => {
+                        onIssueUpdate({ title: getValues('title') });
+                      }}
                       variant='outlined'
                     />
                   )}
@@ -212,7 +225,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                   onClick={() => setContentEditable(true)}
                   sx={{ '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
                 >
-                  <div className='content'>{getValues('textBuffer')}</div>
+                  <div className='content'>{getValues('text')}</div>
                 </Box>
               )}
               {contentEditable && (
@@ -228,7 +241,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                         placeholder='Issue text'
                       />
                     )}
-                    name={'textBuffer'}
+                    name={'text'}
                     control={control}
                   />
                 </Box>
@@ -236,10 +249,10 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
             </div>
             {contentEditable && (
               <div className='action-buttons'>
-                <Button onClick={onSubmit} variant='contained'>
+                <Button onClick={onTextSubmit} variant='contained'>
                   Save
                 </Button>
-                <Button onClick={onCancel} variant='text'>
+                <Button onClick={onTextCancel} variant='text'>
                   Cancel
                 </Button>
               </div>

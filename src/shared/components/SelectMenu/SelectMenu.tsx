@@ -45,12 +45,6 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id 
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const Wrapper = styled(MenuList)(({ theme }) => ({
-    '& .MuiTypography-root': {
-      fontSize: '14px',
-      paddingLeft: theme.spacing(1),
-    },
-  }));
 
   const getSelectedColor = () => {
     const selectedOption = selectedItem;
@@ -64,12 +58,16 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id 
   };
 
   return (
-    <div>
+    <>
       <List onClick={handleClick} disablePadding={true}>
         <ListItem disablePadding>
-          <ListItemButton sx={{ ...getSelectedColor() }} dense={true} selected={true}>
+          <ListItemButton
+            sx={{ ...getSelectedColor(), maxWidth: 'fit-content' }}
+            dense={true}
+            selected={true}
+          >
             {selectedItem.img && (
-              <ListItemIcon>
+              <ListItemIcon sx={{ width: 'auto', minWidth: 'auto' }}>
                 <img src={selectedItem.img} alt={selectedItem.name} />
               </ListItemIcon>
             )}
@@ -113,6 +111,6 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id 
           ))}
         </MenuList>
       </Menu>
-    </div>
+    </>
   );
 };

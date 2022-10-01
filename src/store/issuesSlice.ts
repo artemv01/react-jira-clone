@@ -59,17 +59,17 @@ const initialState: IssueColumn[] = [
 
 export interface CreateIssueParams {
   issue: Issue;
-  columnId: ColumnType;
+  columnId: string;
 }
 export interface UpdateIssueParams {
   issueId: string;
   issue: Partial<Issue>;
-  columnId: ColumnType;
+  columnId: string;
 }
 interface MoveIssueParams {
-  sourceGroupId: ColumnType;
-  destGroupId: ColumnType;
-  destIdx: number;
+  sourceGroupId: string;
+  destGroupId: string;
+  destIdx?: number;
   issueId: string;
 }
 
@@ -107,7 +107,6 @@ const issuesSlice = createSlice({
 
       if (source && dest && issueIdx !== undefined && issueIdx !== -1) {
         const issue: Issue = { ...source?.items[issueIdx], status: payload.destGroupId };
-
         const sourceList = [...source.items];
         sourceList.splice(issueIdx, 1);
         source.items = [...sourceList];
@@ -116,8 +115,7 @@ const issuesSlice = createSlice({
         if (payload.destIdx !== undefined) {
           destList.splice(payload.destIdx, 0, issue);
         } else {
-            destList.splice(0, 0, issue);
-
+          destList.splice(0, 0, issue);
         }
         dest.items = [...destList];
       }
@@ -125,13 +123,24 @@ const issuesSlice = createSlice({
   },
 });
 
+const defaultIssue = {
+  type: '',
+  priority: '',
+  assignee: [],
+  reporter: '',
+  title: '',
+  text: '',
+  id: undefined,
+  publicId: '',
+  status: '',
+};
 export const selectIssues = (state: RootState): IssueColumn[] => state.issues;
 export const selectIssueById =
   (issueId: string) =>
-  (state: RootState): Issue | undefined =>
+  (state: RootState): Issue =>
     state.issues
       .map((col) => col.items)
       .flat()
-      .find((item) => item.id === issueId);
+      .find((item) => item.id === issueId) || defaultIssue;
 export const { addIssue, moveIssue, updateIssue } = issuesSlice.actions;
 export default issuesSlice.reducer;
