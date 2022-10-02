@@ -13,7 +13,7 @@ import ReactQuill from '../../../shared/components/ReactQuill';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CommentInput from '../CommentInput';
-
+import sanitizeHtml from 'sanitize-html';
 import IssueCardControls from '../IssueCardControls';
 import Backdrop from '@mui/material/Backdrop';
 import DeleteIssueConfirm from '../DeleteIssueConfirm';
@@ -82,6 +82,36 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
 
   const [contentEditable, setContentEditable] = useState(false);
   const [titleEditable, setTitleEditable] = useState(false);
+
+  const createMarkup = () => {
+    const dirty = getValues('text');
+    const clean = sanitizeHtml(dirty, {
+      allowedTags: [
+        'abbr',
+        'acronym',
+        'b',
+        'blockquote',
+        'br',
+        'code',
+        'div',
+        'em',
+        'i',
+        'li',
+        'ol',
+        'p',
+        'span',
+        'strong',
+        'table',
+        'td',
+        'tr',
+        'ul',
+      ],
+      allowedAttributes: {
+        a: ['href', 'target'],
+      },
+    });
+    return { __html: clean };
+  };
 
   const onIssueStatusUpdate = (value: string) => {
     dispatch(
@@ -228,7 +258,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                   onClick={() => setContentEditable(true)}
                   sx={{ '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
                 >
-                  <div className='content'>{getValues('text')}</div>
+                  <div className='content' dangerouslySetInnerHTML={createMarkup()}></div>
                 </Box>
               )}
               {contentEditable && (
