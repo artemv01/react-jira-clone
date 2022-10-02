@@ -1,7 +1,8 @@
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
-import { ColumnType, Issue, IssueColumn } from '../shared/model/common';
+import { ColumnType, Comment, Issue, IssueColumn } from '../shared/model/common';
 import { RootState } from './store';
 import { HYDRATE } from 'next-redux-wrapper';
+import { users } from '../shared/stubs/users';
 
 const initialState: IssueColumn[] = [
   {
@@ -20,6 +21,9 @@ const initialState: IssueColumn[] = [
         id: 'i9E3gvSNrd7b1a4rttl3t',
         publicId: 'RJC-1',
         status: '7oG7i6UbQGttwjJn2K8iO',
+        comments: [],
+        createdAt: '2022-10-02T09:54:25.415Z',
+        updatedAt: '2022-10-02T09:54:25.415Z',
       },
       {
         type: 'PkNnJEJXUrfJ94uX8haZC',
@@ -31,6 +35,9 @@ const initialState: IssueColumn[] = [
         id: 'i9E1gvzNrd7b1a4rttl3t',
         publicId: 'RJC-2',
         status: '7oG7i6UbQGttwjJn2K8iO',
+        comments: [],
+        createdAt: '2022-10-02T09:54:25.415Z',
+        updatedAt: '2022-10-02T09:54:25.415Z',
       },
     ],
   },
@@ -57,10 +64,16 @@ const initialState: IssueColumn[] = [
   },
 ];
 
-export interface CreateIssueParams {
+export interface AddIssueParams {
   issue: Issue;
   columnId: string;
 }
+export interface AddCommentParams {
+  issueId: string;
+  commentText: string;
+  commentUserId: string;
+}
+
 export interface UpdateIssueParams {
   issueId: string;
   issue: Partial<Issue>;
@@ -82,10 +95,24 @@ const issuesSlice = createSlice({
     },
   },
   reducers: {
-    addIssue(state, action: PayloadAction<CreateIssueParams>) {
+    addIssue(state, action: PayloadAction<AddIssueParams>) {
       const column = state.find(({ id }) => id === action.payload.columnId);
       if (column) {
-        column.items.push(action.payload.issue);
+        const date = new Date().toISOString();
+        const newIssue = { ...action.payload.issue, createdAt: date, updatedAt: date };
+
+        column.items.unshift(newIssue);
+      }
+    },
+    addComment(state, action: PayloadAction<AddCommentParams>) {
+      const issue = state
+        .map((col) => col.items)
+        .flat()
+        .find((item) => item.id === action.payload.issueId);
+      const user = users.find((item) => item.id === action.payload.commentUserId);
+      const commentData = { user, text: action.payload.commentText, createdAt: new Date().toISOString() };
+      if (issue) {
+        issue.comments.push(commentData as Comment);
       }
     },
     updateIssue(state, action: PayloadAction<UpdateIssueParams>) {
@@ -94,11 +121,9 @@ const issuesSlice = createSlice({
         return;
       }
       const issueIdx = column.items.findIndex(({ id }) => id === action.payload.issueId);
-      if (column) {
-        const updatedIssue = { ...column.items[issueIdx], ...action.payload.issue };
-        column.items.splice(issueIdx, 1);
-        column.items.splice(issueIdx, 0, updatedIssue);
-      }
+      const updatedIssue = { ...column.items[issueIdx], ...action.payload.issue, updatedAt: new Date().toISOString() };
+      column.items.splice(issueIdx, 1);
+      column.items.splice(issueIdx, 0, updatedIssue);
     },
     moveIssue(state, { payload }: PayloadAction<MoveIssueParams>) {
       const source = state.find(({ id }) => id === payload.sourceGroupId);
@@ -142,5 +167,5 @@ export const selectIssueById =
       .map((col) => col.items)
       .flat()
       .find((item) => item.id === issueId) || defaultIssue;
-export const { addIssue, moveIssue, updateIssue } = issuesSlice.actions;
+export const { addIssue, addComment, moveIssue, updateIssue } = issuesSlice.actions;
 export default issuesSlice.reducer;

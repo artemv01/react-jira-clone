@@ -23,7 +23,7 @@ import { CreateIssue } from '../../create-issue/CreateIssue/CreateIssue';
 import Backdrop from '@mui/material/Backdrop';
 import SearchDrawer from '../../search-drawer/SearchDrawer';
 import { theme } from '../../../shared/theme';
-import { CreateIssueParams, addIssue } from '../../../store/issuesSlice';
+import { AddIssueParams, addIssue } from '../../../store/issuesSlice';
 import { useAppDispatch } from '../../../store/hooks';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 interface Props {

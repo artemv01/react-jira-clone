@@ -16,7 +16,7 @@ import { users } from '../../../shared/stubs/users';
 import { priorityTypes } from '../../../shared/PriorityTypes';
 import { issueTypes } from '../../../shared/IssueTypes';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { CreateIssueParams, addIssue } from '../../../store/issuesSlice';
+import { AddIssueParams, addIssue } from '../../../store/issuesSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import { Issue } from '../../../shared/model/common';
 import { incrementLastUsedId, selectSettings } from '../../../store/settingsSlice';
@@ -75,7 +75,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
       id: nanoid(),
       publicId: `${projectSettings.issueIdPrefix}-${projectSettings.lastUsedIssueId + 1}`,
     };
-    const payload: CreateIssueParams = {
+    const payload: AddIssueParams = {
       issue: createIssueData as Issue,
       columnId: 'backlog',
     };

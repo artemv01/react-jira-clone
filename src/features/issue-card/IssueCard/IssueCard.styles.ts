@@ -4,7 +4,7 @@ import { styled, useTheme } from '@mui/material/styles';
 export interface Props {
     onClose?: () => void;
     singlePage?: boolean;
-    id?: string;
+    id: string;
     
   }
 export const Wrapper = styled('div', {

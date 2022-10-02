@@ -1,7 +1,7 @@
 export interface Priority {
   id: string;
   title: string;
-  img:string;
+  img: string;
 }
 export interface IssueType {
   id: string;
@@ -11,6 +11,11 @@ export interface IssueType {
 export interface IssueStatus {
   id: string;
   title: string;
+}
+export interface Comment {
+  text: string;
+  user: User;
+  createdAt: string;
 }
 export interface IssueColumn {
   id: string;
@@ -38,6 +43,9 @@ export interface Issue {
   type: string;
   text: string;
   status: string;
+  comments: Comment[];
+  createdAt: string;
+  updatedAt: string;
 }
 export interface User {
   id: string;

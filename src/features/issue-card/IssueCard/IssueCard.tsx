@@ -13,7 +13,6 @@ import ReactQuill from '../../../shared/components/ReactQuill';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CommentInput from '../CommentInput';
-import Comment from '../Comment';
 
 import IssueCardControls from '../IssueCardControls';
 import Backdrop from '@mui/material/Backdrop';
@@ -30,6 +29,8 @@ import SelectMenu from '../../../shared/components/SelectMenu';
 import { users } from '../../../shared/stubs/users';
 import { Controller, useForm, useFormState } from 'react-hook-form';
 import { issueTypes } from '../../../shared/IssueTypes';
+import CommentCard from '../CommentCard';
+import { getDateString } from '../../../shared/util/util';
 
 export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const issueData = useAppSelector(selectIssueById(id as string));
@@ -93,13 +94,13 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   };
 
   const onIssueUpdate = (update: Partial<Record<keyof Issue, any>>) => {
-      dispatch(
-        updateIssue({
-          columnId: issueData.status,
-          issue: { ...issueData, ...update },
-          issueId: issueData.id as string,
-        })
-      );
+    dispatch(
+      updateIssue({
+        columnId: issueData.status,
+        issue: { ...issueData, ...update },
+        issueId: issueData.id as string,
+      })
+    );
   };
 
   const onTextSubmit = () => {
@@ -150,7 +151,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
         <DeleteIssueConfirm onClose={onDeleteCancel} onConfirm={onDeleteConfirm}></DeleteIssueConfirm>
       </Backdrop>
-      <form>
+      <form style={{ width: '100%', maxWidth: '1040px' }}>
         <Wrapper singlePage={singlePage}>
           <div className='issue-card-controls'>
             <IssueCardControls
@@ -262,17 +263,13 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                 Comments
               </Typography>
               <Box sx={{ mb: 3 }}>
-                <CommentInput></CommentInput>
+                <CommentInput issueId={id} user={users[0]}></CommentInput>
               </Box>
-              <Box sx={{ mb: 2 }}>
-                <Comment></Comment>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Comment></Comment>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Comment></Comment>
-              </Box>
+              {issueData?.comments?.map((comment, index) => (
+                <Box key={index} sx={{ mb: 2 }}>
+                  <CommentCard comment={comment}></CommentCard>
+                </Box>
+              ))}
             </Box>
           </div>
           <div className='issue-controls-col'>
@@ -344,10 +341,10 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
                 </div>
               </div>
               <Typography variant='caption' color='text.secondary'>
-                Created - Jun 28, 2020, 7:30:00 PM
+                Created - {getDateString(new Date(issueData.createdAt))}
               </Typography>
               <Typography variant='caption' color='text.secondary'>
-                Created - Jun 28, 2020, 7:30:00 PM
+                Updated - {getDateString(new Date(issueData.updatedAt))}
               </Typography>
             </IssueControlsWrapper>
           </div>
