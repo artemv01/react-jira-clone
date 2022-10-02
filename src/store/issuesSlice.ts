@@ -1,8 +1,10 @@
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
-import { ColumnType, Comment, Issue, IssueColumn } from '../shared/model/common';
+import { ColumnType, Comment, Issue, IssueColumn, IssueType, Priority, User } from '../shared/model/common';
 import { RootState } from './store';
 import { HYDRATE } from 'next-redux-wrapper';
 import { users } from '../shared/stubs/users';
+import { priorityTypes } from '../shared/PriorityTypes';
+import { issueTypes } from '../shared/IssueTypes';
 
 const initialState: IssueColumn[] = [
   {
@@ -108,7 +110,7 @@ const issuesSlice = createSlice({
       }
     },
     deleteIssue(state, action: PayloadAction<DeleteIssueParams>) {
-        console.log(action)
+      console.log(action);
       const column = state.find(({ id }) => id === action.payload.issue.status) as IssueColumn;
       const issueIdx = column.items.findIndex(({ id }) => id === action.payload.issue.id);
       if (column) {
@@ -160,7 +162,7 @@ const issuesSlice = createSlice({
   },
 });
 
-const defaultIssue = {
+const defaultIssue: Issue = {
   type: '',
   priority: '',
   assignee: [],
@@ -170,8 +172,16 @@ const defaultIssue = {
   id: undefined,
   publicId: '',
   status: '',
+  createdAt: '',
+  updatedAt: '',
+  comments: [],
 };
 export const selectIssues = (state: RootState): IssueColumn[] => state.issues;
+export const selectMergedIssues = (state: RootState): IssueRenderData[] =>
+  state.issues
+    .map((col) => col.items)
+    .flat()
+    .map((item) => joinIssueRelations(item));
 export const selectIssueById =
   (issueId: string) =>
   (state: RootState): Issue =>
@@ -181,3 +191,39 @@ export const selectIssueById =
       .find((item) => item.id === issueId) || defaultIssue;
 export const { addIssue, addComment, moveIssue, updateIssue, deleteIssue } = issuesSlice.actions;
 export default issuesSlice.reducer;
+
+export interface IssueRenderData {
+  text: string;
+  assigned: User[];
+  issueId: string;
+  type: IssueType;
+  priority: Priority;
+  publicId: string;
+  title: string;
+}
+export const joinIssueRelations = (issue: Issue): IssueRenderData => {
+  const assigned = users.filter((item) => {
+    if (Array.isArray(issue.assignee) && issue.assignee.includes(item.id)) {
+      return item;
+    }
+  });
+  const priority = priorityTypes.find((item) => {
+    if (issue.priority === item.id) {
+      return item;
+    }
+  }) as Priority;
+  const type = issueTypes.find((item) => {
+    if (issue.type === item.id) {
+      return item;
+    }
+  }) as IssueType;
+  return {
+    publicId: issue.publicId,
+    text: issue.text,
+    title: issue.title,
+    assigned,
+    issueId: issue.id as string,
+    type,
+    priority,
+  };
+};

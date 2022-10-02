@@ -57,7 +57,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     },
     resolver: yupResolver(createIssueValidate),
   });
-  const { errors, dirtyFields, isValid, isSubmitSuccessful } = useFormState({
+  const { errors,  isSubmitSuccessful } = useFormState({
     control,
   });
   useEffect(() => {

@@ -13,16 +13,13 @@ interface Props {
 }
 
 export const SelectPriority: FC<Props> = ({ onChange, value, onBlur }) => {
-  
   return (
-    <Select
-      onBlur={onBlur}
-      onChange={onChange}
-      value={value}
-    >
+    <Select onBlur={onBlur} onChange={onChange} value={value}>
       {priorityTypes.map((item) => (
         <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>
-          <ListItemIcon sx={{ minWidth: '24px !important', width: '24px !important' }}>{item.img}</ListItemIcon>
+          <ListItemIcon sx={{ minWidth: '24px !important', width: '24px !important' }}>
+            <img src={item.img} />
+          </ListItemIcon>
           <ListItemText sx={{ pl: '8px' }} primaryTypographyProps={{ variant: 'label', color: 'text.secondary' }}>
             {item.title}
           </ListItemText>

@@ -6,54 +6,22 @@ import { priorityTypes } from '../../../shared/PriorityTypes';
 import { issueTypes } from '../../../shared/IssueTypes';
 import { Wrapper } from './TicketCard.styles';
 import { users } from '../../../shared/stubs/users';
-import { IssueType, Priority, User } from '../../../shared/model/common';
+import { Issue, IssueType, Priority, User } from '../../../shared/model/common';
+import { IssueRenderData, joinIssueRelations } from '../../../store/issuesSlice';
 
 interface Props {
-  text: string;
-  assigned: string[];
-  issueId: string;
-  type: string;
-  priority: string;
+  issue: Issue;
 }
-interface IssueRenderData {
-  text: string;
-  assigned: User[];
-  issueId: string;
-  type: IssueType;
-  priority: Priority;
-}
+
 export const TicketCard: FC<Props> = (props) => {
-  const issueData: IssueRenderData = useMemo(() => {
-    const assigned = users.filter((item) => {
-      if (Array.isArray(props.assigned) && props.assigned.includes(item.id)) {
-        return item;
-      }
-    });
-    const priority = priorityTypes.find((item) => {
-      if (props.priority === item.id) {
-        return item;
-      }
-    }) as Priority;
-    const type = issueTypes.find((item) => {
-      if (props.type === item.id) {
-        return item;
-      }
-    }) as IssueType;
-    return {
-      text: props.text,
-      assigned,
-      issueId: props.issueId,
-      type,
-      priority,
-    };
-  }, [props]);
+  const issueData: IssueRenderData = joinIssueRelations(props.issue);
   if (!issueData) {
     // TODO (FEATURE): add loading
     return <></>;
   }
   return (
     <Wrapper>
-      <div className='text'>{issueData.text}</div>
+      <div className='text'>{issueData.title}</div>
       <div className='controls'>
         <div className='user-avatars'>
           {issueData.assigned.map((user, index) => (
@@ -62,7 +30,7 @@ export const TicketCard: FC<Props> = (props) => {
             </div>
           ))}
         </div>
-        <div className='issue-id'>{issueData.issueId}</div>
+        <div className='issue-id'>{issueData.publicId}</div>
         <div className='filler'></div>
         <div className='issue-type'>
           <img src={issueData.type?.img} alt='' />

@@ -13,21 +13,18 @@ interface Props {
 }
 
 export const SelectType: FC<Props> = ({ onChange, value, onBlur }) => {
-    return (
-      <Select
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
-      >
-        {issueTypes.map((item) => (
-          <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>
-            <ListItemIcon sx={{ minWidth: '24px !important', width: '24px !important' }}>{item.img}</ListItemIcon>
-            <ListItemText sx={{ pl: '8px' }} primaryTypographyProps={{ variant: 'label', color: 'text.secondary' }}>
-              {item.title}
-            </ListItemText>
-          </MenuItem>
-        ))}
-      </Select>
-    );
-  };
-  
+  return (
+    <Select onChange={onChange} onBlur={onBlur} value={value}>
+      {issueTypes.map((item) => (
+        <MenuItem value={item.id} key={item.id} sx={{ px: '8px' }}>
+          <ListItemIcon sx={{ minWidth: '24px !important', width: '24px !important' }}>
+            <img src={item.img} alt='' />
+          </ListItemIcon>
+          <ListItemText sx={{ pl: '8px' }} primaryTypographyProps={{ variant: 'label', color: 'text.secondary' }}>
+            {item.title}
+          </ListItemText>
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};

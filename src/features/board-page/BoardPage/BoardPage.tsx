@@ -117,13 +117,7 @@ export const BoardPage: FC = () => {
                               ref={provided.innerRef}
                               onClick={() => setOpenedIssueId(issue.id)}
                             >
-                              <TicketCard
-                                text={issue.title}
-                                assigned={issue.assignee}
-                                issueId={issue.publicId}
-                                type={issue.type}
-                                priority={issue.priority}
-                              />
+                              <TicketCard issue={issue} />
                             </div>
                           )}
                         </Draggable>
