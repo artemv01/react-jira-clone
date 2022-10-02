@@ -61,3 +61,9 @@ export interface Option {
   bgColor?: string;
   textColor?: string;
 }
+export interface IssueFilters {
+  search: string;
+  assignees: string[];
+  onlyCurrentUserIssues: boolean;
+  ignoreResolved: boolean;
+}

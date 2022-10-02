@@ -34,10 +34,6 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id 
 
   const theme = useTheme();
 
-  const testClick = () => {
-    console.log('click');
-  };
-
   const openMenu = Boolean(anchorEl);
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);

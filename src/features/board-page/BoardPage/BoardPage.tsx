@@ -12,6 +12,9 @@ import Breadcrumbs from '../../../shared/components/Breadcrumbs';
 import TicketCard from '../TicketCard';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { moveIssue, selectIssues } from '../../../store/issuesSlice';
+import { Issue, IssueFilters } from '../../../shared/model/common';
+import { users } from '../../../shared/stubs/users';
+import { defaultIssueFilters } from '../../../shared/stubs/defaultIssueFilters';
 
 export const ItemTypes = {
   CARD: 'card',
@@ -32,20 +35,50 @@ export const BoardPage: FC = () => {
       : [{ ...sourceGroup }];
     const [movingTask] = sourceGroup.items.filter((t) => t.id === draggableId);
 
-    console.log({
-      sourceGroupId: sourceGroup.id,
-      destGroupId: destinationGroup.id,
-      destIdx: destination?.index,
-      issueId: movingTask?.id,
-    });
     dispatch(
       moveIssue({
         sourceGroupId: sourceGroup.id,
         destGroupId: destinationGroup.id,
         destIdx: destination.index,
-        issueId: movingTask.id,
+        issueId: movingTask.id as string,
       })
     );
+  };
+
+  const [filters, setFilters] = useState<IssueFilters>(defaultIssueFilters);
+
+  const applyFilters = (issue: Issue): boolean => {
+    const { search, assignees, onlyCurrentUserIssues, ignoreResolved } = filters;
+    let matchScore = 0,
+      neededScore = 0;
+    if (search?.length) {
+      neededScore++;
+      const searchRegexp = new RegExp(search, 'i');
+      if (searchRegexp.test(issue.text) || searchRegexp.test(issue.title)) {
+        ++matchScore;
+      }
+    }
+    if (assignees.length) {
+      neededScore++;
+      const assigneeMatch = assignees.filter((item) => issue.assignee.includes(item)).length;
+      if (assigneeMatch) {
+        ++matchScore;
+      }
+    }
+    if (onlyCurrentUserIssues) {
+      neededScore++;
+      const currentUserId = users[0].id;
+      if (issue.assignee.includes(currentUserId)) {
+        ++matchScore;
+      }
+    }
+    if (ignoreResolved) {
+      neededScore++;
+      if (issue.status !== 'hyHjZ_SbAXqW6KwLdAp_l') {
+        ++matchScore;
+      }
+    }
+    return neededScore === matchScore;
   };
 
   return (
@@ -61,7 +94,12 @@ export const BoardPage: FC = () => {
             Kanban Board
           </Typography>
           <Box sx={{ mb: 2 }}>
-            <BoardPageControls></BoardPageControls>
+            <BoardPageControls
+              onChange={(newFilters) => {
+                setFilters(newFilters);
+              }}
+              value={filters}
+            ></BoardPageControls>
           </Box>
           <Box sx={{ flex: '1 1 auto', maxWidth: '1270px' }}>
             <Grid sx={{ height: '100%' }} container spacing={1}>
@@ -69,7 +107,7 @@ export const BoardPage: FC = () => {
                 return (
                   <Grid item key={data.id} xs={3}>
                     <BoardColumn id={data.id} headerText={data.title}>
-                      {data.items.map((issue, i) => (
+                      {data.items.filter(applyFilters).map((issue, i) => (
                         <Draggable key={issue.id} draggableId={issue.id} index={i}>
                           {(provided: any) => (
                             <div

@@ -8,12 +8,12 @@ export const users: User[] = [
   },
   {
     id: 'IEJ3QQNbTBVjvw_4gvd5D',
-    avatarUrl: '/images/avatar1.jpg',
+    avatarUrl: '/images/avatar2.jpg',
     name: 'James Bond',
   },
   {
     id: 'co5VnI9JT-XhYWn84zXrc',
-    avatarUrl: '/images/avatar1.jpg',
+    avatarUrl: '/images/avatar3.jpg',
     name: 'Daniel Craig',
   },
 ];
