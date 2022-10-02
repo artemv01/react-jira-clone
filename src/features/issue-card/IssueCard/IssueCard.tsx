@@ -23,7 +23,7 @@ import { editorFormats, editorModules } from '../../../shared/editorConfig';
 import { IssueControlsWrapper, Props, Wrapper } from './IssueCard.styles';
 import { ColumnType, Issue, IssueStatus } from '../../../shared/model/common';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { moveIssue, selectIssueById, selectIssues, updateIssue } from '../../../store/issuesSlice';
+import { deleteIssue, moveIssue, selectIssueById, selectIssues, updateIssue } from '../../../store/issuesSlice';
 import React from 'react';
 import SelectMenu from '../../../shared/components/SelectMenu';
 import { users } from '../../../shared/stubs/users';
@@ -115,7 +115,9 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
     setDeleteModalOpened(true);
   };
   const onDeleteConfirm = () => {
+    dispatch(deleteIssue({ issue: issueData }));
     setDeleteModalOpened(false);
+    onClose && onClose();
   };
   const onDeleteCancel = () => {
     setDeleteModalOpened(false);

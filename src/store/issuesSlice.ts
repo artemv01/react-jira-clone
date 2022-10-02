@@ -68,6 +68,9 @@ export interface AddIssueParams {
   issue: Issue;
   columnId: string;
 }
+export interface DeleteIssueParams {
+  issue: Issue;
+}
 export interface AddCommentParams {
   issueId: string;
   commentText: string;
@@ -102,6 +105,15 @@ const issuesSlice = createSlice({
         const newIssue = { ...action.payload.issue, createdAt: date, updatedAt: date };
 
         column.items.unshift(newIssue);
+      }
+    },
+    deleteIssue(state, action: PayloadAction<DeleteIssueParams>) {
+        console.log(action)
+      const column = state.find(({ id }) => id === action.payload.issue.status) as IssueColumn;
+      const issueIdx = column.items.findIndex(({ id }) => id === action.payload.issue.id);
+      if (column) {
+        const date = new Date().toISOString();
+        column.items.splice(issueIdx, 1);
       }
     },
     addComment(state, action: PayloadAction<AddCommentParams>) {
@@ -167,5 +179,5 @@ export const selectIssueById =
       .map((col) => col.items)
       .flat()
       .find((item) => item.id === issueId) || defaultIssue;
-export const { addIssue, addComment, moveIssue, updateIssue } = issuesSlice.actions;
+export const { addIssue, addComment, moveIssue, updateIssue, deleteIssue } = issuesSlice.actions;
 export default issuesSlice.reducer;
