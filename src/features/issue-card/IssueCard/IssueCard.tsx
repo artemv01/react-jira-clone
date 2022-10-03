@@ -4,7 +4,6 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 
 import { priorityTypes } from '../../../shared/PriorityTypes';
-import IssueHeaderBadge from '../IssueHeaderBadge';
 import PriorityBadge from '../PriorityBadge';
 import NoSsr from '../../../shared/NoSsr';
 

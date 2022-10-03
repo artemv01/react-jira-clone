@@ -84,7 +84,7 @@ export const BoardPage: FC = () => {
   return (
     <NoSsr>
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={!!openedIssueId}>
-        <IssueCard id={openedIssueId} onClose={() => setOpenedIssueId(undefined)}></IssueCard>
+        <IssueCard id={openedIssueId as string} onClose={() => setOpenedIssueId(undefined)}></IssueCard>
       </Backdrop>
 
       <DragDropContext onDragEnd={onDragEnd}>

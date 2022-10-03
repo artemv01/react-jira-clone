@@ -453,6 +453,13 @@
     "@types/scheduler" "*"
     "csstype" "^3.0.2"
 
+"@types/sanitize-html@^2.6.2":
+  "integrity" "sha512-7Lu2zMQnmHHQGKXVvCOhSziQMpa+R2hMHFefzbYoYMHeaXR0uXqNeOc3JeQQQ8/6Xa2Br/P1IQTLzV09xxAiUQ=="
+  "resolved" "https://registry.npmjs.org/@types/sanitize-html/-/sanitize-html-2.6.2.tgz"
+  "version" "2.6.2"
+  dependencies:
+    "htmlparser2" "^6.0.0"
+
 "@types/scheduler@*":
   "integrity" "sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew=="
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"

@@ -162,7 +162,7 @@ const issuesSlice = createSlice({
   },
 });
 
-const defaultIssue: Issue = {
+const defaultIssue: Issue & { id: string | undefined } = {
   type: '',
   priority: '',
   assignee: [],

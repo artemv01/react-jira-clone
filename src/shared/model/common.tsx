@@ -34,7 +34,7 @@ export interface IssueStatus {
 export type ColumnType = 'backlog' | 'selected_for_dev' | 'in_progress' | 'done';
 
 export interface Issue {
-  id: string | undefined;
+  id: string;
   publicId: string;
   title: string;
   assignee: string[];
