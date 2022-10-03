@@ -47,7 +47,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   });
 
   useEffect(() => {
-    if (issueData.id) {
+    if (issueData) {
       setValue('title', issueData.title);
       setValue('type', issueData.type);
       setValue('text', issueData.text);
@@ -56,7 +56,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
       setValue('priority', issueData.priority);
       forceUpdate();
     }
-  }, [issueData.id]);
+  }, [issueData?.id]);
 
   const [watchType, watchAssignee, watchPriority, watchStatus] = watch(['type', 'assignee', 'priority', 'status']);
   useEffect(() => {
@@ -113,23 +113,27 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   };
 
   const onIssueStatusUpdate = (value: string) => {
-    dispatch(
-      moveIssue({
-        sourceGroupId: issueData.status,
-        destGroupId: value,
-        issueId: issueData.id as string,
-      })
-    );
+    if (issueData) {
+      dispatch(
+        moveIssue({
+          sourceGroupId: issueData.status,
+          destGroupId: value,
+          issueId: issueData.id as string,
+        })
+      );
+    }
   };
 
   const onIssueUpdate = (update: Partial<Record<keyof Issue, any>>) => {
-    dispatch(
-      updateIssue({
-        columnId: issueData.status,
-        issue: { ...issueData, ...update },
-        issueId: issueData.id as string,
-      })
-    );
+    if (issueData) {
+      dispatch(
+        updateIssue({
+          columnId: issueData.status,
+          issue: { ...issueData, ...update },
+          issueId: issueData.id as string,
+        })
+      );
+    }
   };
 
   const onTextSubmit = () => {

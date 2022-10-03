@@ -162,20 +162,7 @@ const issuesSlice = createSlice({
   },
 });
 
-const defaultIssue: Issue & { id: string | undefined } = {
-  type: '',
-  priority: '',
-  assignee: [],
-  reporter: '',
-  title: '',
-  text: '',
-  id: undefined,
-  publicId: '',
-  status: '',
-  createdAt: '',
-  updatedAt: '',
-  comments: [],
-};
+
 export const selectIssues = (state: RootState): IssueColumn[] => state.issues;
 export const selectMergedIssues = (state: RootState): IssueRenderData[] =>
   state.issues
@@ -188,7 +175,7 @@ export const selectIssueById =
     state.issues
       .map((col) => col.items)
       .flat()
-      .find((item) => item.id === issueId) || defaultIssue;
+      .find((item) => item.id === issueId) as Issue;
 export const { addIssue, addComment, moveIssue, updateIssue, deleteIssue } = issuesSlice.actions;
 export default issuesSlice.reducer;
 
