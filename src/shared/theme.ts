@@ -18,7 +18,7 @@ declare module '@mui/material/styles' {
     };
     board: {
       bg: string;
-      ticketBg: string;
+      issueBg: string;
     };
     silent: {
       silent1: string;
@@ -35,7 +35,7 @@ declare module '@mui/material/styles' {
     };
     board: {
       bg: string;
-      ticketBg: string;
+      issueBg: string;
     };
     silent: {
       silent1: string;
@@ -49,7 +49,7 @@ declare module '@mui/material/styles' {
   interface ThemeOptions {
     board?: {
       bg?: string;
-      ticketBg?: string;
+      issueBg?: string;
     };
     silent?: {
       silent1?: string;
@@ -108,7 +108,7 @@ export const theme = createTheme({
     },
     board: {
       bg: '#F4F5F7',
-      ticketBg: '#fff',
+      issueBg: '#fff',
     },
     hoverMark: {
       primary: 'rgba(0,0,0,0.1)',

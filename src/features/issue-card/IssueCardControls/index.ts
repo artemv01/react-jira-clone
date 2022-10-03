@@ -1,1 +1,0 @@
-export {IssueCardControls as default} from "./IssueCardControls";

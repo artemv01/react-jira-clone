@@ -89,7 +89,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
       sx={{
         p: 3,
         width: '700px',
-        background: (theme) => theme.palette.board.ticketBg,
+        background: (theme) => theme.palette.board.issueBg,
       }}
     >
       <form onSubmit={handleSubmit(submit)}>

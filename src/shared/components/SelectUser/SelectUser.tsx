@@ -16,7 +16,7 @@ export const AvatarItem = styled('div')(({ theme }) => ({
   '& > .MuiAvatar-root': {
     cursor: 'pointer',
     marginLeft: '-6px',
-    border: `1px solid ${theme.palette.board.ticketBg}`,
+    border: `1px solid ${theme.palette.board.issueBg}`,
     transition: 'all 0.3s ease',
     '&:hover, &.selected': {
       transform: 'translateY(-5px)',

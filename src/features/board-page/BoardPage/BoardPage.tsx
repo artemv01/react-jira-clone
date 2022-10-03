@@ -7,14 +7,14 @@ import NoSsr from '../../../shared/NoSsr';
 import BoardColumn from '../BoardColumn';
 import BoardPageControls from '../BoardPageControls';
 import Backdrop from '@mui/material/Backdrop';
-import IssueCard from '../../issue-card/IssueCard';
 import Breadcrumbs from '../../../shared/components/Breadcrumbs';
-import TicketCard from '../TicketCard';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { moveIssue, selectIssues } from '../../../store/issuesSlice';
 import { Issue, IssueFilters } from '../../../shared/model/common';
 import { users } from '../../../shared/stubs/users';
 import { defaultIssueFilters } from '../../../shared/stubs/defaultIssueFilters';
+import IssueModal from '../../issue-card/IssueModal';
+import IssueCard from '../IssueCard';
 
 export const ItemTypes = {
   CARD: 'card',
@@ -84,7 +84,7 @@ export const BoardPage: FC = () => {
   return (
     <NoSsr>
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={!!openedIssueId}>
-        <IssueCard publicId={openedIssueId as string} onClose={() => setOpenedIssueId(undefined)}></IssueCard>
+        <IssueModal publicId={openedIssueId as string} onClose={() => setOpenedIssueId(undefined)}></IssueModal>
       </Backdrop>
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -120,7 +120,7 @@ export const BoardPage: FC = () => {
                                 setOpenedIssueId(issue.publicId)
                               }}
                             >
-                              <TicketCard issue={issue} />
+                              <IssueCard issue={issue} />
                             </div>
                           )}
                         </Draggable>

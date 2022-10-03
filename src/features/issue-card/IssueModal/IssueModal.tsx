@@ -13,13 +13,13 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CommentInput from '../CommentInput';
 import sanitizeHtml from 'sanitize-html';
-import IssueCardControls from '../IssueCardControls';
+import IssueModalControls from '../IssueModalControls';
 import Backdrop from '@mui/material/Backdrop';
 import DeleteIssueConfirm from '../DeleteIssueConfirm';
 import AssigneeSelect from '../AssigneeSelect';
 import { useRouter } from 'next/router';
 import { editorFormats, editorModules } from '../../../shared/editorConfig';
-import { IssueControlsWrapper, Props, Wrapper } from './IssueCard.styles';
+import { IssueControlsWrapper, Props, Wrapper } from './IssueModal.styles';
 import { ColumnType, Issue, IssueStatus } from '../../../shared/model/common';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
@@ -43,7 +43,7 @@ interface Props {
   singlePage?: boolean;
   publicId: string;
 }
-export const IssueCard: FC<Props> = ({ onClose, singlePage, publicId }) => {
+export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
   const issueData = useAppSelector(selectIssueByPublicId(publicId as string));
   const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
   const { handleSubmit, control, reset, setValue, getValues, watch } = useForm<Issue & { text: string }>({
@@ -151,14 +151,14 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, publicId }) => {
     router.push(`/project/issue/${publicId}`);
   };
 
-  const ticketHeaderRef = useRef(null);
+  const issueHeaderRef = useRef(null);
   const MemoizedEditor = React.memo(ReactQuill);
 
   useEffect(() => {
     function addTitleInputClick(event: Event): any {
-      if (ticketHeaderRef.current && !(ticketHeaderRef.current as any).contains(event.target)) {
+      if (issueHeaderRef.current && !(issueHeaderRef.current as any).contains(event.target)) {
         setTitleEditable(false);
-      } else if (ticketHeaderRef.current && (ticketHeaderRef.current as any).contains(event.target)) {
+      } else if (issueHeaderRef.current && (issueHeaderRef.current as any).contains(event.target)) {
         setTitleEditable(true);
       }
     }
@@ -167,7 +167,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, publicId }) => {
     return function () {
       document.removeEventListener('click', addTitleInputClick, false);
     };
-  }, [ticketHeaderRef, issueData]);
+  }, [issueHeaderRef, issueData]);
 
   // TODO (FEATURE): loading skeleton
   if (!issueData) {
@@ -180,12 +180,12 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, publicId }) => {
       </Backdrop>
       <Wrapper singlePage={singlePage}>
         <div className='issue-card-controls'>
-          <IssueCardControls
+          <IssueModalControls
             singlePage={singlePage}
             onDelete={onDeleteClick}
             onExpand={onExpandClick}
             onClose={onClose}
-          ></IssueCardControls>
+          ></IssueModalControls>
         </div>
         <div className='editor-col'>
           <Box>
@@ -207,7 +207,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, publicId }) => {
               control={control}
             />
           </Box>
-          <div ref={ticketHeaderRef}>
+          <div ref={issueHeaderRef}>
             {!titleEditable && (
               <Typography
                 sx={{ mb: 2, mt: 1, '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}

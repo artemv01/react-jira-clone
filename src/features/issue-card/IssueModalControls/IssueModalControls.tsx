@@ -12,7 +12,7 @@ interface Props {
   onClose?: () => void;
   singlePage?: boolean;
 }
-export const IssueCardControls: FC<Props> = ({ onDelete, onExpand, onClose, singlePage }) => {
+export const IssueModalControls: FC<Props> = ({ onDelete, onExpand, onClose, singlePage }) => {
   return (
     <Box
       sx={{

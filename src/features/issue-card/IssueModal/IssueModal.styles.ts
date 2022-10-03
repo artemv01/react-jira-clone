@@ -7,7 +7,7 @@ export const Wrapper = styled('div', {
   position: 'relative',
   display: 'flex',
   flexFlow: 'row nowrap',
-  backgroundColor: theme.palette.board.ticketBg,
+  backgroundColor: theme.palette.board.issueBg,
   padding: !singlePage ? `${theme.spacing(2)} ${theme.spacing(2.5)} 64px ${theme.spacing(2.5)}` : 0,
   width: '100%',
   maxWidth: !singlePage ? '1040px' : '100%',

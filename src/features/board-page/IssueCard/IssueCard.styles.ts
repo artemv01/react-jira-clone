@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 
 export const Wrapper = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.board.ticketBg,
+    backgroundColor: theme.palette.board.issueBg,
     width: '100%',
     height: 'auto',
     padding: theme.spacing(1),
@@ -32,7 +32,7 @@ export const Wrapper = styled('div')(({ theme }) => ({
         marginLeft: '-4px',
         width: 24,
         height: 24,
-        border: `1px solid ${theme.palette.board.ticketBg}`,
+        border: `1px solid ${theme.palette.board.issueBg}`,
       },
     },
     '.issue-id': {

@@ -64,7 +64,7 @@ export const SearchDrawer: FC<Props> = ({ toggleCb, isOpened }) => {
             issues?.filter(searchFilter).map((item, index) => (
               <Box
                 key={index}
-                className={'ticket-mini-card'}
+                className={'issue-mini-card'}
                 sx={{
                   display: 'flex',
                   flexFlow: 'row nowrap',

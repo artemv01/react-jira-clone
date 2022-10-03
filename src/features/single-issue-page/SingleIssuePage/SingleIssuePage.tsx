@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { FC } from 'react';
 import Breadcrumbs from '../../../shared/components/Breadcrumbs';
-import IssueCard from '../../issue-card/IssueCard';
+import IssueCard from '../../issue-card/IssueModal';
 
 
 interface Props {

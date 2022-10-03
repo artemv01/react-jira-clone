@@ -4,7 +4,7 @@ import DefaultProps from '../../../shared/model/DefaultProps';
 import Avatar from '@mui/material/Avatar';
 import { priorityTypes } from '../../../shared/PriorityTypes';
 import { issueTypes } from '../../../shared/IssueTypes';
-import { Wrapper } from './TicketCard.styles';
+import { Wrapper } from './IssueCard.styles';
 import { users } from '../../../shared/stubs/users';
 import { Issue, IssueType, Priority, User } from '../../../shared/model/common';
 import { IssueRenderData, joinIssueRelations } from '../../../store/issuesSlice';
@@ -13,7 +13,7 @@ interface Props {
   issue: Issue;
 }
 
-export const TicketCard: FC<Props> = (props) => {
+export const IssueCard: FC<Props> = (props) => {
   const issueData: IssueRenderData = joinIssueRelations(props.issue);
   if (!issueData) {
     // TODO (FEATURE): add loading
