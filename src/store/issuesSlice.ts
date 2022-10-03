@@ -12,36 +12,7 @@ const initialState: IssueColumn[] = [
     title: 'Backlog',
     bgColor: '#f4f5f7',
     textColor: '#42526E',
-    items: [
-      {
-        type: 'PkNnJEJXUrfJ94uX8haZC',
-        priority: 'kUvro59zCQQRgz4DCiDjs',
-        assignee: ['85hO6aeMSpjVxT3iwdhiP', 'IEJ3QQNbTBVjvw_4gvd5D'],
-        reporter: '85hO6aeMSpjVxT3iwdhiP',
-        title: 'dwqdwqdqwdq',
-        text: '<p>ddwdqdwqdwqdwq</p>',
-        id: 'i9E3gvSNrd7b1a4rttl3t',
-        publicId: 'RJC-1',
-        status: '7oG7i6UbQGttwjJn2K8iO',
-        comments: [],
-        createdAt: '2022-10-02T09:54:25.415Z',
-        updatedAt: '2022-10-02T09:54:25.415Z',
-      },
-      {
-        type: 'PkNnJEJXUrfJ94uX8haZC',
-        priority: 'kUvro59zCQQRgz4DCiDjs',
-        assignee: ['85hO6aeMSpjVxT3iwdhiP', 'IEJ3QQNbTBVjvw_4gvd5D'],
-        reporter: '85hO6aeMSpjVxT3iwdhiP',
-        title: 'aaa',
-        text: 'aaa',
-        id: 'i9E1gvzNrd7b1a4rttl3t',
-        publicId: 'RJC-2',
-        status: '7oG7i6UbQGttwjJn2K8iO',
-        comments: [],
-        createdAt: '2022-10-02T09:54:25.415Z',
-        updatedAt: '2022-10-02T09:54:25.415Z',
-      },
-    ],
+    items: [],
   },
   {
     id: 'XXUEBDiCrhJAml7ya3yeS',
@@ -104,9 +75,15 @@ const issuesSlice = createSlice({
       const column = state.find(({ id }) => id === action.payload.columnId);
       if (column) {
         const date = new Date().toISOString();
-        const newIssue = { ...action.payload.issue, createdAt: date, updatedAt: date };
+        const newIssue = {
+          ...action.payload.issue,
+          createdAt: date,
+          updatedAt: date,
+          comments: [],
+          status: action.payload.columnId,
+        };
 
-        column.items.unshift(newIssue);
+        column.items.push(newIssue);
       }
     },
     deleteIssue(state, action: PayloadAction<DeleteIssueParams>) {
@@ -161,7 +138,6 @@ const issuesSlice = createSlice({
     },
   },
 });
-
 
 export const selectIssues = (state: RootState): IssueColumn[] => state.issues;
 export const selectMergedIssues = (state: RootState): IssueRenderData[] =>

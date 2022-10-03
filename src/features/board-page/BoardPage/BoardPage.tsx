@@ -106,7 +106,7 @@ export const BoardPage: FC = () => {
               {taskList.map((data, index) => {
                 return (
                   <Grid item key={data.id} xs={3}>
-                    <BoardColumn id={data.id} headerText={data.title}>
+                    <BoardColumn id={data.id} headerText={data.title + ` ${data.items.length}`}>
                       {data.items.filter(applyFilters).map((issue, i) => (
                         <Draggable key={issue.id} draggableId={issue.id} index={i}>
                           {(provided: any) => (

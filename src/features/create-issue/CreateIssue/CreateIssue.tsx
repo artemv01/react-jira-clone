@@ -20,10 +20,11 @@ import { AddIssueParams, addIssue } from '../../../store/issuesSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import { Issue } from '../../../shared/model/common';
 import { incrementLastUsedId, selectSettings } from '../../../store/settingsSlice';
-import { Controller, useForm,useFormState } from 'react-hook-form';
+import { Controller, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string, array } from 'yup';
 import { ErrorMessage } from '../../../shared/components/ErrorMessage/ErrorMessage';
+import { BACKLOG_COLUMN_ID } from '../../../shared/model/const';
 interface Props {
   onClose: () => void;
 }
@@ -45,7 +46,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     title: string().required(),
     text: string(),
   }).required();
-  const { handleSubmit, control, reset,setValue} = useForm({
+  const { handleSubmit, control, reset, setValue } = useForm({
     mode: 'onBlur',
     defaultValues: {
       type: issueTypes[0].id,
@@ -57,12 +58,12 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     },
     resolver: yupResolver(createIssueValidate),
   });
-  const { errors,  isSubmitSuccessful } = useFormState({
+  const { errors, isSubmitSuccessful } = useFormState({
     control,
   });
   useEffect(() => {
-    reset()
-  }, [isSubmitSuccessful])
+    reset();
+  }, [isSubmitSuccessful]);
   const projectSettings = useAppSelector(selectSettings);
 
   const dispatch = useAppDispatch();
@@ -77,7 +78,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     };
     const payload: AddIssueParams = {
       issue: createIssueData as Issue,
-      columnId: 'backlog',
+      columnId: BACKLOG_COLUMN_ID,
     };
     dispatch(addIssue(payload));
     dispatch(incrementLastUsedId());
@@ -153,7 +154,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
           <Box sx={{ mb: 1 }}>
             <Label text='Reporter'>
               <Controller
-                render={({ field: { onChange, value } }) => <SelectUser  onChange={onChange} value={value} />}
+                render={({ field: { onChange, value } }) => <SelectUser onChange={onChange} value={value} />}
                 name={'reporter'}
                 control={control}
               />
@@ -162,7 +163,9 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
           <Box sx={{ mb: 1 }}>
             <Label text='Short summary'>
               <Controller
-                render={({ field: { onChange, value, onBlur } }) => <TextField onBlur={onBlur} value={value} onChange={onChange}></TextField>}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <TextField onBlur={onBlur} value={value} onChange={onChange}></TextField>
+                )}
                 name={'title'}
                 control={control}
               />
@@ -173,7 +176,12 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
             <Label text='Assignees'>
               <Controller
                 render={({ field: { onChange, value } }) => (
-                  <SelectUser setValue={(newVal) => setValue('assignee', newVal )} value={value} multiple={true} onChange={onChange} />
+                  <SelectUser
+                    setValue={(newVal) => setValue('assignee', newVal)}
+                    value={value}
+                    multiple={true}
+                    onChange={onChange}
+                  />
                 )}
                 name={'assignee'}
                 control={control}

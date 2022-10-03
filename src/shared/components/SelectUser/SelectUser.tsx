@@ -16,8 +16,6 @@ export const AvatarItem = styled('div')(({ theme }) => ({
   '& > .MuiAvatar-root': {
     cursor: 'pointer',
     marginLeft: '-6px',
-    width: 36,
-    height: 36,
     border: `1px solid ${theme.palette.board.ticketBg}`,
     transition: 'all 0.3s ease',
     '&:hover, &.selected': {
@@ -47,7 +45,11 @@ export const SelectUser: FC<Props> = ({ onChange, value }) => {
       {users.map((user, index) => (
         <AvatarItem key={index} onClick={() => selectUser(user.id)}>
           <Tooltip title={user.name} placement='bottom'>
-            <Avatar className={value.includes(user.id) ? 'selected' : ''} src={user.avatarUrl}></Avatar>
+            <Avatar
+              className={value.includes(user.id) ? 'selected' : ''}
+              sx={{ width: 42, height: 42 }}
+              src={user.avatarUrl}
+            ></Avatar>
           </Tooltip>
         </AvatarItem>
       ))}

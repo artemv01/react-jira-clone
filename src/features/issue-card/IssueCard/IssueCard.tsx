@@ -30,6 +30,7 @@ import { Controller, useForm, useFormState } from 'react-hook-form';
 import { issueTypes } from '../../../shared/IssueTypes';
 import CommentCard from '../CommentCard';
 import { getDateString } from '../../../shared/util/util';
+import { sanitizeConfig } from './editorConfig';
 
 export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const issueData = useAppSelector(selectIssueById(id as string));
@@ -85,29 +86,9 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
   const createMarkup = () => {
     const dirty = getValues('text');
     const clean = sanitizeHtml(dirty, {
-      allowedTags: [
-        'abbr',
-        'acronym',
-        'b',
-        'blockquote',
-        'br',
-        'code',
-        'div',
-        'em',
-        'i',
-        'li',
-        'ol',
-        'p',
-        'span',
-        'strong',
-        'table',
-        'td',
-        'tr',
-        'ul',
-      ],
-      allowedAttributes: {
-        a: ['href', 'target'],
-      },
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+      allowedAttributes: { img: ['src'] },
+      allowedSchemes: ['data', 'http', 'https'],
     });
     return { __html: clean };
   };
@@ -186,205 +167,207 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>
         <DeleteIssueConfirm onClose={onDeleteCancel} onConfirm={onDeleteConfirm}></DeleteIssueConfirm>
       </Backdrop>
-      <form style={{ width: '100%', maxWidth: '1040px' }}>
-        <Wrapper singlePage={singlePage}>
-          <div className='issue-card-controls'>
-            <IssueCardControls
-              singlePage={singlePage}
-              onDelete={onDeleteClick}
-              onExpand={onExpandClick}
-              onClose={onClose}
-            ></IssueCardControls>
+      <Wrapper singlePage={singlePage}>
+        <div className='issue-card-controls'>
+          <IssueCardControls
+            singlePage={singlePage}
+            onDelete={onDeleteClick}
+            onExpand={onExpandClick}
+            onClose={onClose}
+          ></IssueCardControls>
+        </div>
+        <div className='editor-col'>
+          <Box>
+            <Controller
+              render={({ field: { onChange, value } }) => (
+                <SelectMenu
+                  onChange={onChange}
+                  id='select-type'
+                  value={value}
+                  uppercase={true}
+                  options={issueTypes.map((item) => ({
+                    value: item.id,
+                    name: item.title,
+                    img: item.img,
+                  }))}
+                />
+              )}
+              name={'type'}
+              control={control}
+            />
+          </Box>
+          <div ref={ticketHeaderRef}>
+            {!titleEditable && (
+              <Typography
+                sx={{ mb: 2, mt: 1, '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
+                variant='h1'
+              >
+                {getValues('title') || '\u00A0'}
+              </Typography>
+            )}
+            {titleEditable && (
+              <Controller
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    multiline={true}
+                    fullWidth={true}
+                    sx={{
+                      mb: 2,
+                      mt: 1,
+                      '& .MuiInputBase-input': {
+                        fontSize: 24,
+                      },
+                    }}
+                    type='text'
+                    value={value}
+                    onChange={onChange}
+                    onBlur={() => {
+                      onIssueUpdate({ title: getValues('title') });
+                    }}
+                    variant='outlined'
+                  />
+                )}
+                name={'title'}
+                control={control}
+              />
+            )}
           </div>
-          <div className='editor-col'>
-            <Box>
+          <div className='issue-content'>
+            <Typography sx={{ mb: 1 }} variant='h4'>
+              Description
+            </Typography>
+            {!contentEditable && (
+              <Box
+                onClick={() => setContentEditable(true)}
+                sx={{
+                  '&:hover': { backgroundColor: theme.palette.button.primary },
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
+              >
+                <div className='content' dangerouslySetInnerHTML={createMarkup()}></div>
+              </Box>
+            )}
+            {contentEditable && (
+              <Box>
+                <Controller
+                  render={({ field: { onChange, value } }) => (
+                    <MemoizedEditor
+                      theme={'snow'}
+                      onChange={onChange}
+                      value={value}
+                      modules={editorModules}
+                      formats={editorFormats}
+                      placeholder='Issue text'
+                    />
+                  )}
+                  name={'text'}
+                  control={control}
+                />
+              </Box>
+            )}
+          </div>
+          {contentEditable && (
+            <div className='action-buttons'>
+              <Button onClick={onTextSubmit} variant='contained'>
+                Save
+              </Button>
+              <Button onClick={onTextCancel} variant='text'>
+                Cancel
+              </Button>
+            </div>
+          )}
+          <Box className='comments' sx={{ mt: 3 }}>
+            <Typography sx={{ mb: 2 }} variant='h4'>
+              Comments
+            </Typography>
+            <Box sx={{ mb: 3 }}>
+              <CommentInput issueId={id} user={users[0]}></CommentInput>
+            </Box>
+            {issueData?.comments?.map((comment, index) => (
+              <Box key={index} sx={{ mb: 2 }}>
+                <CommentCard comment={comment}></CommentCard>
+              </Box>
+            ))}
+          </Box>
+        </div>
+        <div className='issue-controls-col'>
+          <IssueControlsWrapper>
+            <div className='issue-control'>
+              <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
+                status
+              </Typography>
               <Controller
                 render={({ field: { onChange, value } }) => (
                   <SelectMenu
                     onChange={onChange}
-                    id='select-type'
+                    id='select-status'
                     value={value}
                     uppercase={true}
-                    options={issueTypes.map((item) => ({
+                    options={issuesStore.map((item) => ({
                       value: item.id,
                       name: item.title,
-                      img: item.img,
+                      bgColor: item.bgColor,
+                      textColor: item.textColor,
                     }))}
                   />
                 )}
-                name={'type'}
+                name={'status'}
                 control={control}
               />
-            </Box>
-            <div ref={ticketHeaderRef}>
-              {!titleEditable && (
-                <Typography
-                  sx={{ mb: 2, mt: 1, '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
-                  variant='h1'
-                >
-                  {getValues('title') || '\u00A0'}
-                </Typography>
-              )}
-              {titleEditable && (
-                <Controller
-                  render={({ field: { onChange, value } }) => (
-                    <TextField
-                      multiline={true}
-                      fullWidth={true}
-                      sx={{
-                        mb: 2,
-                        mt: 1,
-                        '& .MuiInputBase-input': {
-                          fontSize: 24,
-                        },
-                      }}
-                      type='text'
-                      value={value}
-                      onChange={onChange}
-                      onBlur={() => {
-                        onIssueUpdate({ title: getValues('title') });
-                      }}
-                      variant='outlined'
-                    />
-                  )}
-                  name={'title'}
-                  control={control}
-                />
-              )}
             </div>
-            <div className='issue-content'>
-              <Typography sx={{ mb: 1 }} variant='h4'>
-                Description
+            <div className='issue-control'>
+              <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
+                assignees
               </Typography>
-              {!contentEditable && (
-                <Box
-                  onClick={() => setContentEditable(true)}
-                  sx={{ '&:hover': { backgroundColor: theme.palette.button.primary }, cursor: 'pointer' }}
-                >
-                  <div className='content' dangerouslySetInnerHTML={createMarkup()}></div>
-                </Box>
-              )}
-              {contentEditable && (
-                <Box>
-                  <Controller
-                    render={({ field: { onChange, value } }) => (
-                      <MemoizedEditor
-                        theme={'snow'}
-                        onChange={onChange}
-                        value={value}
-                        modules={editorModules}
-                        formats={editorFormats}
-                        placeholder='Issue text'
-                      />
-                    )}
-                    name={'text'}
-                    control={control}
+              <Controller
+                render={({ field: { onChange, value } }) => (
+                  <AssigneeSelect
+                    options={users.map((item) => ({
+                      name: item.name,
+                      value: item.id,
+                      img: item.avatarUrl,
+                    }))}
+                    onChange={onChange}
+                    value={value}
                   />
-                </Box>
-              )}
+                )}
+                name={'assignee'}
+                control={control}
+              />
             </div>
-            {contentEditable && (
-              <div className='action-buttons'>
-                <Button onClick={onTextSubmit} variant='contained'>
-                  Save
-                </Button>
-                <Button onClick={onTextCancel} variant='text'>
-                  Cancel
-                </Button>
-              </div>
-            )}
-            <Box className='comments' sx={{ mt: 3 }}>
-              <Typography sx={{ mb: 2 }} variant='h4'>
-                Comments
+            <div className='issue-control'>
+              <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
+                priority
               </Typography>
-              <Box sx={{ mb: 3 }}>
-                <CommentInput issueId={id} user={users[0]}></CommentInput>
-              </Box>
-              {issueData?.comments?.map((comment, index) => (
-                <Box key={index} sx={{ mb: 2 }}>
-                  <CommentCard comment={comment}></CommentCard>
-                </Box>
-              ))}
-            </Box>
-          </div>
-          <div className='issue-controls-col'>
-            <IssueControlsWrapper>
-              <div className='issue-control'>
-                <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
-                  status
-                </Typography>
+              <div className='control-content'>
                 <Controller
                   render={({ field: { onChange, value } }) => (
                     <SelectMenu
                       onChange={onChange}
-                      id='select-status'
                       value={value}
-                      uppercase={true}
-                      options={issuesStore.map((item) => ({
+                      id={'select-priority'}
+                      options={priorityTypes.map((item) => ({
                         value: item.id,
                         name: item.title,
-                        bgColor: item.bgColor,
-                        textColor: item.textColor,
+                        img: item.img,
                       }))}
                     />
                   )}
-                  name={'status'}
+                  name={'priority'}
                   control={control}
                 />
               </div>
-              <div className='issue-control'>
-                <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
-                  assignees
-                </Typography>
-                <Controller
-                  render={({ field: { onChange, value } }) => (
-                    <AssigneeSelect
-                      options={users.map((item) => ({
-                        name: item.name,
-                        value: item.id,
-                        img: item.avatarUrl,
-                      }))}
-                      onChange={onChange}
-                      value={value}
-                    />
-                  )}
-                  name={'assignee'}
-                  control={control}
-                />
-              </div>
-              <div className='issue-control'>
-                <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
-                  priority
-                </Typography>
-                <div className='control-content'>
-                  <Controller
-                    render={({ field: { onChange, value } }) => (
-                      <SelectMenu
-                        onChange={onChange}
-                        value={value}
-                        id={'select-priority'}
-                        options={priorityTypes.map((item) => ({
-                          value: item.id,
-                          name: item.title,
-                          img: item.img,
-                        }))}
-                      />
-                    )}
-                    name={'priority'}
-                    control={control}
-                  />
-                </div>
-              </div>
-              <Typography variant='caption' color='text.secondary'>
-                Created - {getDateString(new Date(issueData.createdAt))}
-              </Typography>
-              <Typography variant='caption' color='text.secondary'>
-                Updated - {getDateString(new Date(issueData.updatedAt))}
-              </Typography>
-            </IssueControlsWrapper>
-          </div>
-        </Wrapper>
-      </form>
+            </div>
+            <Typography variant='caption' color='text.secondary'>
+              Created - {getDateString(new Date(issueData.createdAt))}
+            </Typography>
+            <Typography variant='caption' color='text.secondary'>
+              Updated - {getDateString(new Date(issueData.updatedAt))}
+            </Typography>
+          </IssueControlsWrapper>
+        </div>
+      </Wrapper>
     </NoSsr>
   );
 };

@@ -7,7 +7,7 @@ export interface Props {
 }
 export const Wrapper = styled('div', {
   shouldForwardProp: (prop) => prop !== 'singlePage',
-})<{ singlePage: boolean | undefined}>(({ theme, singlePage }) => ({
+})<{ singlePage: boolean | undefined }>(({ theme, singlePage }) => ({
   position: 'relative',
   display: 'flex',
   flexFlow: 'row nowrap',
@@ -16,8 +16,15 @@ export const Wrapper = styled('div', {
   width: '100%',
   maxWidth: !singlePage ? '1040px' : '100%',
   '& .editor-col': {
-    flex: '1 1 auto',
+    flex: '1 1 60%',
     marginRight: '40px',
+    width: '60%',
+    maxWidth: '60%',
+  },
+  '& .editor-col .content img': {
+    display: 'block',
+    width: '100%',
+    height: 'auto',
   },
   '& .issue-controls-col': {
     flex: '0 0 333px',
