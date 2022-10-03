@@ -22,7 +22,14 @@ import { editorFormats, editorModules } from '../../../shared/editorConfig';
 import { IssueControlsWrapper, Props, Wrapper } from './IssueCard.styles';
 import { ColumnType, Issue, IssueStatus } from '../../../shared/model/common';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { deleteIssue, moveIssue, selectIssueById, selectIssues, updateIssue } from '../../../store/issuesSlice';
+import {
+  deleteIssue,
+  moveIssue,
+  selectIssueById,
+  selectIssueByPublicId,
+  selectIssues,
+  updateIssue,
+} from '../../../store/issuesSlice';
 import React from 'react';
 import SelectMenu from '../../../shared/components/SelectMenu';
 import { users } from '../../../shared/stubs/users';
@@ -31,9 +38,13 @@ import { issueTypes } from '../../../shared/IssueTypes';
 import CommentCard from '../CommentCard';
 import { getDateString } from '../../../shared/util/util';
 import { sanitizeConfig } from './editorConfig';
-
-export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
-  const issueData = useAppSelector(selectIssueById(id as string));
+interface Props {
+  onClose?: () => void;
+  singlePage?: boolean;
+  publicId: string;
+}
+export const IssueCard: FC<Props> = ({ onClose, singlePage, publicId }) => {
+  const issueData = useAppSelector(selectIssueByPublicId(publicId as string));
   const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
   const { handleSubmit, control, reset, setValue, getValues, watch } = useForm<Issue & { text: string }>({
     mode: 'onSubmit',
@@ -137,7 +148,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
     setDeleteModalOpened(false);
   };
   const onExpandClick = () => {
-    router.push(`/project/issue/${id}`);
+    router.push(`/project/issue/${publicId}`);
   };
 
   const ticketHeaderRef = useRef(null);
@@ -282,7 +293,7 @@ export const IssueCard: FC<Props> = ({ onClose, singlePage, id }) => {
               Comments
             </Typography>
             <Box sx={{ mb: 3 }}>
-              <CommentInput issueId={id} user={users[0]}></CommentInput>
+              <CommentInput issueId={issueData.id} user={users[0]}></CommentInput>
             </Box>
             {issueData?.comments?.map((comment, index) => (
               <Box key={index} sx={{ mb: 2 }}>

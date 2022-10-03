@@ -84,7 +84,7 @@ export const BoardPage: FC = () => {
   return (
     <NoSsr>
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={!!openedIssueId}>
-        <IssueCard id={openedIssueId as string} onClose={() => setOpenedIssueId(undefined)}></IssueCard>
+        <IssueCard publicId={openedIssueId as string} onClose={() => setOpenedIssueId(undefined)}></IssueCard>
       </Backdrop>
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -103,7 +103,7 @@ export const BoardPage: FC = () => {
           </Box>
           <Box sx={{ flex: '1 1 auto', maxWidth: '1270px' }}>
             <Grid sx={{ height: '100%' }} container spacing={1}>
-              {taskList.map((data, index) => {
+              {taskList.map((data) => {
                 return (
                   <Grid item key={data.id} xs={3}>
                     <BoardColumn id={data.id} headerText={data.title + ` ${data.items.length}`}>
@@ -115,7 +115,10 @@ export const BoardPage: FC = () => {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}
-                              onClick={() => setOpenedIssueId(issue.id)}
+                              onClick={() => {
+                                console.log(issue)
+                                setOpenedIssueId(issue.publicId)
+                              }}
                             >
                               <TicketCard issue={issue} />
                             </div>

@@ -1,16 +1,17 @@
-import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
+import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import issuesReducer from './issuesSlice';
-import settingsReducer from './settingsSlice';
+import settingsReducer, { ProjectSettings } from './settingsSlice';
 import { createWrapper } from 'next-redux-wrapper';
 import rootReducer from './rootReducer';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-const STORE_VERSION = '0.0.1'
-let store: EnhancedStore;
+import { IssueColumn } from '../shared/model/common';
+const STORE_VERSION = '0.0.1';
+
 const makeStore = () => {
   const isServer = typeof window === 'undefined';
   if (isServer) {
-    store = configureStore({
+    const store = configureStore({
       reducer: {
         issues: issuesReducer,
         settings: settingsReducer,
@@ -24,7 +25,7 @@ const makeStore = () => {
     };
 
     const persistedReducer = persistReducer(persistConfig, rootReducer);
-    store = configureStore({ reducer: persistedReducer });
+    const store = configureStore({ reducer: persistedReducer });
     (store as any).__persistor = persistStore(store);
     return store;
   }
@@ -32,4 +33,11 @@ const makeStore = () => {
 
 export type RootState = ReturnType<typeof rootReducer>;
 export const wrapper = createWrapper(makeStore, { debug: true });
-export type AppDispatch = typeof store.dispatch;
+
+const typeStore = configureStore({
+  reducer: {
+    issues: issuesReducer,
+    settings: settingsReducer,
+  },
+});
+export type AppDispatch = ReturnType<typeof makeStore>['dispatch'];

@@ -3,7 +3,7 @@ import { ColumnType, Issue, IssueColumn } from '../shared/model/common';
 import { RootState } from './store';
 import { HYDRATE } from 'next-redux-wrapper';
 
-interface ProjectSettings {
+export interface ProjectSettings {
   lastUsedIssueId: number;
   issueIdPrefix: string;
 }

@@ -152,6 +152,13 @@ export const selectIssueById =
       .map((col) => col.items)
       .flat()
       .find((item) => item.id === issueId) as Issue;
+export const selectIssueByPublicId =
+  (issueId: string) =>
+  (state: RootState): Issue =>
+    state.issues
+      .map((col) => col.items)
+      .flat()
+      .find((item) => item.publicId === issueId) as Issue;
 export const { addIssue, addComment, moveIssue, updateIssue, deleteIssue } = issuesSlice.actions;
 export default issuesSlice.reducer;
 

@@ -1,10 +1,6 @@
 import Menu from '@mui/material/Menu';
 import { styled, useTheme } from '@mui/material/styles';
-export interface Props {
-  onClose?: () => void;
-  singlePage?: boolean;
-  id: string;
-}
+
 export const Wrapper = styled('div', {
   shouldForwardProp: (prop) => prop !== 'singlePage',
 })<{ singlePage: boolean | undefined }>(({ theme, singlePage }) => ({
