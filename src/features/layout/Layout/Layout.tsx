@@ -26,6 +26,7 @@ import { theme } from '../../../shared/theme';
 import { AddIssueParams, addIssue } from '../../../store/issuesSlice';
 import { useAppDispatch } from '../../../store/hooks';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { users } from '../../../shared/stubs/users';
 interface Props {
   children?: any;
 }
@@ -94,8 +95,8 @@ export const Layout: FC<Props> = ({ children }) => {
                 <AddIcon></AddIcon>
               </IconButton>
               <Box sx={{ flex: '1 1 auto' }}></Box>
-              <Tooltip title='John Johnson' placement='right-start'>
-                <Avatar alt='John Johnson' src='' sx={{ mb: 2, width: 28, height: 28 }} />
+              <Tooltip title={users[0].name} placement='right-start'>
+                <Avatar alt={users[0].name} src={users[0].avatarUrl} sx={{ mb: 2, width: 28, height: 28 }} />
               </Tooltip>
               <IconButton
                 size='small'
