@@ -19,7 +19,7 @@ import DeleteIssueConfirm from '../DeleteIssueConfirm';
 import AssigneeSelect from '../AssigneeSelect';
 import { useRouter } from 'next/router';
 import { editorFormats, editorModules } from '../../../shared/editorConfig';
-import { IssueControlsWrapper, Props, Wrapper } from './IssueModal.styles';
+import { IssueControlsWrapper, Wrapper } from './IssueModal.styles';
 import { ColumnType, Issue, IssueStatus } from '../../../shared/model/common';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {

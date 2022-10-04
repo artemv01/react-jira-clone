@@ -1,0 +1,30 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Upload repository
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avz --delete --exclude='.env' --exclude='node_modules/'  --exclude='.git/'
+          path: ./
+          remote_path: /home/ubuntu/rjc/
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: ${{ secrets.SSH_PORT }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.SSH_KEY }}
+
+      - name: Post-deployment script
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: /bin/bash /home/ubuntu/rjc/scripts/deploy.sh
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          privateKey: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}

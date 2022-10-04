@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const store = useStore();
   return (
     <NoSsr>
-      <PersistGate persistor={store.__persistor} loading={<div>Loading</div>}>
+      <PersistGate persistor={(store as any).__persistor} loading={<div>Loading</div>}>
         <Component {...pageProps} />
       </PersistGate>
     </NoSsr>
