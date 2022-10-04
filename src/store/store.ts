@@ -6,7 +6,7 @@ import rootReducer from './rootReducer';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { IssueColumn } from '../shared/model/common';
-const STORE_VERSION = '0.0.1';
+const STORE_VERSION = '0.0.5';
 
 const makeStore = () => {
   const isServer = typeof window === 'undefined';

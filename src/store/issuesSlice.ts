@@ -5,38 +5,9 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { users } from '../shared/stubs/users';
 import { priorityTypes } from '../shared/PriorityTypes';
 import { issueTypes } from '../shared/IssueTypes';
-
-const initialState: IssueColumn[] = [
-  {
-    id: '7oG7i6UbQGttwjJn2K8iO',
-    title: 'Backlog',
-    bgColor: '#f4f5f7',
-    textColor: '#42526E',
-    items: [],
-  },
-  {
-    id: 'XXUEBDiCrhJAml7ya3yeS',
-    title: 'Selected for development',
-    bgColor: '#f4f5f7',
-    textColor: '#42526E',
-    items: [],
-  },
-  {
-    id: 'ogAkq0W6PtnOUXhdn7KtZ',
-    title: 'in progress',
-    bgColor: '#0067ff',
-    textColor: '#ffffff',
-    items: [],
-  },
-  {
-    id: 'hyHjZ_SbAXqW6KwLdAp_l',
-    bgColor: '#0b875b',
-    textColor: '#ffffff',
-    title: 'done',
-    items: [],
-  },
-];
-
+import { issuesMock } from './storeMocks';
+// import mockStore from './mock.json'
+const initialState: IssueColumn[] = JSON.parse(issuesMock);
 export interface AddIssueParams {
   issue: Issue;
   columnId: string;
