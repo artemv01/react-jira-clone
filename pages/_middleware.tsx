@@ -5,5 +5,6 @@ export async function middleware(req: NextRequest) {
   if (pathname == '/') {
     return NextResponse.redirect(new URL('/project/board', req.url));
   }
+
   return NextResponse.next();
 }

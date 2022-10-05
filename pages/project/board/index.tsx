@@ -5,10 +5,10 @@ import {NextSeo} from 'next-seo';
 function Board() {
   return (
     <>
-    <NextSeo title="Kanban Board"/>
-     <Layout>
-      <BoardPage></BoardPage>
-    </Layout>
+      <NextSeo title="Kanban Board"/>
+      <Layout>
+        <BoardPage></BoardPage>
+      </Layout>
     </>
    
   );
