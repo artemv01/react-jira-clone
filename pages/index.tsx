@@ -1,7 +1,7 @@
-import Layout from "../src/features/layout/Layout";
+import Layout from '../src/features/layout/Layout';
 
-function Home() {
+const Home = () => {
   return <Layout></Layout>;
-}
+};
 
 export default Home;

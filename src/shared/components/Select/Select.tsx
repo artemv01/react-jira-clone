@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import FormControl from '@mui/material/FormControl';
 import React from 'react';
 
-const StyledSelect = styled(MuiSelect)(({ theme }) => ({
+const StyledSelect = styled(MuiSelect)(() => ({
   '& .MuiOutlinedInput-notchedOutline': {
     borderColor: '#d9d9d9',
     transition: 'all 0.3s linear',

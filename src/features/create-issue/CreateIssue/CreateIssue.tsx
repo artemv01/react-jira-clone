@@ -63,7 +63,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
   });
   useEffect(() => {
     reset();
-  }, [isSubmitSuccessful]);
+  }, [isSubmitSuccessful, reset]);
   const projectSettings = useAppSelector(selectSettings);
   const issueColumns = useAppSelector(selectIssueColumns);
 
@@ -81,7 +81,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     return ids[ids.length - 1] + 1;
   };
 
-  function submit(formData: any) {
+  const submit = (formData: any) => {
     const createIssueData = {
       ...formData,
       id: nanoid(),
@@ -93,7 +93,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     };
     dispatch(addIssue(payload));
     onClose();
-  }
+  };
 
   return (
     <Box

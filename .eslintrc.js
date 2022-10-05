@@ -27,7 +27,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react', 'react-hooks', 'unused-imports'],
   rules: {
-    'no-console': 'error',
+    'react/display-name': 0,
     'func-style': 'error',
     'consistent-return': 'error',
     'prefer-arrow-callback': [
@@ -44,12 +44,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 1,
     'react/react-in-jsx-scope': 0,
     '@typescript-eslint/no-explicit-any': 0,
-    '@typescript-eslint/no-unused-vars': [
-      2,
-      {
-        varsIgnorePattern: '^_',
-      },
-    ],
     '@typescript-eslint/no-empty-interface': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/camelcase': 0,

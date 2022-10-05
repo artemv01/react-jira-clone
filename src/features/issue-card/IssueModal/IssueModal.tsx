@@ -158,6 +158,7 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
   const MemoizedEditor = React.memo(ReactQuill);
 
   useEffect(() => {
+    // eslint-disable-next-line func-style
     function addTitleInputClick(event: Event): any {
       if (issueHeaderRef.current && !(issueHeaderRef.current as any).contains(event.target)) {
         setTitleEditable(false);

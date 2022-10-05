@@ -20,14 +20,11 @@ const findUserById = (findId: string) => users.find(({ id }) => findId === id);
 export const SelectUser: FC<Props> = ({ onChange, multiple, value, onBlur, setValue }) => {
   const handleDelete = (e: React.MouseEvent, deleteItem: string) => {
     e.preventDefault();
-    console.log(value)
-    console.log(setValue)
 
     if (Array.isArray(value) && setValue) {
       const temp = [...value];
       const deleteIdx = temp.indexOf(deleteItem);
       temp.splice(deleteIdx, 1);
-      console.log(temp)
       setValue(temp);
     }
   };

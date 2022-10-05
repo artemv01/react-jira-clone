@@ -120,7 +120,6 @@ export const BoardPage: FC = () => {
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}
                               onClick={() => {
-                                console.log(issue)
                                 setOpenedIssueId(issue.publicId)
                               }}
                             >

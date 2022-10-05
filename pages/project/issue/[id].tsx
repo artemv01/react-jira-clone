@@ -20,9 +20,7 @@ const SingleIssue: FC = (): JSX.Element => {
   );
 };
 
-export async function getServerSideProps(ctx: any) {
-  const { req, res } = ctx;
-
+export async function getServerSideProps() {
   return {
     props: {},
   };

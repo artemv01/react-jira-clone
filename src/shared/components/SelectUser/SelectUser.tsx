@@ -22,7 +22,7 @@ export const AvatarItem = styled('div')(({ theme }) => ({
     },
   },
 }));
-export const Wrapper = styled('div')(({ theme }) => ({
+export const Wrapper = styled('div')(() => ({
   display: 'flex',
   flexFlow: 'row nowrap',
   marginRight: '16px',

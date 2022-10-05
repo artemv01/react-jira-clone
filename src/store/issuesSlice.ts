@@ -58,11 +58,9 @@ const issuesSlice = createSlice({
       }
     },
     deleteIssue(state, action: PayloadAction<DeleteIssueParams>) {
-      console.log(action);
       const column = state.find(({ id }) => id === action.payload.issue.status) as IssueColumn;
       const issueIdx = column.items.findIndex(({ id }) => id === action.payload.issue.id);
       if (column) {
-        const date = new Date().toISOString();
         column.items.splice(issueIdx, 1);
       }
     },
@@ -150,16 +148,22 @@ export const joinIssueRelations = (issue: Issue): IssueRenderData => {
     if (Array.isArray(issue.assignee) && issue.assignee.includes(item.id)) {
       return item;
     }
+
+    return undefined;
   });
   const priority = priorityTypes.find((item) => {
     if (issue.priority === item.id) {
       return item;
     }
+
+    return undefined;
   }) as Priority;
   const type = issueTypes.find((item) => {
     if (issue.type === item.id) {
       return item;
     }
+
+    return undefined;
   }) as IssueType;
 
   return {

@@ -5,7 +5,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import ViewKanbanIcon from '@mui/icons-material/ViewKanban';
-export function MainMenu(): JSX.Element {
+export const MainMenu = (): JSX.Element => {
   return (
     <List
       sx={{
@@ -36,7 +36,6 @@ export function MainMenu(): JSX.Element {
           <ListItemText disableTypography primary={<Typography fontSize={15}>Kanban Board</Typography>} />
         </ListItemButton>
       </ListItem>
-      
     </List>
   );
-}
+};

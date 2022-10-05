@@ -21,12 +21,9 @@ export const CommentInput: FC<Props> = ({ issueId, user }) => {
     text: string().required(),
   }).required();
   const {
-    handleSubmit,
     control,
     reset,
-    setValue,
     getValues,
-    watch,
     formState: { isValid },
   } = useForm<Issue & { text: string }>({
     mode: 'onChange',
