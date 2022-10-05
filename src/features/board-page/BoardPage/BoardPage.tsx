@@ -58,6 +58,7 @@ export const BoardPage: FC = () => {
         ++matchScore;
       }
     }
+
     if (assignees.length) {
       neededScore++;
       const assigneeMatch = assignees.filter((item) => issue.assignee.includes(item)).length;
@@ -65,6 +66,7 @@ export const BoardPage: FC = () => {
         ++matchScore;
       }
     }
+
     if (onlyCurrentUserIssues) {
       neededScore++;
       const currentUserId = users[0].id;
@@ -72,12 +74,14 @@ export const BoardPage: FC = () => {
         ++matchScore;
       }
     }
+
     if (ignoreResolved) {
       neededScore++;
       if (issue.status !== 'hyHjZ_SbAXqW6KwLdAp_l') {
         ++matchScore;
       }
     }
+
     return neededScore === matchScore;
   };
 

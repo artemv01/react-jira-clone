@@ -32,23 +32,28 @@ export const AssigneeSelect: FC<Props> = ({ options, value, onChange }) => {
   const handleAddMenuClick = (event: React.MouseEvent<HTMLDivElement>): void => {
     setAssigneeBtn(event.currentTarget);
   };
+
   const handleAddMenuClose = () => {
     setAssigneeBtn(null);
   };
+
   const optionClick = (newValue: string) => {
     const result = [...value]
     result.push(newValue);
     onChange([...result]);
     handleAddMenuClose();
   };
+
   const optionRemove = (removeValue: string) => {
     const idx = value.indexOf(removeValue);
     const result = [...value]
     if (idx !== -1) {
-        result.splice(idx, 1);
+      result.splice(idx, 1);
     }
+
     onChange([...result]);
   };
+
   const [selectedOption, setSelectedOption] = useState<Option[]>([]);
   useEffect(() => {
     setSelectedOption(options.filter((item) => value.includes(item.value)));

@@ -2,17 +2,14 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { FC, useEffect, useState } from 'react';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import SvgIcon from '@mui/material/SvgIcon';
 
-import { priorityTypes } from '../../../shared/PriorityTypes';
-import { Option, Priority } from '../../../shared/model/common';
+import { Option } from '../../../shared/model/common';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
@@ -38,14 +35,17 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const getSelectedColor = () => {
     const selectedOption = selectedItem;
+
     return getOptionColorSettings(selectedOption);
   };
+
   const getOptionColorSettings = (option: Option): { backgroundColor: string; color: string } => {
     return {
       backgroundColor: (option?.bgColor || theme.palette.button.primary) + ' !important',

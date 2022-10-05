@@ -1,10 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '../../../shared/components/Select';
 import { users } from '../../../shared/stubs/users';
 import Avatar from '@mui/material/Avatar';
-import DefaultProps from '../../../shared/model/DefaultProps';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import CloseIcon from '@mui/icons-material/Close';

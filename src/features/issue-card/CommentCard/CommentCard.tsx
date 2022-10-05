@@ -1,11 +1,8 @@
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { FC, useEffect, useState } from 'react';
-import { Comment, User } from '../../../shared/model/common';
-import { users } from '../../../shared/stubs/users';
+import { FC } from 'react';
+import { Comment } from '../../../shared/model/common';
 import {getDateString} from '../../../shared/util/util';
 interface Props {
   comment: Comment;

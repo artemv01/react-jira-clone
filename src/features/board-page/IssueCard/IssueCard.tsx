@@ -1,12 +1,7 @@
-import { FC, useMemo } from 'react';
-import Box from '@mui/material/Box';
-import DefaultProps from '../../../shared/model/DefaultProps';
+import { FC } from 'react';
 import Avatar from '@mui/material/Avatar';
-import { priorityTypes } from '../../../shared/PriorityTypes';
-import { issueTypes } from '../../../shared/IssueTypes';
 import { Wrapper } from './IssueCard.styles';
-import { users } from '../../../shared/stubs/users';
-import { Issue, IssueType, Priority, User } from '../../../shared/model/common';
+import { Issue } from '../../../shared/model/common';
 import { IssueRenderData, joinIssueRelations } from '../../../store/issuesSlice';
 
 interface Props {
@@ -19,6 +14,7 @@ export const IssueCard: FC<Props> = (props) => {
     // TODO (FEATURE): add loading
     return <></>;
   }
+
   return (
     <Wrapper>
       <div className='text'>{issueData.title}</div>

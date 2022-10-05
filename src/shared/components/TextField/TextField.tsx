@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
-import MuiInput, { OutlinedInputProps } from '@mui/material/OutlinedInput';
-import { FC, useState } from 'react';
+import MuiInput from '@mui/material/OutlinedInput';
+import { FC } from 'react';
 
 interface Props {
   onChange: (val: string) => void;

@@ -24,9 +24,11 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const Wrapper = styled(Menu)(({ theme }) => ({
     '& .MuiTypography-root': {
       fontSize: '14px',
@@ -40,10 +42,12 @@ export const PriorityBadge: FC<Props> = ({ priorityId }) => {
     if (priorityIdx === -1) {
       priorityIdx = 0;
     }
+
     setSelected(priorityTypes[priorityIdx]);
     setPriorities(priorityTypes.filter((item, idx) => idx !== priorityIdx));
     handleClose();
   };
+
   useEffect(() => {
     initPriorities(priorityId);
   }, [priorityId]);

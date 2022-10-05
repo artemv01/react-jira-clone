@@ -1,4 +1,3 @@
-import {nanoid} from "@reduxjs/toolkit";
 import {User} from "../model/common";
 export const users: User[] = [
   {

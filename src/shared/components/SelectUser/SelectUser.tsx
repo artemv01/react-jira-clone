@@ -1,6 +1,5 @@
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
-import { title } from 'process';
 import { FC } from 'react';
 import { users } from '../../stubs/users';
 import { styled } from '@mui/material/styles';
@@ -38,8 +37,10 @@ export const SelectUser: FC<Props> = ({ onChange, value }) => {
     } else {
       selected.push(id);
     }
+
     onChange(selected);
   };
+
   return (
     <Wrapper>
       {users.map((user, index) => (

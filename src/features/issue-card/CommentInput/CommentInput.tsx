@@ -50,6 +50,7 @@ export const CommentInput: FC<Props> = ({ issueId, user }) => {
     reset();
     setShowActions(false);
   };
+
   const onCancel = () => {
     reset();
 

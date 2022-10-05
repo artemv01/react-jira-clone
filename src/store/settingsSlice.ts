@@ -1,5 +1,4 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
-import { ColumnType, Issue, IssueColumn } from '../shared/model/common';
+import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { HYDRATE } from 'next-redux-wrapper';
 

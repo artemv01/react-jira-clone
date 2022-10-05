@@ -1,6 +1,5 @@
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
@@ -23,9 +22,6 @@ import { CreateIssue } from '../../create-issue/CreateIssue/CreateIssue';
 import Backdrop from '@mui/material/Backdrop';
 import SearchDrawer from '../../search-drawer/SearchDrawer';
 import { theme } from '../../../shared/theme';
-import { AddIssueParams, addIssue } from '../../../store/issuesSlice';
-import { useAppDispatch } from '../../../store/hooks';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { users } from '../../../shared/stubs/users';
 interface Props {
   children?: any;
@@ -48,6 +44,7 @@ export const Layout: FC<Props> = ({ children }) => {
   const handlePopoverOpen = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const openPopover = Boolean(anchorEl);
   const popoverId = open ? 'info-popover' : undefined;
   const handlePopoverClose = () => {
@@ -57,6 +54,7 @@ export const Layout: FC<Props> = ({ children }) => {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };

@@ -1,4 +1,3 @@
-import { nanoid } from '@reduxjs/toolkit';
 import { IssueType } from './model/common';
 
 export const issueTypes: IssueType[] = [

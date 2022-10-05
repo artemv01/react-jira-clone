@@ -13,6 +13,7 @@ interface Props {
 }
 export const Breadcrumbs: FC<Props> = (props) => {
   const {breadcrumbs} = props;
+
   return (
     <BreadcrumbWrapper>
       {breadcrumbs.map((item, index) => {

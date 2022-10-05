@@ -1,28 +1,28 @@
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MuiDrawer from '@mui/material/Drawer';
-import { styled, useTheme, Theme, CSSObject, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
 
 const openedMixin =
   (width: number) =>
-  (theme: Theme): CSSObject => ({
-    width,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-  });
+    (theme: Theme): CSSObject => ({
+      width,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      overflowX: 'hidden',
+    });
 
 const closedMixin =
   (width: number) =>
-  (theme: Theme): CSSObject => ({
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width,
-  });
+    (theme: Theme): CSSObject => ({
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: 'hidden',
+      width,
+    });
 
 export const SearchInput = styled(OutlinedInput)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {

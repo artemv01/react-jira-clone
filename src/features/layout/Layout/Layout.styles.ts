@@ -5,25 +5,25 @@ import IconButton from '@mui/material/IconButton';
 
 const openedMixin =
   (width: number) =>
-  (theme: Theme): CSSObject => ({
-    width,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-  });
+    (theme: Theme): CSSObject => ({
+      width,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      overflowX: 'hidden',
+    });
 
 const closedMixin =
   (width: number) =>
-  (theme: Theme): CSSObject => ({
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width,
-  });
+    (theme: Theme): CSSObject => ({
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: 'hidden',
+      width,
+    });
 
 export const MainDrawer = styled(MuiDrawer)(({ theme, open }) => ({
   flexShrink: 0,

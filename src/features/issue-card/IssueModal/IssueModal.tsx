@@ -1,10 +1,9 @@
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 
 import { priorityTypes } from '../../../shared/PriorityTypes';
-import PriorityBadge from '../PriorityBadge';
 import NoSsr from '../../../shared/NoSsr';
 
 import 'react-quill/dist/quill.snow.css';
@@ -20,12 +19,11 @@ import AssigneeSelect from '../AssigneeSelect';
 import { useRouter } from 'next/router';
 import { editorFormats, editorModules } from '../../../shared/editorConfig';
 import { IssueControlsWrapper, Wrapper } from './IssueModal.styles';
-import { ColumnType, Issue, IssueStatus } from '../../../shared/model/common';
+import { Issue } from '../../../shared/model/common';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   deleteIssue,
   moveIssue,
-  selectIssueById,
   selectIssueByPublicId,
   selectIssueColumns,
   updateIssue,
@@ -33,11 +31,10 @@ import {
 import React from 'react';
 import SelectMenu from '../../../shared/components/SelectMenu';
 import { users } from '../../../shared/stubs/users';
-import { Controller, useForm, useFormState } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { issueTypes } from '../../../shared/IssueTypes';
 import CommentCard from '../CommentCard';
 import { getDateString } from '../../../shared/util/util';
-import { sanitizeConfig } from './editorConfig';
 interface Props {
   onClose?: () => void;
   singlePage?: boolean;
@@ -101,6 +98,7 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
       allowedAttributes: { img: ['src'] },
       allowedSchemes: ['data', 'http', 'https'],
     });
+
     return { __html: clean };
   };
 
@@ -132,21 +130,26 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
     onIssueUpdate({ text: getValues('text') });
     setContentEditable(false);
   };
+
   const onTextCancel = () => {
     setValue('text', issueData.text);
     setContentEditable(false);
   };
+
   const onDeleteClick = () => {
     setDeleteModalOpened(true);
   };
+
   const onDeleteConfirm = () => {
     dispatch(deleteIssue({ issue: issueData }));
     setDeleteModalOpened(false);
     onClose && onClose();
   };
+
   const onDeleteCancel = () => {
     setDeleteModalOpened(false);
   };
+
   const onExpandClick = () => {
     router.push(`/project/issue/${publicId}`);
   };
@@ -162,6 +165,7 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
         setTitleEditable(true);
       }
     }
+
     document.addEventListener('click', addTitleInputClick, false);
 
     return function () {
@@ -173,6 +177,7 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
   if (!issueData) {
     return <></>;
   }
+
   return (
     <NoSsr>
       <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={isDeleteModalOpened}>

@@ -1,11 +1,10 @@
-import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import issuesReducer from './issuesSlice';
-import settingsReducer, { ProjectSettings } from './settingsSlice';
+import settingsReducer from './settingsSlice';
 import { createWrapper } from 'next-redux-wrapper';
 import rootReducer from './rootReducer';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { IssueColumn } from '../shared/model/common';
 const STORE_VERSION = '0.0.5';
 
 const makeStore = () => {
@@ -17,6 +16,7 @@ const makeStore = () => {
         settings: settingsReducer,
       },
     });
+
     return store;
   } else {
     const persistConfig = {
@@ -27,6 +27,7 @@ const makeStore = () => {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     const store = configureStore({ reducer: persistedReducer });
     (store as any).__persistor = persistStore(store);
+
     return store;
   }
 };

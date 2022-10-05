@@ -6,7 +6,6 @@ import { FC, useState } from 'react';
 
 import InputAdornment from '@mui/material/InputAdornment';
 import Search from '@mui/icons-material/Search';
-import { issueTypes } from '../../../shared/IssueTypes';
 import { DrawerWrapper, SearchInput } from './SearchDrawer.styles';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { IssueRenderData, selectMergedIssues } from '../../../store/issuesSlice';
@@ -26,8 +25,10 @@ export const SearchDrawer: FC<Props> = ({ toggleCb, isOpened }) => {
     ) {
       return;
     }
+
     toggleCb(open);
   };
+
   const searchFilter = (issue: IssueRenderData): boolean => {
     if (search?.length) {
       const searchRegexp = new RegExp(search, 'i');
@@ -35,6 +36,7 @@ export const SearchDrawer: FC<Props> = ({ toggleCb, isOpened }) => {
         return false;
       }
     }
+
     return true;
   };
 

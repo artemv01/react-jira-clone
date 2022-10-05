@@ -1,8 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import { IssueType, Priority } from '../../../shared/model/common';
 import Select from '../../../shared/components/Select';
 import { priorityTypes } from '../../../shared/PriorityTypes';
 

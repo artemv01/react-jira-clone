@@ -20,9 +20,11 @@ export const BoardPageControls: FC<Props> = ({ onChange, value }) => {
   const updateFilters = (newFilters: IssueFilters) => {
     onChange(newFilters);
   };
+
   const showResetButton = () => {
     return JSON.stringify(defaultIssueFilters) !== JSON.stringify(value);
   };
+
   return (
     <BoardPageControlsWrapper>
       <FormControl size='small' className='search-input' variant='standard'>

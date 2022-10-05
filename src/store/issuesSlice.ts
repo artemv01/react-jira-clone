@@ -1,5 +1,5 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
-import { ColumnType, Comment, Issue, IssueColumn, IssueType, Priority, User } from '../shared/model/common';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Comment, Issue, IssueColumn, IssueType, Priority, User } from '../shared/model/common';
 import { RootState } from './store';
 import { HYDRATE } from 'next-redux-wrapper';
 import { users } from '../shared/stubs/users';
@@ -82,6 +82,7 @@ const issuesSlice = createSlice({
       if (!column) {
         return;
       }
+
       const issueIdx = column.items.findIndex(({ id }) => id === action.payload.issueId);
       const updatedIssue = { ...column.items[issueIdx], ...action.payload.issue, updatedAt: new Date().toISOString() };
       column.items.splice(issueIdx, 1);
@@ -104,6 +105,7 @@ const issuesSlice = createSlice({
         } else {
           destList.splice(0, 0, issue);
         }
+
         dest.items = [...destList];
       }
     },
@@ -118,14 +120,14 @@ export const selectMergedIssues = (state: RootState): IssueRenderData[] =>
     .map((item) => joinIssueRelations(item));
 export const selectIssueById =
   (issueId: string) =>
-  (state: RootState): Issue =>
+    (state: RootState): Issue =>
     state.issues
       .map((col) => col.items)
       .flat()
       .find((item) => item.id === issueId) as Issue;
 export const selectIssueByPublicId =
   (issueId: string) =>
-  (state: RootState): Issue =>
+    (state: RootState): Issue =>
     state.issues
       .map((col) => col.items)
       .flat()
@@ -159,6 +161,7 @@ export const joinIssueRelations = (issue: Issue): IssueRenderData => {
       return item;
     }
   }) as IssueType;
+
   return {
     publicId: issue.publicId,
     text: issue.text,

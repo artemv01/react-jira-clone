@@ -8,7 +8,7 @@ interface Props {
   id: string;
 }
 export const SingleIssuePage: FC<Props> = ({ id }) => {
-const breadcrumbs = ['Projects', 'React Jira Clone', 'Issues', id];
+  const breadcrumbs = ['Projects', 'React Jira Clone', 'Issues', id];
 
   return (
     <Box>

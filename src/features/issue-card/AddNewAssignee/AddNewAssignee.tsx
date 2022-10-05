@@ -1,4 +1,4 @@
-import { FC, forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef } from 'react';
 import Box from '@mui/material/Box';
 
 interface Props {

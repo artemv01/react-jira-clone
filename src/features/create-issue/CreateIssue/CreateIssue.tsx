@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
@@ -77,8 +77,10 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
       .flat()
       .map(({ publicId }) => Number((publicId.match(/\d+/) as RegExpMatchArray)[0]));
     ids.sort();
+
     return ids[ids.length - 1] + 1;
   };
+
   function submit(formData: any) {
     const createIssueData = {
       ...formData,
@@ -92,6 +94,7 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     dispatch(addIssue(payload));
     onClose();
   }
+
   return (
     <Box
       sx={{

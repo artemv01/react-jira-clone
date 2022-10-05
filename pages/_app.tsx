@@ -9,6 +9,7 @@ import { DefaultSeo } from 'next-seo';
 import { SEO } from '../next-seo.config';
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const store = useStore();
+
   return (
     <>
       <DefaultSeo {...SEO} />
