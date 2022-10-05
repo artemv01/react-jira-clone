@@ -27,7 +27,7 @@ import {
   moveIssue,
   selectIssueById,
   selectIssueByPublicId,
-  selectIssues,
+  selectIssueColumns,
   updateIssue,
 } from '../../../store/issuesSlice';
 import React from 'react';
@@ -85,7 +85,7 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
   const theme = useTheme();
   const router = useRouter();
 
-  const issuesStore = useAppSelector(selectIssues);
+  const issuesStore = useAppSelector(selectIssueColumns);
 
   const dispatch = useAppDispatch();
 

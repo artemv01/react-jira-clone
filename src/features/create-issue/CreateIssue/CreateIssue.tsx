@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,10 +16,10 @@ import { users } from '../../../shared/stubs/users';
 import { priorityTypes } from '../../../shared/PriorityTypes';
 import { issueTypes } from '../../../shared/IssueTypes';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { AddIssueParams, addIssue } from '../../../store/issuesSlice';
+import { AddIssueParams, addIssue, selectIssueColumns } from '../../../store/issuesSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import { Issue } from '../../../shared/model/common';
-import { incrementLastUsedId, selectSettings } from '../../../store/settingsSlice';
+import { selectSettings } from '../../../store/settingsSlice';
 import { Controller, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string, array } from 'yup';
@@ -65,23 +65,31 @@ export const CreateIssue: FC<Props> = ({ onClose }) => {
     reset();
   }, [isSubmitSuccessful]);
   const projectSettings = useAppSelector(selectSettings);
+  const issueColumns = useAppSelector(selectIssueColumns);
 
   const dispatch = useAppDispatch();
 
   const MemoizedEditor = React.memo(ReactQuill);
 
+  const nextIssueId = () => {
+    const ids = issueColumns
+      .map((col) => col.items)
+      .flat()
+      .map(({ publicId }) => Number((publicId.match(/\d+/) as RegExpMatchArray)[0]));
+    ids.sort();
+    return ids[ids.length - 1] + 1;
+  };
   function submit(formData: any) {
     const createIssueData = {
       ...formData,
       id: nanoid(),
-      publicId: `${projectSettings.issueIdPrefix}-${projectSettings.lastUsedIssueId + 1}`,
+      publicId: `${projectSettings.issueIdPrefix}-${nextIssueId()}`,
     };
     const payload: AddIssueParams = {
       issue: createIssueData as Issue,
       columnId: BACKLOG_COLUMN_ID,
     };
     dispatch(addIssue(payload));
-    dispatch(incrementLastUsedId());
     onClose();
   }
   return (

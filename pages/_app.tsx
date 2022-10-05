@@ -6,10 +6,9 @@ import NoSsr from '../src/shared/NoSsr';
 import { useStore } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { DefaultSeo } from 'next-seo';
-import {SEO} from '../next-seo.config';
-function MyApp({ Component, pageProps }: AppProps) {
+import { SEO } from '../next-seo.config';
+const MyApp = ({ Component, pageProps }: AppProps) => {
   const store = useStore();
-
   return (
     <>
       <DefaultSeo {...SEO} />
@@ -20,6 +19,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </NoSsr>
     </>
   );
-}
+};
 
 export default compose(wrapper.withRedux)(MyApp);

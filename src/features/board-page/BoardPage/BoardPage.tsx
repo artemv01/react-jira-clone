@@ -9,7 +9,7 @@ import BoardPageControls from '../BoardPageControls';
 import Backdrop from '@mui/material/Backdrop';
 import Breadcrumbs from '../../../shared/components/Breadcrumbs';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { moveIssue, selectIssues } from '../../../store/issuesSlice';
+import { moveIssue, selectIssueColumns } from '../../../store/issuesSlice';
 import { Issue, IssueFilters } from '../../../shared/model/common';
 import { users } from '../../../shared/stubs/users';
 import { defaultIssueFilters } from '../../../shared/stubs/defaultIssueFilters';
@@ -22,7 +22,7 @@ export const ItemTypes = {
 const breadcrumbs = ['Projects', 'React Jira Clone', 'Kanban Board'];
 
 export const BoardPage: FC = () => {
-  const taskList = useAppSelector(selectIssues);
+  const taskList = useAppSelector(selectIssueColumns);
   const dispatch = useAppDispatch();
   const [openedIssueId, setOpenedIssueId] = useState<string | undefined>();
   const onDragEnd = (val: any) => {

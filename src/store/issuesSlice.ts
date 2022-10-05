@@ -110,7 +110,7 @@ const issuesSlice = createSlice({
   },
 });
 
-export const selectIssues = (state: RootState): IssueColumn[] => state.issues;
+export const selectIssueColumns = (state: RootState): IssueColumn[] => state.issues;
 export const selectMergedIssues = (state: RootState): IssueRenderData[] =>
   state.issues
     .map((col) => col.items)
@@ -130,6 +130,7 @@ export const selectIssueByPublicId =
       .map((col) => col.items)
       .flat()
       .find((item) => item.publicId === issueId) as Issue;
+
 export const { addIssue, addComment, moveIssue, updateIssue, deleteIssue } = issuesSlice.actions;
 export default issuesSlice.reducer;
 
