@@ -1,5 +1,6 @@
 /* eslint-disable func-style */
 
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import Layout from '../../../src/features/layout/Layout';
@@ -10,9 +11,12 @@ const SingleIssue: FC = (): JSX.Element => {
   const id = router.query.id as string;
 
   return (
-    <Layout>
-      <SingleIssuePage id={id}></SingleIssuePage>
-    </Layout>
+    <>
+      <NextSeo title={`${id}`} />
+      <Layout>
+        <SingleIssuePage id={id}></SingleIssuePage>
+      </Layout>
+    </>
   );
 };
 
