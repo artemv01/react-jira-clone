@@ -1,4 +1,5 @@
 A jira clone written on React, inspired by [Angular Jira Clone][angularclone].
+The app uses Redux and currently saves the changes into the local storage.
 
 ## Technology stack
 
