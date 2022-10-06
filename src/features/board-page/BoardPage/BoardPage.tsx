@@ -18,7 +18,6 @@ import IssueCard from '../IssueCard';
 import Button from '../../../shared/components/Button';
 import GithubIcon from '../../../shared/icons/GithubIcon';
 import { useEffect } from 'react';
-import { Link } from '@mui/material';
 
 export const ItemTypes = {
   CARD: 'card',

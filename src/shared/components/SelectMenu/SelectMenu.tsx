@@ -48,7 +48,7 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id,
   const getOptionColorSettings = (option: Option): { backgroundColor: string; color: string } => {
     return {
       backgroundColor: (option?.bgColor || theme.palette.button.primary) + ' !important',
-      color: (option?.textColor || theme.palette.text.body2) + ' !important',
+      color: (option?.textColor || theme.typography.body2) + ' !important',
     };
   };
 
