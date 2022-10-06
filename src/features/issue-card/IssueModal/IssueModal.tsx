@@ -49,6 +49,7 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
       title: '',
       type: '',
       text: '',
+      reporter: '',
       status: '',
       assignee: [],
       priority: '',
@@ -59,6 +60,7 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
     if (issueData) {
       setValue('title', issueData.title);
       setValue('type', issueData.type);
+      setValue('reporter', issueData.reporter);
       setValue('text', issueData.text);
       setValue('status', issueData.status);
       setValue('assignee', issueData.assignee);
@@ -67,7 +69,13 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
     }
   }, [issueData?.id]);
 
-  const [watchType, watchAssignee, watchPriority, watchStatus] = watch(['type', 'assignee', 'priority', 'status']);
+  const [watchType, watchAssignee, watchPriority, watchStatus, watchReporter] = watch([
+    'type',
+    'assignee',
+    'priority',
+    'status',
+    'reporter',
+  ]);
   useEffect(() => {
     onIssueStatusUpdate(watchStatus);
   }, [watchStatus]);
@@ -76,8 +84,9 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
       type: watchType,
       assignee: watchAssignee,
       priority: watchPriority,
+      reporter: watchReporter,
     });
-  }, [watchType, watchAssignee, watchPriority]);
+  }, [watchType, watchAssignee, watchPriority, watchReporter]);
 
   const theme = useTheme();
   const router = useRouter();
@@ -330,6 +339,28 @@ export const IssueModal: FC<Props> = ({ onClose, singlePage, publicId }) => {
                   />
                 )}
                 name={'status'}
+                control={control}
+              />
+            </div>
+            <div className='issue-control'>
+              <Typography sx={{ mb: 0.5 }} color='text.secondary' variant='label'>
+                reporter
+              </Typography>
+              <Controller
+                render={({ field: { onChange, value } }) => (
+                  <SelectMenu
+                    onChange={onChange}
+                    id='select-reporter'
+                    value={value}
+                    avatarVariant='circular'
+                    options={users.map((item) => ({
+                      value: item.id,
+                      name: item.name,
+                      img: item.avatarUrl,
+                    }))}
+                  />
+                )}
+                name={'reporter'}
                 control={control}
               />
             </div>

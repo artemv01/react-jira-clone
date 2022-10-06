@@ -1,10 +1,6 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { FC, useEffect, useState } from 'react';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
@@ -12,6 +8,8 @@ import MenuList from '@mui/material/MenuList';
 import { Option } from '../../../shared/model/common';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Button from '../Button';
+import { Avatar } from '@mui/material';
 
 interface Props {
   onChange: (val: string) => void;
@@ -19,9 +17,10 @@ interface Props {
   options: Array<Option>;
   uppercase?: boolean;
   id: string;
+  avatarVariant?: 'circular' | 'rounded' | 'square';
 }
 
-export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id }) => {
+export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id, avatarVariant }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [selectedItem, setSelectedItem] = useState<Option>({} as Option);
@@ -49,36 +48,35 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id 
   const getOptionColorSettings = (option: Option): { backgroundColor: string; color: string } => {
     return {
       backgroundColor: (option?.bgColor || theme.palette.button.primary) + ' !important',
-      color: (option?.textColor || theme.palette.text.primary) + ' !important',
+      color: (option?.textColor || theme.palette.text.body2) + ' !important',
     };
   };
 
   return (
     <>
-      <List onClick={handleClick} disablePadding={true}>
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ ...getSelectedColor(), maxWidth: 'fit-content' }}
-            dense={true}
-            selected={true}
-          >
-            {selectedItem.img && (
-              <ListItemIcon sx={{ width: 'auto', minWidth: 'auto' }}>
-                <img src={selectedItem.img} alt={selectedItem.name} />
-              </ListItemIcon>
-            )}
-            <ListItemText
-              sx={{ mx: 1 }}
-              disableTypography
-              primary={
-                <Typography component='span' fontSize={14} sx={{ textTransform: uppercase ? 'uppercase' : 'none' }}>
-                  {selectedItem.name}
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <Button
+        startIcon={
+          selectedItem.img && (
+            <Avatar sx={{ width: '22px', height: '22px' }} variant={avatarVariant || 'square'} src={selectedItem.img} />
+          )
+        }
+        onClick={handleClick}
+        sx={{
+          backgroundColor: getSelectedColor().backgroundColor,
+          height: '32px',
+          display: 'flex',
+          '& .MuiButtonBase-root': { display: 'flex' },
+        }}
+      >
+        <Typography
+          fontSize='14px'
+          variant='body2'
+          lineHeight='16px'
+          sx={{ textTransform: uppercase ? 'uppercase' : 'none', color: getSelectedColor().color }}
+        >
+          {selectedItem.name}
+        </Typography>
+      </Button>
       <Menu id={id} anchorEl={anchorEl} open={openMenu} onClose={handleClose}>
         <MenuList disablePadding={true}>
           {options.map((item) => (
@@ -97,9 +95,11 @@ export const SelectMenu: FC<Props> = ({ options, value, onChange, uppercase, id 
             >
               <MenuItem>
                 {item.img && (
-                  <ListItemIcon>
-                    <img src={item.img} alt={selectedItem.name} />
-                  </ListItemIcon>
+                  <Avatar
+                    src={item.img}
+                    variant={avatarVariant || 'square'}
+                    sx={{ width: '22px', height: '22px' }}
+                  ></Avatar>
                 )}
                 <ListItemText sx={{ textTransform: uppercase ? 'uppercase' : 'none' }}>{item.name}</ListItemText>
               </MenuItem>

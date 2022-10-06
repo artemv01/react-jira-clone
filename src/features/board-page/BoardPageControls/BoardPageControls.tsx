@@ -51,7 +51,14 @@ export const BoardPageControls: FC<Props> = ({ onChange, value }) => {
           onClick={() => updateFilters({ ...value, onlyCurrentUserIssues: !value.onlyCurrentUserIssues })}
         >
           <ListItemButton selected={value.onlyCurrentUserIssues}>
-            <ListItemText disableTypography primary={<Typography fontSize={15}>Only My Issues</Typography>} />
+            <ListItemText
+              disableTypography
+              primary={
+                <Typography variant='body2' fontSize={14}>
+                  Only My Issues
+                </Typography>
+              }
+            />
           </ListItemButton>
         </ListItem>
         <ListItem
@@ -63,7 +70,14 @@ export const BoardPageControls: FC<Props> = ({ onChange, value }) => {
           disablePadding
         >
           <ListItemButton>
-            <ListItemText disableTypography primary={<Typography fontSize={15}>Ignore Resolved</Typography>} />
+            <ListItemText
+              disableTypography
+              primary={
+                <Typography variant='body2' fontSize={14}>
+                  Ignore Resolved
+                </Typography>
+              }
+            />
           </ListItemButton>
         </ListItem>
         {showResetButton() && (

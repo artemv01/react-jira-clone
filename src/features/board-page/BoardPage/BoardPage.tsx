@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -15,6 +15,10 @@ import { users } from '../../../shared/stubs/users';
 import { defaultIssueFilters } from '../../../shared/stubs/defaultIssueFilters';
 import IssueModal from '../../issue-card/IssueModal';
 import IssueCard from '../IssueCard';
+import Button from '../../../shared/components/Button';
+import GithubIcon from '../../../shared/icons/GithubIcon';
+import { useEffect } from 'react';
+import { Link } from '@mui/material';
 
 export const ItemTypes = {
   CARD: 'card',
@@ -23,6 +27,8 @@ const breadcrumbs = ['Projects', 'React Jira Clone', 'Kanban Board'];
 
 export const BoardPage: FC = () => {
   const taskList = useAppSelector(selectIssueColumns);
+  const backdropRef = useRef<HTMLElement>();
+  const modalRef = useRef<HTMLElement>();
   const dispatch = useAppDispatch();
   const [openedIssueId, setOpenedIssueId] = useState<string | undefined>();
   const onDragEnd = (val: any) => {
@@ -85,18 +91,49 @@ export const BoardPage: FC = () => {
     return neededScore === matchScore;
   };
 
+  //   useEffect(() => console.log(backdropRef?.current), [openedIssueId]);
+  useEffect(() => {
+    // eslint-disable-next-line func-style
+    function addBackdropClick(event: Event): any {
+      if (modalRef.current && !(modalRef.current as any).contains(event.target)) {
+        setOpenedIssueId(undefined);
+      }
+    }
+
+    const node = backdropRef?.current;
+    node && node.addEventListener('click', addBackdropClick, false);
+
+    return function () {
+      node && node.removeEventListener('click', addBackdropClick, false);
+    };
+  }, [backdropRef]);
+
   return (
     <NoSsr>
-      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={!!openedIssueId}>
-        <IssueModal publicId={openedIssueId as string} onClose={() => setOpenedIssueId(undefined)}></IssueModal>
+      <Backdrop ref={backdropRef} sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} open={!!openedIssueId}>
+        <Box ref={modalRef}>
+          <IssueModal publicId={openedIssueId as string} onClose={() => setOpenedIssueId(undefined)}></IssueModal>
+        </Box>
       </Backdrop>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <Breadcrumbs breadcrumbs={breadcrumbs}></Breadcrumbs>
-          <Typography variant='h1' sx={{ mb: 3, mt: 1.5 }}>
-            Kanban Board
-          </Typography>
+          <Box sx={{ display: 'flex', flexFlow: 'row norwap', justifyContent: 'space-between' }}>
+            <Typography variant='h1' sx={{ mb: 3, mt: 1.5 }}>
+              Kanban Board
+            </Typography>
+            <Button
+              href='https://github.com/artemv01/react-jira-clone'
+              target='_blank'
+              sx={{ height: '32px' }}
+              startIcon={<GithubIcon />}
+            >
+              <Typography fontSize='14px' variant='body2' lineHeight='16px'>
+                View on Github
+              </Typography>
+            </Button>
+          </Box>
           <Box sx={{ mb: 2 }}>
             <BoardPageControls
               onChange={(newFilters) => {
@@ -120,7 +157,7 @@ export const BoardPage: FC = () => {
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}
                               onClick={() => {
-                                setOpenedIssueId(issue.publicId)
+                                setOpenedIssueId(issue.publicId);
                               }}
                             >
                               <IssueCard issue={issue} />

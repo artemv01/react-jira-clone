@@ -21,17 +21,17 @@ export const IssueModalControls: FC<Props> = ({ onDelete, onExpand, onClose, sin
         },
       }}
     >
-      <IconButton onClick={onDelete} aria-label='delete'>
-        <DeleteOutlineIcon></DeleteOutlineIcon>
+      <IconButton  onClick={onDelete} aria-label='delete'>
+        <DeleteOutlineIcon sx={{width: '22px', height: '22px'}}></DeleteOutlineIcon>
       </IconButton>
       {!singlePage && (
         <IconButton onClick={onExpand} aria-label='expand'>
-          <OpenInNewIcon></OpenInNewIcon>
+          <OpenInNewIcon sx={{width: '22px', height: '22px'}}></OpenInNewIcon>
         </IconButton>
       )}
       {!singlePage && (
         <IconButton onClick={onClose} aria-label='close'>
-          <CloseIcon></CloseIcon>
+          <CloseIcon sx={{width: '22px', height: '22px'}}></CloseIcon>
         </IconButton>
       )}
     </Box>

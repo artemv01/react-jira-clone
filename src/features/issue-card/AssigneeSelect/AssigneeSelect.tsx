@@ -19,6 +19,7 @@ import { Option } from '../../../shared/model/common';
 import React from 'react';
 import { FC } from 'react';
 import { AssigneeMenu } from './AssigneeSelect.styles';
+import Button from '../../../shared/components/Button';
 
 interface Props {
   onChange: (newVal: string[]) => void;
@@ -38,7 +39,7 @@ export const AssigneeSelect: FC<Props> = ({ options, value, onChange }) => {
   };
 
   const optionClick = (newValue: string) => {
-    const result = [...value]
+    const result = [...value];
     result.push(newValue);
     onChange([...result]);
     handleAddMenuClose();
@@ -46,7 +47,7 @@ export const AssigneeSelect: FC<Props> = ({ options, value, onChange }) => {
 
   const optionRemove = (removeValue: string) => {
     const idx = value.indexOf(removeValue);
-    const result = [...value]
+    const result = [...value];
     if (idx !== -1) {
       result.splice(idx, 1);
     }
@@ -62,20 +63,23 @@ export const AssigneeSelect: FC<Props> = ({ options, value, onChange }) => {
   return (
     <Box>
       <List disablePadding={true}>
-        {selectedOption.map((opt) => (
-          <ListItem key={opt.value} disablePadding={true}>
-            <ListItemButton dense={true} selected={true}>
-              <Avatar alt={opt.name} src={opt.img} sx={{ width: 20, height: 20 }} />
-              <ListItemText
-                sx={{ mx: 1 }}
-                disableTypography
-                primary={<Typography fontSize={14}>{opt.name}</Typography>}
-              />
-              <ListItemIcon onClick={() => optionRemove(opt.value)}>
-                <CloseIcon />
-              </ListItemIcon>
-            </ListItemButton>
-          </ListItem>
+        {selectedOption.map((opt, i) => (
+          <Button
+            key={i}
+            startIcon={<Avatar alt={opt.name} src={opt.img} sx={{ width: 20, height: 20 }} />}
+            endIcon={<CloseIcon onClick={() => optionRemove(opt.value)} />}
+            sx={{
+              height: '32px',
+              display: 'flex',
+              '& .MuiButtonBase-root': { display: 'flex' },
+              mb: 1,
+              mr: 1,
+            }}
+          >
+            <Typography fontSize='14px' variant='body2' lineHeight='16px'>
+              {opt.name}
+            </Typography>
+          </Button>
         ))}
       </List>
       <AddNewAssignee ref={addAssigneeRef} onClick={handleAddMenuClick} />

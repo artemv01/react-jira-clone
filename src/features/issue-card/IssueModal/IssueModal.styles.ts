@@ -8,8 +8,7 @@ export const Wrapper = styled('div', {
   flexFlow: 'row nowrap',
   backgroundColor: theme.palette.board.issueBg,
   padding: !singlePage ? `${theme.spacing(2)} ${theme.spacing(2.5)} 64px ${theme.spacing(2.5)}` : 0,
-  width: '100%',
-  maxWidth: !singlePage ? '1040px' : '100%',
+  width: !singlePage ? '1040px' : '100%',
   '& .editor-col': {
     flex: '1 1 60%',
     marginRight: '40px',

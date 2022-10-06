@@ -29,10 +29,10 @@ export const IssueCard: FC<Props> = (props) => {
         <div className='issue-id'>{issueData.publicId}</div>
         <div className='filler'></div>
         <div className='issue-type'>
-          <img src={issueData.type?.img} alt='' />
+          <img src={issueData.type?.img} width="22" height="22"  alt='' />
         </div>
         <div className='issue-priority'>
-          <img src={issueData.priority?.img} alt='' />
+          <img src={issueData.priority?.img}  width="22" height="22" alt='' />
         </div>
       </div>
     </Wrapper>

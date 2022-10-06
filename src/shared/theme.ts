@@ -76,6 +76,12 @@ export const theme = createTheme({
     h1: {
       fontSize: '24px',
     },
+    body1: {
+      color: '#172B4D',
+    },
+    body2: {
+      color: '#42526E',
+    },
     h4: {
       fontSize: '16px',
       fontWeight: 'bold',
@@ -103,8 +109,8 @@ export const theme = createTheme({
       contrastText: '#fff',
     },
     button: {
-      primary: 'rgba(0,0,0,0.1)',
-      dark: 'rgba(0,0,0,0.2)',
+      primary: '#F4F5F7',
+      dark: '#EBECF0',
     },
     board: {
       bg: '#F4F5F7',

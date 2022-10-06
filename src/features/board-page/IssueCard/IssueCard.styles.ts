@@ -11,6 +11,9 @@ export const Wrapper = styled('div')(({ theme }) => ({
   lineHeight: '20px',
   display: 'flex',
   flexFlow: 'column nowrap',
+  '&:hover': {
+    backgroundColor: theme.palette.button.dark,
+  },
   '& > .text': {
     fontSize: '13px',
     lineHeight: '20px',
